@@ -33,7 +33,7 @@ int main( int , char** )
         }
         else
         {
-            //JOCKE ÄR EN BALLE
+            //AXEEEEEEEEEEEL DIN FÖRGRÖMMADE UNGE, KUKBALLE
             //Get window surface
             screenSurface = SDL_GetWindowSurface( window );
 

@@ -33,6 +33,7 @@ int main( int , char** )
         }
         else
         {
+            //BALLE
             //Get window surface
             screenSurface = SDL_GetWindowSurface( window );
 

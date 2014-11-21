@@ -33,7 +33,7 @@ int main( int , char** )
         }
         else
         {
-            //JOCKE ÄR EN BALLE
+            //NU SKA VI SLUTA LÄGGA IN KOMMENTARER!!
             //Get window surface
             screenSurface = SDL_GetWindowSurface( window );
 

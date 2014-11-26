@@ -11,6 +11,7 @@ public:
     gamefield() = default;
     gamefield(string map, string character_one, string character_two);
     void update();
+    ~gamefield()=default;
 
 
 private:

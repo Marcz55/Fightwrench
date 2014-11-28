@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
+#include <map>
 
 class graphic_engine
 {
@@ -21,7 +22,7 @@ private:
 
 public:
     ~graphic_engine() = default;
-    graphic_engine()=default;
+    graphic_engine();
 
 
 

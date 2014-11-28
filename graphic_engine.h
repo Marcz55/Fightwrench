@@ -19,10 +19,13 @@ private:
     SDL_Window* Window ;
     SDL_Renderer* Renderer;
     std::map<std::string,SDL_Texture*> Image_map;
+    SDL_Rect Current_rect;
 
 public:
     ~graphic_engine() = default;
     graphic_engine();
+    void draw_all();
+    void draw_object(std::string name, double x_coord, double y_coord);
 
 
 

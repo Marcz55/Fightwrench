@@ -19,7 +19,26 @@ graphic_engine::graphic_engine()
     SDL_RenderSetLogicalSize(Renderer, Window_width, Window_height);
 
     //Skapa texturer
-    Image_map.insert(pair<string,SDL_Texture*>("axel",SDL_CreateTextureFromSurface(Renderer, IMG_Load("Axel.png"))));
+    Image_map.insert(pair<string,SDL_Texture*>("Axel",SDL_CreateTextureFromSurface(Renderer, IMG_Load("Axel.png"))));
+}
 
+void graphic_engine::draw_object(string name,double x_coord,double y_coord)
+{
+    Current_rect.w = 617;
+    Current_rect.h = 448;
+    Current_rect.x = x_coord;
+    Current_rect.y = y_coord;
+    SDL_RenderCopy(Renderer, Image_map.at(name), nullptr, &Current_rect);
+}
 
+void graphic_engine::draw_all()
+{
+    //Måste ta in en lista med alla objekt som ska renderas och köra draw_object till alla!
+
+    SDL_SetRenderDrawColor(Renderer,0,0,0,255);
+    SDL_RenderClear(Renderer);
+
+    draw_object("Axel",0,0);
+
+    SDL_RenderPresent(Renderer);
 }

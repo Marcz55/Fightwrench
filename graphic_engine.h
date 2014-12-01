@@ -9,6 +9,12 @@
 #include <vector>
 #include <map>
 
+struct Texture_struct{
+    int Texture_width;
+    int Texture_height;
+    SDL_Texture* Texture;
+};
+
 class graphic_engine
 {
 friend class gamefield;
@@ -18,14 +24,15 @@ private:
     int Window_height;
     SDL_Window* Window ;
     SDL_Renderer* Renderer;
-    std::map<std::string,SDL_Texture*> Image_map;
+    std::map<std::string,Texture_struct> Image_map;
     SDL_Rect Current_rect;
 
 public:
     ~graphic_engine() = default;
     graphic_engine();
     void draw_all();
-    void draw_object(std::string name, double x_coord, double y_coord);
+    void draw_object(std::string name, double x_coord, double y_coord, double angle);
+    void create_texture(std::string texture_name, const char *texture_file);
 
 
 

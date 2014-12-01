@@ -2,15 +2,19 @@
 and may not be redistributed without written permission.*/
 #include "graphic_engine.h"
 //Screen dimension constants
+using namespace std;
+
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
+
 
 int main(int, char **)
 {
 
     graphic_engine Test;
+
     Test.draw_all();
-    SDL_Delay( 5000 );
+
 
    /* //The window we'll be rendering to
     SDL_Window* window = NULL;

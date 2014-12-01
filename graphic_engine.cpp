@@ -48,8 +48,13 @@ void graphic_engine::draw_all()
         SDL_SetRenderDrawColor(Renderer,0,0,0,255);
         SDL_RenderClear(Renderer);
 
-        draw_object("Axel",i,i,i);
-        draw_object("Marsus",800-i,600-i,-i);
+        for(auto it = g1.character_vector.begin(); it != g1.character_vector.end(); it++)
+        {
+         draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_direction);
+        }
+
+        //draw_object("Axel",i,i,i);
+        //draw_object("Marsus",800-i,600-i,-i);
 
         SDL_RenderPresent(Renderer);
         SDL_Delay(10);

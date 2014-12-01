@@ -1,6 +1,7 @@
 /*This source code copyrighted by Lazy Foo' Productions (2004-2013)
 and may not be redistributed without written permission.*/
 #include "graphic_engine.h"
+#include "gamefield.h"
 //Screen dimension constants
 using namespace std;
 
@@ -12,7 +13,8 @@ int main(int, char **)
 {
 
     graphic_engine Test;
-
+    gamefield g1;
+    g1.add_object();
     Test.draw_all();
 
 

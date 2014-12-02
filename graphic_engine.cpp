@@ -3,7 +3,7 @@ using namespace std;
 
 graphic_engine::graphic_engine()
 {
-    //Kolla så SDL fungerar
+    //Kolla så SDL fungerar, initiera
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         cerr << "Error initializing SDL" << endl;
         exit(1);
@@ -28,6 +28,7 @@ void graphic_engine::create_texture(string texture_name, const char *texture_fil
 {
     SDL_Surface* Create_surface = IMG_Load(texture_file);
     Image_map.insert(pair<string,Texture_struct>(texture_name,Texture_struct{Create_surface->w,Create_surface->h,SDL_CreateTextureFromSurface(Renderer,Create_surface)}));
+    SDL_FreeSurface(Create_surface);
 }
 
 void graphic_engine::draw_object(string name,double x_coord,double y_coord, double angle)
@@ -37,6 +38,16 @@ void graphic_engine::draw_object(string name,double x_coord,double y_coord, doub
     Current_rect.x = x_coord;
     Current_rect.y = y_coord;
     SDL_RenderCopyEx(Renderer, Image_map.at(name).Texture, nullptr, &Current_rect,angle,nullptr,SDL_FLIP_NONE);
+}
+
+graphic_engine::~graphic_engine()
+{
+    SDL_DestroyRenderer(Renderer);
+    SDL_DestroyWindow(Window);
+    Renderer = nullptr;
+    Window = nullptr;
+    IMG_Quit();
+    SDL_Quit();
 }
 
 void graphic_engine::draw_all(gamefield& my_gamefield)

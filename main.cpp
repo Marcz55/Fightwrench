@@ -2,6 +2,7 @@
 and may not be redistributed without written permission.*/
 #include "graphic_engine.h"
 #include "gamefield.h"
+#include "soundhandler.h"
 //Screen dimension constants
 using namespace std;
 
@@ -19,6 +20,8 @@ int main(int, char **)
     {
     Test.draw_all(g1);
     }
+
+
 
 
    /* //The window we'll be rendering to

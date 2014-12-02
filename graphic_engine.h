@@ -29,7 +29,7 @@ private:
     SDL_Rect Current_rect;
 
 public:
-    ~graphic_engine() = default;
+    ~graphic_engine();
     graphic_engine();
     void draw_all(gamefield &my_gamefield);
     void draw_object(std::string name, double x_coord, double y_coord, double angle);

@@ -43,8 +43,6 @@ void graphic_engine::draw_all(gamefield& my_gamefield)
 {
     //Måste ta in en lista med alla objekt som ska renderas och köra draw_object till alla!
     //Test för att rita ut 2 objekt
-    for(int i = 0; i < 1000; i++)
-    {
         SDL_SetRenderDrawColor(Renderer,0,0,0,255);
         SDL_RenderClear(Renderer);
 
@@ -59,5 +57,4 @@ void graphic_engine::draw_all(gamefield& my_gamefield)
 
         SDL_RenderPresent(Renderer);
         SDL_Delay(10);
-    }
 }

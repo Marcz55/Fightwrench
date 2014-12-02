@@ -15,7 +15,10 @@ int main(int, char **)
     graphic_engine Test;
     gamefield g1;
     g1.add_object();
+    for(int i = 0; i < 1000; i++)
+    {
     Test.draw_all(g1);
+    }
 
 
    /* //The window we'll be rendering to

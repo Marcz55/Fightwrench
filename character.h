@@ -16,6 +16,7 @@ public:
     int get_ypos(){return ypos;}
     double get_direction(){return direction;}
     void update_move_vector();
+    void ultimate(){};
 protected:
     double x_movement = 0;
     double y_movement = 0;

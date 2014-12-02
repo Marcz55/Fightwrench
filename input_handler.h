@@ -2,6 +2,8 @@
 #define INPUT_HANDLER_H
 #include <SDL2/SDL.h>
 #include <vector>
+#include <gamefield.h>
+using namespace std;
 class input_handler
 {
 private:
@@ -12,7 +14,7 @@ private:
 public:
     input_handler() = default;
     ~input_handler() = default;
-    update(class gamefield&); //Tar hand om allt som ligger i event_queue
+    void update(/*class gamefield&*/); //Tar hand om allt som ligger i event_queue
 };
 
 #endif // INPUT_HANDLER_H

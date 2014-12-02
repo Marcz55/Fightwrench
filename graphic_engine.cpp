@@ -39,18 +39,19 @@ void graphic_engine::draw_object(string name,double x_coord,double y_coord, doub
     SDL_RenderCopyEx(Renderer, Image_map.at(name).Texture, nullptr, &Current_rect,angle,nullptr,SDL_FLIP_NONE);
 }
 
-void graphic_engine::draw_all()
+void graphic_engine::draw_all(gamefield& my_gamefield)
 {
-        //Måste ta in en lista med alla objekt som ska renderas och köra draw_object till alla!
-        //Test för att rita ut 2 objekt
-        for(int i = 0; i < 1000; i++)
-        {
+    //Måste ta in en lista med alla objekt som ska renderas och köra draw_object till alla!
+    //Test för att rita ut 2 objekt
+    for(int i = 0; i < 1000; i++)
+    {
         SDL_SetRenderDrawColor(Renderer,0,0,0,255);
         SDL_RenderClear(Renderer);
 
-        for(auto it = g1.character_vector.begin(); it != g1.character_vector.end(); it++)
+        for(auto it = my_gamefield.character_vector.begin(); it != my_gamefield.character_vector.end(); it++)
         {
-         draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_direction);
+            draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_direction());
+            it->update();
         }
 
         //draw_object("Axel",i,i,i);
@@ -58,5 +59,5 @@ void graphic_engine::draw_all()
 
         SDL_RenderPresent(Renderer);
         SDL_Delay(10);
-        }
+    }
 }

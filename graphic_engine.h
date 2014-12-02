@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include "gamefield.h"
 
 struct Texture_struct{
     int Texture_width;
@@ -30,7 +31,7 @@ private:
 public:
     ~graphic_engine() = default;
     graphic_engine();
-    void draw_all();
+    void draw_all(gamefield &my_gamefield);
     void draw_object(std::string name, double x_coord, double y_coord, double angle);
     void create_texture(std::string texture_name, const char *texture_file);
 

@@ -11,7 +11,7 @@ public:
     virtual void rotate(int turn_direction); //turn_direction är 0 eller +-1 för att avgöra om
                                              //objektet ska vridas och åt vilket håll.
 
-private:
+protected:
     std::string name;
     double xpos;
     double ypos;

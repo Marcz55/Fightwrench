@@ -1,6 +1,6 @@
 #include "gamefield.h"
- void add_object()
+ void gamefield::add_object()
  {
-     character_vector.insert(new character("Axel",150, 300));
-     character_vector.insert(new character("Marsus",400, 50))
+     character_vector.push_back(character(150, 300));
+     character_vector.push_back(character(400, 50));
  }

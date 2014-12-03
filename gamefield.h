@@ -17,6 +17,7 @@ public:
     void update();
     ~gamefield()=default;
     void add_object();
+    vector<character> get_character_vector(){return character_vector;}
 
 
 private:

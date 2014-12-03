@@ -4,6 +4,7 @@ and may not be redistributed without written permission.*/
 #include "gamefield.h"
 #include "soundhandler.h"
 #include "input_handler.h"
+#include "game.h"
 //Screen dimension constants
 using namespace std;
 
@@ -13,8 +14,10 @@ const int SCREEN_HEIGHT = 480;
 
 int main(int, char **)
 {
+    game main_game;
+    main_game.game_loop();
 
-    graphic_engine Test;
+    /*graphic_engine Test;
     gamefield g1;
     g1.add_object();
     input_handler i1;
@@ -22,7 +25,8 @@ int main(int, char **)
     {
     Test.draw_all(g1);
     i1.update(g1);
-    }
+    }*/
+
 
 
 

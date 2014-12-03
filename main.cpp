@@ -1,9 +1,7 @@
 /*This source code copyrighted by Lazy Foo' Productions (2004-2013)
 and may not be redistributed without written permission.*/
-#include "graphic_engine.h"
-#include "gamefield.h"
-#include "soundhandler.h"
-#include "input_handler.h"
+#include "menu.h"
+
 //Screen dimension constants
 using namespace std;
 
@@ -14,7 +12,12 @@ const int SCREEN_HEIGHT = 480;
 int main(int, char **)
 {
 
-    graphic_engine Test;
+    menu m;
+
+
+
+
+    /*graphic_engine Test;
     gamefield g1;
     g1.add_object();
     input_handler i1;
@@ -22,7 +25,7 @@ int main(int, char **)
     {
     Test.draw_all(g1);
     i1.update(g1);
-    }
+    }*/
 
 
 

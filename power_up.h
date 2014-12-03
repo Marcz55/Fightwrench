@@ -15,7 +15,7 @@ public:
 private:
     int radius;
     int duration; //borde ges i x*10ms .
-    bool is_picked_up = false; //
+    bool is_picked_up = false;
 
 };
 

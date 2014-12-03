@@ -6,7 +6,7 @@
 
 class character : public gameobject
 {
-    friend class input_handler;
+    //friend class input_handler;
 public:
     character(int x_pos, int y_pos): gameobject("Axel", x_pos,y_pos){}
 
@@ -17,6 +17,7 @@ public:
     double get_direction(){return direction;}
     void update_move_vector();
     void ultimate(){};
+    input_setter(int,int,int,int,int,int,bool);
 protected:
     double x_movement = 0;
     double y_movement = 0;

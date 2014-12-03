@@ -1,6 +1,6 @@
 #include "input_handler.h"
 
-void input_handler::update(class gamefield& field)
+void input_handler::update(gamefield& field)
 {
     while(SDL_PollEvent(&event))
     {
@@ -16,7 +16,7 @@ void input_handler::update(class gamefield& field)
                         field.character_vector[0].input_set_right(1);
                         break;
                     case SDLK_w:
-                        field.character_vector[0].input_set_up(1);
+                        field.get_character_vector()->at(0).input_set_up(1);
                         break;
                     case SDLK_s:
                         field.character_vector[0].input_set_down(1);
@@ -34,6 +34,7 @@ void input_handler::update(class gamefield& field)
                         field.character_vector[0].ultimate();
                         break;
                 }
+                break;
             case SDL_KEYUP:
                 switch(event.key.keysym.sym)
             {
@@ -62,9 +63,8 @@ void input_handler::update(class gamefield& field)
                     field.character_vector[1].stopultimate;
                     break;
                     */
-            }
-
-
+             }
+            break;
         }
 
 

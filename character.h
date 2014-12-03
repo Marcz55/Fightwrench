@@ -11,10 +11,6 @@ public:
     character(int x_pos, int y_pos): gameobject("Axel", x_pos,y_pos){}
 
     void update() override;
-    std::string get_name(){return name;}
-    int get_xpos(){return xpos;}
-    int get_ypos(){return ypos;}
-    double get_direction(){return direction;}
     void update_move_vector();
     void ultimate(){};
 protected:

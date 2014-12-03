@@ -3,6 +3,7 @@ and may not be redistributed without written permission.*/
 #include "graphic_engine.h"
 #include "gamefield.h"
 #include "soundhandler.h"
+#include "input_handler.h"
 //Screen dimension constants
 using namespace std;
 
@@ -16,9 +17,11 @@ int main(int, char **)
     graphic_engine Test;
     gamefield g1;
     g1.add_object();
+    input_handler i1;
     for(int i = 0; i < 1000; i++)
     {
     Test.draw_all(g1);
+    i1.update(g1);
     }
 
 

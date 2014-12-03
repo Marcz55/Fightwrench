@@ -61,6 +61,7 @@ void graphic_engine::draw_all(gamefield& my_gamefield)
         {
             draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_direction());
             it->update();
+            it->update_move_vector();
         }
 
         //draw_object("Axel",i,i,i);

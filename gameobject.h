@@ -10,6 +10,10 @@ public:
     virtual void move(double x_length, double y_length);
     virtual void rotate(int turn_direction); //turn_direction är 0 eller +-1 för att avgöra om
                                              //objektet ska vridas och åt vilket håll.
+    virtual std::string get_name(){return name;}
+    virtual int get_xpos(){return xpos;}
+    virtual int get_ypos(){return ypos;}
+    virtual double get_direction(){return direction;}
 
 protected:
     std::string name;

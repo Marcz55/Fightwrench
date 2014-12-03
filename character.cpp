@@ -19,5 +19,5 @@ void character::update_move_vector()
     {
         y_movement = 0;
         x_movement = 0;
-    }
+    };
 }

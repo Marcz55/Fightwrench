@@ -9,9 +9,9 @@ game::game()
 
 void game::main_update()
 {
-    main_graphic_engine.draw_all(main_game_field);
-    main_input_handler.update(main_game_field);
-    for(auto it = main_game_field.get_character_vector.begin(); it != main_game_field.get_character_vector.end(); it++)
+    main_graphic_engine.draw_all(main_gamefield);
+    main_input_handler.update(main_gamefield);
+    for(auto it = main_gamefield.get_character_vector.begin(); it != main_gamefield.get_character_vector.end(); it++)
     {
         it->update();
         it->update_movement_vector(); //Denna bör läggas på lämplig plats i inputhanteraren.

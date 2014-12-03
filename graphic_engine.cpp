@@ -56,7 +56,6 @@ void graphic_engine::draw_all(gamefield& my_gamefield)
     //Test för att rita ut 2 objekt
         SDL_SetRenderDrawColor(Renderer,0,0,0,255);
         SDL_RenderClear(Renderer);
-
         for(auto it = my_gamefield.character_vector.begin(); it != my_gamefield.character_vector.end(); it++)
         {
             draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_direction());

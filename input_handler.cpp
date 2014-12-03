@@ -10,25 +10,25 @@ void input_handler::update(class gamefield& field)
                 switch(event.key.keysym.sym)
                 {
                     case SDLK_a:
-                        field.character_vector[0].left_key = 1;
+                        field.character_vector[0].input_set_left(1);
                         break;
                     case SDLK_d:
-                        field.character_vector[0].right_key = 1;
+                        field.character_vector[0].input_set_right(1);
                         break;
                     case SDLK_w:
-                        field.character_vector[0].up_key = 1;
+                        field.character_vector[0].input_set_up(1);
                         break;
                     case SDLK_s:
-                        field.character_vector[0].down_key = 1;
+                        field.character_vector[0].input_set_down(1);
                         break;
                     case SDLK_y:
-                        field.character_vector[0].turn_left_key = 1;
+                        field.character_vector[0].input_set_turn_left(1);
                         break;
                     case SDLK_u:
-                        field.character_vector[0].turn_right_key = 1;
+                        field.character_vector[0].input_set_turn_right(1);
                         break;
                     case SDLK_i:
-                        field.character_vector[0].shoot_key = true;
+                        field.character_vector[0].input_set_shoot(true);
                         break;
                     case SDLK_o:
                         field.character_vector[0].ultimate();
@@ -38,27 +38,27 @@ void input_handler::update(class gamefield& field)
                 switch(event.key.keysym.sym)
             {
                 case SDLK_a:
-                    field.character_vector[0].left_key = 0;
+                    field.character_vector[0].input_set_left(0);
                     break;
                 case SDLK_d:
-                    field.character_vector[0].right_key = 0;
+                    field.character_vector[0].input_set_right(0);
                     break;
                 case SDLK_w:
-                    field.character_vector[0].up_key = 0;
+                    field.character_vector[0].input_set_up(0);
                     break;
                 case SDLK_s:
-                    field.character_vector[0].down_key = 0;
+                    field.character_vector[0].input_set_down(0);
                     break;
                 case SDLK_y:
-                    field.character_vector[0].turn_left_key = 0;
+                    field.character_vector[0].input_set_turn_left(0);
                     break;
                 case SDLK_u:
-                    field.character_vector[0].turn_right_key = 0;
+                    field.character_vector[0].input_set_turn_right(0);
                     break;
                 case SDLK_i:
-                    field.character_vector[0].shoot_key = false;
+                    field.character_vector[0].input_set_shoot(false);
                     break;
-                /*case SDLK_o:
+                    /*case SDLK_o:
                     field.character_vector[1].stopultimate;
                     break;
                     */

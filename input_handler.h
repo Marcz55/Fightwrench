@@ -14,7 +14,7 @@ private:
 public:
     input_handler() = default;
     ~input_handler() = default;
-    void update(class gamefield&); //Tar hand om allt som ligger i event_queue
+    void update(gamefield&); //Tar hand om allt som ligger i event_queue
 };
 
 #endif // INPUT_HANDLER_H

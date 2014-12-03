@@ -1,10 +1,10 @@
 #include "game.h"
 #include <time.h>
-
 using namespace std;
 
 game::game()
 {
+    main_gamefield.add_object();
 }
 
 void game::main_update()
@@ -16,6 +16,7 @@ void game::main_update()
         it->update();
         it->update_move_vector(); //Denna bör läggas på lämplig plats i inputhanteraren.
     }
+
 }
 
 void game::game_loop()

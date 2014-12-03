@@ -15,7 +15,7 @@ soundhandler::soundhandler()
 
     Soundtrack = Mix_LoadMUS("Testmusik.mp3");
 
-    Gunshot = Mix_LoadWAV("Sound1.wav");
+    create_sound("Gunshot","Sound1.wav");
 
 }
 

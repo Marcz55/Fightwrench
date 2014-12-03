@@ -13,7 +13,14 @@ public:
     void update() override;
     void update_move_vector();
     void ultimate(){};
-    input_setter(int,int,int,int,int,int,bool);
+    void input_set_up(const int);
+    void input_set_down(const int);
+    void input_set_left(const int);
+    void input_set_right(const int);
+    void input_set_turn_left(const int);
+    void input_set_turn_right(const int);
+    void input_set_shoot(const bool);
+    int get_up_key(){return up_key;}
 protected:
     double x_movement = 0;
     double y_movement = 0;

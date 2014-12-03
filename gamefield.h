@@ -4,6 +4,7 @@
 #include<vector>
 #include "gameobject.h"
 #include "character.h"
+#include "cover.h"
 
 using namespace std;
 class gamefield
@@ -17,6 +18,7 @@ public:
     void update();
     ~gamefield()=default;
     void add_object();
+    vector<character>* get_character_vector(){return &character_vector;}
 
 
 private:
@@ -25,7 +27,7 @@ private:
     string map1;
     vector<character> character_vector;
    // vector<class projectile> projectile_vector;
-    //vector<class cover> cover_vector;
+    vector<class cover> cover_vector;
    // vector<class power_up> power_up_vector;
 };
 

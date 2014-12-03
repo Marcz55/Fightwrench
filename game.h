@@ -3,6 +3,8 @@
 #include "gamefield.h"
 #include "graphic_engine.h"
 #include "input_handler.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_main.h>
 
 
 class game
@@ -14,7 +16,7 @@ public:
 
 private:
     gamefield main_gamefield;
-    graphic_enginge main_graphic_engine;
+    graphic_engine main_graphic_engine;
     input_handler main_input_handler;
 
 };

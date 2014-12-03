@@ -59,13 +59,10 @@ void graphic_engine::draw_all(gamefield& my_gamefield)
         for(auto it = my_gamefield.character_vector.begin(); it != my_gamefield.character_vector.end(); it++)
         {
             draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_direction());
-            it->update();
-            it->update_move_vector();
         }
 
         //draw_object("Axel",i,i,i);
         //draw_object("Marsus",800-i,600-i,-i);
 
         SDL_RenderPresent(Renderer);
-        SDL_Delay(10);
 }

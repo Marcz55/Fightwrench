@@ -21,3 +21,37 @@ void character::update_move_vector()
         x_movement = 0;
     };
 }
+void character::input_set_up(const int up)
+{
+    up_key = up;
+}
+
+void character::input_set_down(const int down)
+{
+    down_key = down;
+}
+
+void character::input_set_left(const int left)
+{
+    left_key = left;
+}
+
+void character::input_set_right(const int right)
+{
+    right_key = right;
+}
+
+void character::input_set_turn_left(const int turn_left)
+{
+    turn_left_key = turn_left;
+}
+
+void character::input_set_turn_right(const int turn_right)
+{
+    turn_right_key = turn_right;
+}
+
+void character::input_set_shoot(const bool shoot)
+{
+    shoot_key = shoot;
+}

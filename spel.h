@@ -5,6 +5,9 @@ class Spel
 {
 public:
     Spel();
+
+
+
 };
 
 #endif // SPEL_H

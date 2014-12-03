@@ -1,0 +1,22 @@
+#ifndef POWER_UP_H
+#define POWER_UP_H
+#include "gameobject.h"
+#include "character.h"
+
+class power_up : public gameobject
+{
+public:
+    power_up()=delete;
+    power_up(std::string name1, int x, int y, int input_radius, int input_duration);
+    ~power_up()=default;
+    power_up(power_up& copy_power_up)=default;
+    bool check_pick_up_status();
+    void pick_up(character& up_picker);
+private:
+    int radius;
+    int duration; //borde ges i x*10ms .
+    bool is_picked_up = false; //
+
+};
+
+#endif // POWER_UP_H

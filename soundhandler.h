@@ -14,10 +14,13 @@ class soundhandler
 public:
     soundhandler();
 
+    ~soundhandler();
+
     //Bakgrundsmusik
     Mix_Music* Soundtrack = nullptr;
+    Mix_Chunk* Gunshot = nullptr;
     //Ljudeffekter
-    //std::map<std::string,Mix_Chunk> Sound_map;
+    std::map<std::string,Mix_Chunk*> Sound_map;
 
     void playbgm();
     void stopbgm();
@@ -25,8 +28,8 @@ public:
     void resumebgm();
     void rewindbgm();
 
-   // void create_sound(std::string, const char*);
-    //void play_sound(std::string);
+    void create_sound(std::string, const char*);
+    void play_sound(std::string);
 
 };
 

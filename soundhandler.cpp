@@ -15,10 +15,23 @@ soundhandler::soundhandler()
 
     Soundtrack = Mix_LoadMUS("Testmusik.mp3");
 
+    Gunshot = Mix_LoadWAV("Sound1.wav");
 
 }
 
-/*void soundhandler::create_sound(string name, const char* filename)
+soundhandler::~soundhandler()
+{
+    Mix_FreeMusic(Soundtrack);
+    Mix_FreeChunk(Gunshot);
+    for(auto it = Sound_map.begin(); it != Sound_map.end(); ++it)
+    {
+        Mix_FreeChunk(it->second);
+    }
+    Mix_Quit();
+    SDL_Quit();
+}
+
+void soundhandler::create_sound(string name, const char* filename)
 {
     Mix_Chunk* Current_sound = Mix_LoadWAV(filename);
     Sound_map.insert(pair<string,Mix_Chunk*>(name, Current_sound));
@@ -29,7 +42,7 @@ void soundhandler::play_sound(string name)
 {
     Mix_PlayChannel(-1, Sound_map.at(name), 0);
 }
-*/
+
 void soundhandler::playbgm()
 {
     if (Soundtrack != nullptr)

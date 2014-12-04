@@ -2,13 +2,13 @@
 
 using namespace std;
 
-gameobject::gameobject(string name1, int x, int y)
+gameobject::gameobject(string object_name, int x, int y, int init_speed, double angle)
 {
     xpos =x;
     ypos=y;
-    direction = 0;
-    speed = 10;
-    name=name1;
+    direction = angle;
+    speed = init_speed;
+    name=object_name;
 
 }
 

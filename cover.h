@@ -4,7 +4,7 @@
 class cover : public gameobject
 {
 public:
-    cover(std::string name1, int x, int y, int health_input, int height_input, int width_input);
+    cover(std::string name1, int x, int y, double angle, int health_input, int height_input, int width_input);
     cover()=delete;
     ~cover()=default;
 

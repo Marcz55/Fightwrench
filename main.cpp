@@ -1,6 +1,11 @@
 /*This source code copyrighted by Lazy Foo' Productions (2004-2013)
 and may not be redistributed without written permission.*/
 #include "menu.h"
+#include "graphic_engine.h"
+#include "gamefield.h"
+#include "soundhandler.h"
+#include "input_handler.h"
+#include "game.h"
 
 //Screen dimension constants
 using namespace std;
@@ -13,6 +18,8 @@ int main(int, char **)
 {
 
     menu m;
+    game main_game;
+    main_game.game_loop();
 
 
 

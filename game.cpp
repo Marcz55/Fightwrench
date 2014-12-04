@@ -4,7 +4,8 @@ using namespace std;
 
 game::game()
 {
-    main_gamefield.add_object();
+    main_gamefield.add_character(marcus{"Marsus",100,100,2,67});
+    main_gamefield.add_character(axel{"Axel",700,500,2,30});
 }
 
 void game::main_update()

@@ -3,6 +3,8 @@
 #include "gamefield.h"
 #include "graphic_engine.h"
 #include "input_handler.h"
+#include "axel.h"
+#include "marcus.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_main.h>
 

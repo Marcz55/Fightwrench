@@ -1,6 +1,6 @@
 #include "cover.h"
 
-cover::cover(std::string name1, int x, int y, int health_input, int height_input, int width_input):gameobject(name1, x, y)
+cover::cover(std::string name1, int x, int y, double angle, int health_input, int height_input, int width_input):gameobject(name1, x, y, 0,angle)
 {
     health=health_input;
     width=width_input;

@@ -17,7 +17,7 @@ public:
     gamefield(string map, string character_one, string character_two);
     void update();
     ~gamefield()=default;
-    void add_object();
+    void add_character(character character_to_add);
     vector<character>* get_character_vector(){return &character_vector;}
 
 

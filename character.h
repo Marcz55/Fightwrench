@@ -8,7 +8,7 @@ class character : public gameobject
 {
     //friend class input_handler;
 public:
-    character(int x_pos, int y_pos): gameobject("Axel", x_pos,y_pos){}
+    character(std::string character_name,int x_pos, int y_pos, int speed, double angle): gameobject(character_name, x_pos,y_pos,speed,angle){}
 
     void update() override;
     void update_move_vector();

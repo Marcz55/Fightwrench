@@ -41,8 +41,8 @@ menu::~menu()
     SDL_DestroyTexture(Background);
     SDL_DestroyTexture(Button1);
     SDL_DestroyTexture(Button2);
-    SDL_Quit();
     IMG_Quit();
+    SDL_Quit();
 }
 
 void menu::menu_loop()
@@ -90,7 +90,7 @@ void menu::update(const double mouse_x,const double mouse_y)
         render(100,100,200,200,Button2,Button2_rect);
         if(mouse_x < mouse_y)
         {
-            //Gör inget
+            //Gör inget, kanske någon mysig grafik
         }
         break;
     }
@@ -111,12 +111,19 @@ void menu::mouse_clicked(const double x, const double y)
         cout << "x: " << x << " y: " << y << "\n";
         if(checkcollision(Button1_rect,x,y))
         {
-            //Do stuff
             cout << "Button 1 clicked!";
         }
         if(checkcollision(Button2_rect,x,y))
         {
-            //Do stuff
+            SDL_DestroyWindow(Menu_window);
+            SDL_DestroyRenderer(Menu_renderer);
+            SDL_DestroyTexture(Background);
+            SDL_DestroyTexture(Button1);
+            SDL_DestroyTexture(Button2);
+            IMG_Quit();
+            SDL_Quit();
+            game main_game;
+            main_game.game_loop();
             cout << "Button 2 clicked!";
         }
         break;

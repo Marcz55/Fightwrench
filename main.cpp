@@ -18,8 +18,8 @@ int main(int, char **)
 {
 
     menu m;
-    game main_game;
-    main_game.game_loop();
+    //game main_game;
+    //main_game.game_loop();
 
 
 

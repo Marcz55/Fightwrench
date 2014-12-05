@@ -11,6 +11,7 @@ menu::menu()
 
     Menu_width = 400;
     Menu_height = 300;
+    state = 0;
 
     //Skapa fönster
     Menu_window = SDL_CreateWindow("Fightwrench - The Mindless Genocide", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Menu_width, Menu_height,SDL_WINDOW_RESIZABLE);
@@ -22,14 +23,14 @@ menu::menu()
     //Skapa bakgrunden
     Menu_surface = IMG_Load("Menybild.png");
     Background = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
-    Menu_surface = IMG_Load("Button1.png");
+
+    //Skapa knappar
+    Menu_surface = IMG_Load("Knapp1.png");
     Button1 = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
-    Menu_surface = IMG_Load("Button2.png");
+    Menu_surface = IMG_Load("Knapp2.png");
     Button2 = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
     SDL_FreeSurface(Menu_surface);
-
     menu_loop();
-    SDL_Delay(3000);
 
 }
 
@@ -46,18 +47,53 @@ menu::~menu()
 
 void menu::menu_loop()
 {
+    double mouse_x = 0;
+    double mouse_y = 0;
 
+    for(int i = 0; i>-1; ++i)
+    {
+        SDL_Event listen;
+        while (SDL_PollEvent(&listen))
+        {
+            if(listen.type == SDL_MOUSEMOTION){
+                mouse_x = listen.motion.x;
+                mouse_y = listen.motion.y;
+            }
+            else if(listen.type == SDL_MOUSEBUTTONDOWN)
+            {
+                mouse_clicked(mouse_x,mouse_y);
+            }
+
+        }
+        update(mouse_x,mouse_y);
+        SDL_Delay(10);
+    }
 }
 
-void menu::update()
+void menu::render(int w, int h, double x, double y, SDL_Texture*& texture,SDL_Rect& rect)
+{
+    rect.w = w;
+    rect.h = h;
+    rect.x = x;
+    rect.y = y;
+    SDL_RenderCopy(Menu_renderer,texture,nullptr,&rect);
+}
+
+void menu::update(const double mouse_x,const double mouse_y)
 {
     //Uppdatera bakgrunden
-    Background_rect.w = 400;
-    Background_rect.h = 300;
-    Background_rect.x = 0;
-    Background_rect.y = 0;
-    SDL_RenderCopy(Menu_renderer,Background,nullptr,&Background_rect);
-
+    switch (state)
+    {
+    case 0:
+        render(Menu_width,Menu_height,0,0,Background,Menu_rect);
+        render(100,100,100,200,Button1,Button1_rect);
+        render(100,100,200,200,Button2,Button2_rect);
+        if(mouse_x < mouse_y)
+        {
+            //Gör inget
+        }
+        break;
+    }
     //Uppdatera knappar
 
 
@@ -65,4 +101,36 @@ void menu::update()
     SDL_RenderPresent(Menu_renderer);
 
 
+}
+
+void menu::mouse_clicked(const double x, const double y)
+{
+    switch (state)
+    {
+    case 0:
+        cout << "x: " << x << " y: " << y << "\n";
+        if(checkcollision(Button1_rect,x,y))
+        {
+            //Do stuff
+            cout << "Button 1 clicked!";
+        }
+        if(checkcollision(Button2_rect,x,y))
+        {
+            //Do stuff
+            cout << "Button 2 clicked!";
+        }
+        break;
+
+        //Fler cases
+    }
+}
+
+bool menu::checkcollision(const SDL_Rect& rect,const double x,const double y)
+{
+    if((x > rect.x && x < rect.x + rect.w) && (y > rect.y && y < rect.y + rect.h))
+    {
+        return true;
+    } else {
+        return false;
+    }
 }

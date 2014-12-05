@@ -36,8 +36,8 @@ void graphic_engine::draw_object(string name,double x_coord,double y_coord, doub
 {
     Current_rect.w = Image_map.at(name).Texture_width;
     Current_rect.h = Image_map.at(name).Texture_height;
-    Current_rect.x = x_coord;
-    Current_rect.y = y_coord;
+    Current_rect.x = x_coord - Current_rect.w/2;
+    Current_rect.y = y_coord - Current_rect.h/2;
     SDL_RenderCopyEx(Renderer, Image_map.at(name).Texture, nullptr, &Current_rect,angle,nullptr,SDL_FLIP_NONE);
 }
 

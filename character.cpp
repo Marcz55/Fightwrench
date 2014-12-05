@@ -1,5 +1,4 @@
 #include "character.h"
-#include <iostream>
 using namespace std;
 
 character::character(string character_name,int x_pos, int y_pos, int speed, double angle, string init_projectile, vector<projectile>* init_projectile_vector,int init_firing_cooldown): gameobject(character_name, x_pos,y_pos,speed,angle)
@@ -21,7 +20,6 @@ void character::update()
     {
         this->fire_weapon();
     }
-    cout<<direction<<endl;
 
 
 }

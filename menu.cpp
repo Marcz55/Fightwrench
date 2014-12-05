@@ -86,11 +86,17 @@ void menu::update(const double mouse_x,const double mouse_y)
     {
     case 0:
         render(Menu_width,Menu_height,0,0,Background,Menu_rect);
-        render(100,100,100,200,Button1,Button1_rect);
-        render(100,100,200,200,Button2,Button2_rect);
-        if(mouse_x < mouse_y)
+        if(checkcollision(Button1_rect, mouse_x, mouse_y)){
+            render(110,110,95,195,Button1,Button1_rect);
+        } else
         {
-            //Gör inget, kanske någon mysig grafik
+        render(100,100,100,200,Button1,Button1_rect);
+        }
+        if(checkcollision(Button2_rect, mouse_x, mouse_y)){
+            render(110,110,195,195,Button2,Button2_rect);
+        } else
+        {
+        render(100,100,200,200,Button2,Button2_rect);
         }
         break;
     }

@@ -5,7 +5,7 @@
 class axel : public character
 {
 public:
-    axel(std::string axel_name, int x, int y,int speed, double angle):character(axel_name,x,y,speed,angle){}
+    axel(int x, int y, double angle, std::vector<projectile>* init_projectile_vector):character("Axel",x,y,3,angle,"bullet",init_projectile_vector,10){}
 };
 
 #endif // AXEL_H

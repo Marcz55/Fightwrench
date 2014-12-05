@@ -5,6 +5,7 @@
 #include "gameobject.h"
 #include "character.h"
 #include "cover.h"
+#include "projectile.h"
 
 using namespace std;
 class gamefield
@@ -18,7 +19,10 @@ public:
     void update();
     ~gamefield()=default;
     void add_character(character character_to_add);
+    void add_projectile(projectile projectile_to_add);
     vector<character>* get_character_vector(){return &character_vector;}
+    vector<cover>* get_cover_vector(){return &cover_vector;}
+    vector<projectile>* get_projectile_vector(){return &projectile_vector;}
 
 
 private:
@@ -26,7 +30,7 @@ private:
     int window_width = 800;
     string map1;
     vector<character> character_vector;
-   // vector<class projectile> projectile_vector;
+    vector<class projectile> projectile_vector;
     vector<class cover> cover_vector;
    // vector<class power_up> power_up_vector;
 };

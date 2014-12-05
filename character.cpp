@@ -1,9 +1,29 @@
 #include "character.h"
+#include <iostream>
 using namespace std;
+
+character::character(string character_name,int x_pos, int y_pos, int speed, double angle, string init_projectile, vector<projectile>* init_projectile_vector,int init_firing_cooldown): gameobject(character_name, x_pos,y_pos,speed,angle)
+{
+    projectile_type = init_projectile;
+    projectile_vector = init_projectile_vector;
+    firing_cooldown = init_firing_cooldown;
+}
+
 void character::update()
 {
     this->rotate(turn_right_key - turn_left_key);
     this->move(x_movement,y_movement);
+    if (firing_timer > 0)
+    {
+        firing_timer -= 1;
+    }
+    if (shoot_key && firing_timer <= 0)
+    {
+        this->fire_weapon();
+    }
+    cout<<direction<<endl;
+
+
 }
 
 void character::update_move_vector()
@@ -54,4 +74,15 @@ void character::input_set_turn_right(const int turn_right)
 void character::input_set_shoot(const bool shoot)
 {
     shoot_key = shoot;
+}
+
+void character::fire_weapon()
+{
+    if(projectile_type == "bullet")
+    {
+        projectile_vector->push_back(bullet(xpos,ypos,direction));
+        firing_timer = firing_cooldown;
+    }
+
+
 }

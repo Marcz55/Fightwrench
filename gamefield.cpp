@@ -5,3 +5,8 @@
  {     
      character_vector.push_back(character_to_add);
  }
+
+ void gamefield::add_projectile(projectile projectile_to_add)
+ {
+     projectile_vector.push_back(projectile_to_add);
+ }

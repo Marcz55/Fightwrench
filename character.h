@@ -1,14 +1,17 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 #include "gameobject.h"
+#include "projectile.h"
+#include "bullet.h"
 #include <string>
 #include <math.h>
+#include <vector>
 
 class character : public gameobject
 {
     //friend class input_handler;
 public:
-    character(std::string character_name,int x_pos, int y_pos, int speed, double angle): gameobject(character_name, x_pos,y_pos,speed,angle){}
+    character(std::string character_name,int x_pos, int y_pos, int speed, double angle, std::string init_projectile, std::vector<projectile>* init_projectile_vector,int init_firing_cooldown);
 
     void update() override;
     void update_move_vector();
@@ -21,6 +24,8 @@ public:
     void input_set_turn_right(const int);
     void input_set_shoot(const bool);
     int get_up_key(){return up_key;}
+    void fire_weapon();
+
 protected:
     double x_movement = 0;
     double y_movement = 0;
@@ -31,6 +36,10 @@ protected:
     int turn_left_key = 0;
     int turn_right_key = 0;
     bool shoot_key = false;
+    int firing_cooldown; //Antal tic en karaktär måste vänta innan den kan skjuta igen.
+    int firing_timer = 0;    //Den timer som räknas ner och sätt till firing_cooldown när man skjuter.
+    std::string projectile_type;
+    std::vector<projectile>* projectile_vector;
 
 
 };

@@ -5,7 +5,7 @@
 class marcus : public character
 {
 public:
-    marcus(std::string marcus_name, int x, int y,int speed, double angle):character(marcus_name,x,y,speed,angle){}
+    marcus(int x, int y,double angle, std::vector<projectile>* init_projectile_vector):character("Marsus",x,y,2,angle,"bullet",init_projectile_vector,20){}
 };
 
 #endif // MARCUS_H

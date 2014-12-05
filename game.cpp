@@ -4,8 +4,8 @@ using namespace std;
 
 game::game()
 {
-    main_gamefield.add_character(marcus{"Marsus",100,100,2,67});
-    main_gamefield.add_character(axel{"Axel",700,500,2,30});
+    main_gamefield.add_character(marcus{100,100,67,main_gamefield.get_projectile_vector()});
+    main_gamefield.add_character(axel{700,500,30,main_gamefield.get_projectile_vector()});
 }
 
 void game::main_update()
@@ -16,6 +16,10 @@ void game::main_update()
     {
         it->update();
         it->update_move_vector(); //Denna bör läggas på lämplig plats i inputhanteraren.
+    }
+    for(auto it = main_gamefield.get_projectile_vector()->begin(); it != main_gamefield.get_projectile_vector()->end(); it++)
+    {
+        it->update();
     }
 
 }

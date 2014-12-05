@@ -21,6 +21,7 @@ graphic_engine::graphic_engine()
     //Skapa texturer
     create_texture("Axel","Axel.png");
     create_texture("Marsus","Marsus.png");
+    create_texture("bullet","bullet.png");
 
 }
 
@@ -57,6 +58,10 @@ void graphic_engine::draw_all(gamefield& my_gamefield)
         SDL_SetRenderDrawColor(Renderer,0,0,0,255);
         SDL_RenderClear(Renderer);
         for(auto it = my_gamefield.character_vector.begin(); it != my_gamefield.character_vector.end(); it++)
+        {
+            draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_direction());
+        }
+        for(auto it = my_gamefield.projectile_vector.begin(); it != my_gamefield.projectile_vector.end(); it++)
         {
             draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_direction());
         }

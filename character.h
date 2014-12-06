@@ -3,6 +3,8 @@
 #include "gameobject.h"
 #include "projectile.h"
 #include "bullet.h"
+#include "grenade.h"
+#include "soundhandler.h"
 #include <string>
 #include <math.h>
 #include <vector>
@@ -11,7 +13,7 @@ class character : public gameobject
 {
     //friend class input_handler;
 public:
-    character(std::string character_name,int x_pos, int y_pos, int speed, double angle, std::string init_projectile, std::vector<projectile>* init_projectile_vector,int init_firing_cooldown);
+    character(std::string character_name,int x_pos, int y_pos, int speed, double angle, std::string init_projectile, std::vector<projectile>* init_projectile_vector,int init_firing_cooldown, soundhandler* init_soundhandler);
 
     void update() override;
     void update_move_vector();
@@ -40,6 +42,8 @@ protected:
     int firing_timer = 0;    //Den timer som räknas ner och sätt till firing_cooldown när man skjuter.
     std::string projectile_type;
     std::vector<projectile>* projectile_vector;
+    soundhandler* main_soundhandler;
+
 
 
 };

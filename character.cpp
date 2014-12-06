@@ -1,11 +1,12 @@
 #include "character.h"
 using namespace std;
 
-character::character(string character_name,int x_pos, int y_pos, int speed, double angle, string init_projectile, vector<projectile>* init_projectile_vector,int init_firing_cooldown): gameobject(character_name, x_pos,y_pos,speed,angle)
+character::character(string character_name,int x_pos, int y_pos, int speed, double angle, string init_projectile, vector<projectile>* init_projectile_vector,int init_firing_cooldown, soundhandler* init_soundhandler): gameobject(character_name, x_pos,y_pos,speed,angle)
 {
     projectile_type = init_projectile;
     projectile_vector = init_projectile_vector;
     firing_cooldown = init_firing_cooldown;
+    main_soundhandler = init_soundhandler;
 }
 
 void character::update()
@@ -80,6 +81,13 @@ void character::fire_weapon()
     {
         projectile_vector->push_back(bullet(xpos,ypos,direction));
         firing_timer = firing_cooldown;
+        main_soundhandler->play_sound("Gunshot"); //Denna rad gör att spelet krashar oftare än vad är lämpligt.
+    }
+    if(projectile_type == "grenade")
+    {
+        projectile_vector->push_back(grenade(xpos,ypos,direction));
+        firing_timer = firing_cooldown;
+        main_soundhandler->play_sound("Gunshot"); //Denna rad gör att spelet krashar oftare än vad är lämpligt.
     }
 
 

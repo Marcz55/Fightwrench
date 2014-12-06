@@ -12,7 +12,6 @@ class gamefield
 {
     friend class collision_handler;
     friend class graphic_engine;
-    friend class input_handler;
 public:
     gamefield() = default;
     gamefield(string map, string character_one, string character_two);

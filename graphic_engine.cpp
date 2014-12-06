@@ -22,6 +22,7 @@ graphic_engine::graphic_engine()
     create_texture("Axel","Axel.png");
     create_texture("Marsus","Marsus.png");
     create_texture("bullet","bullet.png");
+    create_texture("grenade","grenade.png");
 
 }
 

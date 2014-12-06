@@ -4,8 +4,8 @@ using namespace std;
 
 game::game()
 {
-    main_gamefield.add_character(marcus{100,100,67,main_gamefield.get_projectile_vector()});
-    main_gamefield.add_character(axel{700,500,30,main_gamefield.get_projectile_vector()});
+    main_gamefield.add_character(marcus{100,100,67,main_gamefield.get_projectile_vector(),&main_soundhandler});
+    main_gamefield.add_character(axel{700,500,30,main_gamefield.get_projectile_vector(),&main_soundhandler});
 }
 
 void game::main_update()

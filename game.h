@@ -5,6 +5,7 @@
 #include "input_handler.h"
 #include "axel.h"
 #include "marcus.h"
+#include "soundhandler.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_main.h>
 
@@ -20,6 +21,8 @@ private:
     gamefield main_gamefield;
     graphic_engine main_graphic_engine;
     input_handler main_input_handler;
+    soundhandler main_soundhandler;
+
 
 };
 

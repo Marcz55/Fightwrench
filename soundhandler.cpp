@@ -31,16 +31,18 @@ soundhandler::~soundhandler()
     SDL_Quit();
 }
 
-void soundhandler::create_sound(string name, const char* filename)
+void soundhandler::create_sound(const string name, const char* filename)
 {
     Mix_Chunk* Current_sound = Mix_LoadWAV(filename);
     Sound_map.insert(pair<string,Mix_Chunk*>(name, Current_sound));
     Mix_FreeChunk(Current_sound);
+    Current_sound = nullptr;
 }
 
-void soundhandler::play_sound(string name)
+void soundhandler::play_sound(const string name)
 {
-    Mix_PlayChannel(-1, Sound_map.at(name), 0);
+    if(Sound_map.at(name) != nullptr)
+        Mix_PlayChannel(-1, Sound_map.at(name), 0);
 }
 
 void soundhandler::playbgm()

@@ -28,8 +28,8 @@ public:
     void resumebgm();
     void rewindbgm();
 
-    void create_sound(std::string, const char*);
-    void play_sound(std::string);
+    void create_sound(std::string const, const char*);
+    void play_sound(std::string const);
 
 };
 

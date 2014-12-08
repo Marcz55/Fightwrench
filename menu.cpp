@@ -117,6 +117,7 @@ void menu::mouse_clicked(const double x, const double y)
         cout << "x: " << x << " y: " << y << "\n";
         if(checkcollision(Button1_rect,x,y))
         {
+            menu_soundhandler.play_sound("Axel");
             cout << "Button 1 clicked!";
         }
         if(checkcollision(Button2_rect,x,y))

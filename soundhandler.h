@@ -18,7 +18,6 @@ public:
 
     //Bakgrundsmusik
     Mix_Music* Soundtrack = nullptr;
-    Mix_Chunk* Gunshot = nullptr;
     //Ljudeffekter
     std::map<std::string,Mix_Chunk*> Sound_map;
 

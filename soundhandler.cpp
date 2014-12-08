@@ -16,13 +16,13 @@ soundhandler::soundhandler()
     Soundtrack = Mix_LoadMUS("Testmusik.mp3");
 
     create_sound("Gunshot","Sound1.wav");
+    create_sound("Axel","Axel_laugh.wav");
 
 }
 
 soundhandler::~soundhandler()
 {
     Mix_FreeMusic(Soundtrack);
-    Mix_FreeChunk(Gunshot);
     for(auto it = Sound_map.begin(); it != Sound_map.end(); ++it)
     {
         Mix_FreeChunk(it->second);
@@ -33,10 +33,7 @@ soundhandler::~soundhandler()
 
 void soundhandler::create_sound(const string name, const char* filename)
 {
-    Mix_Chunk* Current_sound = Mix_LoadWAV(filename);
-    Sound_map.insert(pair<string,Mix_Chunk*>(name, Current_sound));
-    Mix_FreeChunk(Current_sound);
-    Current_sound = nullptr;
+    Sound_map.insert(pair<string,Mix_Chunk*>(name, Mix_LoadWAV(filename)));
 }
 
 void soundhandler::play_sound(const string name)

@@ -32,7 +32,8 @@ public:
     ~graphic_engine();
     graphic_engine();
     void draw_all(gamefield &my_gamefield);
-    void draw_object(std::string name, double x_coord, double y_coord, double angle);
+    void draw_scaled_object(std::string name, double x_coord, double y_coord, double angle, double x_scale, double y_scale);
+    void draw_object(string name,double x_coord,double y_coord, double angle);
     void create_texture(std::string texture_name, const char *texture_file);
 
 

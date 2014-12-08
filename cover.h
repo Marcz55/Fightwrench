@@ -1,18 +1,22 @@
 #ifndef COVER_H
 #define COVER_H
 #include "gameobject.h"
+#include <vector>
+#include <cmath>
+using namespace std;
 class cover : public gameobject
 {
 public:
-    cover(std::string name1, int x, int y, double angle, int health_input, int height_input, int width_input);
+    cover(std::string name1, int x, int y, double angle, int health_input, double height_input, double width_input);
     cover()=delete;
     ~cover()=default;
 
+    vector<double> get_corners();
 
     //getters
     int get_health(){return health;}
-    int get_height(){return height;}
-    int get_width(){return width;}
+    double get_height(){return height;}
+    double get_width(){return width;}
 
     //setters
     void set_health(int new_health);
@@ -24,8 +28,8 @@ public:
 
 private:
     int health = 0;
-    int height = 0;
-    int width = 0;
+    double height = 0;
+    double width = 0;
 };
 
 #endif // COVER_H

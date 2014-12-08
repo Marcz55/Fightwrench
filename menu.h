@@ -11,9 +11,9 @@
 class menu
 {
 public:
-    menu();
+    menu(soundhandler& main_soundhandler);
     ~menu();
-    void update(const double,const double);
+    void update(const double, const double);
 
 private:
     int Menu_width;
@@ -28,11 +28,10 @@ private:
     SDL_Rect Menu_rect;
     SDL_Rect Button1_rect;
     SDL_Rect Button2_rect;
-    void menu_loop();
+    void menu_loop(soundhandler &main_soundhandler);
     void render(int, int, double, double, SDL_Texture*&, SDL_Rect&);
-    void mouse_clicked(const double,const double);
+    void mouse_clicked(const double,const double,soundhandler&);
     bool checkcollision(const SDL_Rect&,const double,const double);
-    soundhandler menu_soundhandler;
 
 };
 

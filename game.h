@@ -13,7 +13,7 @@
 class game
 {
 public:
-    game();
+    game(soundhandler &main_soundhandler);
     void main_update();
     void game_loop();
 
@@ -21,9 +21,6 @@ private:
     gamefield main_gamefield;
     graphic_engine main_graphic_engine;
     input_handler main_input_handler;
-    soundhandler main_soundhandler;
-
-
 };
 
 #endif // GAME_H

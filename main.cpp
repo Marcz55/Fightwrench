@@ -17,7 +17,8 @@ const int SCREEN_HEIGHT = 480;
 int main(int, char **)
 {
 
-    menu m;
+    soundhandler main_soundhandler;
+    menu m(main_soundhandler);
     //game main_game;
     //main_game.game_loop();
 

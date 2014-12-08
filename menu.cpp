@@ -2,7 +2,7 @@
 
 using namespace std;
 
-menu::menu()
+menu::menu(soundhandler &main_soundhandler)
 {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         cerr << "Error initializing SDL" << endl;
@@ -30,7 +30,7 @@ menu::menu()
     Menu_surface = IMG_Load("Knapp2.png");
     Button2 = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
     SDL_FreeSurface(Menu_surface);
-    menu_loop();
+    menu_loop(main_soundhandler);
 
 }
 
@@ -45,7 +45,7 @@ menu::~menu()
     SDL_Quit();
 }
 
-void menu::menu_loop()
+void menu::menu_loop(soundhandler& main_soundhandler)
 {
     double mouse_x = 0;
     double mouse_y = 0;
@@ -61,7 +61,7 @@ void menu::menu_loop()
             }
             else if(listen.type == SDL_MOUSEBUTTONDOWN)
             {
-                mouse_clicked(mouse_x,mouse_y);
+                mouse_clicked(mouse_x,mouse_y,main_soundhandler);
             }
 
         }
@@ -109,7 +109,7 @@ void menu::update(const double mouse_x,const double mouse_y)
 
 }
 
-void menu::mouse_clicked(const double x, const double y)
+void menu::mouse_clicked(const double x, const double y,soundhandler& main_soundhandler)
 {
     switch (state)
     {
@@ -117,7 +117,7 @@ void menu::mouse_clicked(const double x, const double y)
         cout << "x: " << x << " y: " << y << "\n";
         if(checkcollision(Button1_rect,x,y))
         {
-            menu_soundhandler.play_sound("Axel");
+            main_soundhandler.play_sound("Axel");
             cout << "Button 1 clicked!";
         }
         if(checkcollision(Button2_rect,x,y))
@@ -127,9 +127,7 @@ void menu::mouse_clicked(const double x, const double y)
             SDL_DestroyTexture(Background);
             SDL_DestroyTexture(Button1);
             SDL_DestroyTexture(Button2);
-            IMG_Quit();
-            SDL_Quit();
-            game main_game;
+            game main_game(main_soundhandler);
             main_game.game_loop();
             cout << "Button 2 clicked!";
         }

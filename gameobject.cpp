@@ -15,6 +15,16 @@ gameobject::gameobject(string object_name, int x, int y, int init_speed, double 
 void gameobject::rotate(int turn_direction)
 {
     direction = direction + 2*turn_direction;
+
+    //För stora/små vinklar leder till konstigheter, bägransar intervall till [0,360]
+    if (direction > 360)
+    {
+        direction = direction - 360;
+    }
+    if (direction < 0)
+    {
+        direction = direction + 360;
+    }
 }
 
 void gameobject::move(double x_length, double y_length)

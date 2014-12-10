@@ -13,7 +13,10 @@ class character : public gameobject
 {
     //friend class input_handler;
 public:
-    character(std::string character_name,int x_pos, int y_pos, int speed, double angle, std::string init_projectile, std::vector<projectile>* init_projectile_vector,int init_firing_cooldown, soundhandler* init_soundhandler);
+    character(std::string character_name,int x_pos, int y_pos, int speed, double angle,
+              std::string init_projectile, std::vector<projectile>* init_projectile_vector,
+              int init_firing_cooldown, soundhandler* init_soundhandler, int init_max_health,
+              int init_max_ammo, int init_reload_time);
 
     void update() override;
     void update_move_vector();
@@ -27,6 +30,9 @@ public:
     void input_set_shoot(const bool);
     int get_up_key(){return up_key;}
     int get_movement_direction(){return movement_direction;}
+    int get_health(){return current_health;}
+    double get_health_percent(){return current_health/max_health;}
+    double get_ammo_percent(){return current_ammo/max_ammo;}
     void fire_weapon();
 
 protected:
@@ -38,6 +44,12 @@ protected:
     int right_key = 0;
     int turn_left_key = 0;
     int turn_right_key = 0;
+    int current_health = 0;
+    int max_health = 0;
+    int current_ammo =0;
+    int max_ammo = 0;
+    int reload_time = 0;
+    int reload_timer = 0;
     double movement_direction = 0;
     bool shoot_key = false;
     int firing_cooldown; //Antal tic en karaktär måste vänta innan den kan skjuta igen.

@@ -1,25 +1,49 @@
 #include "character.h"
 using namespace std;
 
-character::character(string character_name,int x_pos, int y_pos, int speed, double angle, string init_projectile, vector<projectile>* init_projectile_vector,int init_firing_cooldown, soundhandler* init_soundhandler): gameobject(character_name, x_pos,y_pos,speed,angle)
+character::character(string character_name, int x_pos, int y_pos, int speed, double angle,
+                     string init_projectile, vector<projectile>* init_projectile_vector,
+                     int init_firing_cooldown, soundhandler* init_soundhandler, int init_max_health,
+                     int init_max_ammo, int init_reload_time): gameobject(character_name, x_pos,y_pos,speed,angle)
 {
     projectile_type = init_projectile;
     projectile_vector = init_projectile_vector;
     firing_cooldown = init_firing_cooldown;
     main_soundhandler = init_soundhandler;
+    current_health = init_max_health;
+    max_ammo = init_max_ammo;
+    current_ammo = init_max_ammo;
+    reload_time = init_reload_time;
 }
 
 void character::update()
 {
+    if (reload_timer > 0)
+    {
+        if (reload_timer == 1)
+        {
+            reload_timer = 0;
+            current_ammo = max_ammo;
+        }
+        else
+        {
+            reload_timer -= 1;
+        }
+    }
     this->rotate(turn_right_key - turn_left_key);
     this->move(x_movement,y_movement);
     if (firing_timer > 0)
     {
         firing_timer -= 1;
     }
-    if (shoot_key && firing_timer <= 0)
+    if (shoot_key && firing_timer <= 0 && current_ammo > 0)
     {
         this->fire_weapon();
+        current_ammo -= 1;
+        if (current_ammo <= 0)
+        {
+            reload_timer = reload_time;
+        }
     }
 
 
@@ -124,13 +148,13 @@ void character::fire_weapon()
 {
     if(projectile_type == "bullet")
     {
-        projectile_vector->push_back(bullet(xpos,ypos,direction));
+        projectile_vector->push_back(bullet(xpos,ypos,direction - 90));
         firing_timer = firing_cooldown;
         main_soundhandler->play_sound("Gunshot"); //Denna rad gör att spelet krashar oftare än vad är lämpligt.
     }
     if(projectile_type == "grenade")
     {
-        projectile_vector->push_back(grenade(xpos,ypos,direction));
+        projectile_vector->push_back(grenade(xpos,ypos,direction - 90));
         firing_timer = firing_cooldown;
         main_soundhandler->play_sound("Gunshot"); //Denna rad gör att spelet krashar oftare än vad är lämpligt.
     }

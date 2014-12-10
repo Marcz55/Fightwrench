@@ -5,7 +5,8 @@
 class marcus : public character
 {
 public:
-    marcus(int x, int y,double angle, std::vector<projectile>* init_projectile_vector, soundhandler* init_soundhandler):character("Marsus",x,y,2,angle,"bullet",init_projectile_vector,20,init_soundhandler){}
+    marcus(int x, int y,double angle, std::vector<projectile>* init_projectile_vector,
+           soundhandler* init_soundhandler):character("Marsus",x,y,2,angle,"bullet",init_projectile_vector,20,init_soundhandler,100,30,100){}
 };
 
 #endif // MARCUS_H

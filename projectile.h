@@ -15,6 +15,8 @@ protected:
     double x_movement;
     double y_movement;
     int damage;
+    double x_deceleration = 0;
+    double y_deceleration = 0;
 };
 
 #endif // PROJECTILE_H

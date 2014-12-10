@@ -7,10 +7,47 @@ projectile::projectile(string bullet_name, double x, double y, int speed, double
     x_movement = speed*cos(direction*0.0175); //0.0175 ungefär pi/180
     y_movement = speed*sin(direction*0.0175);
 
+    //Detta ska abra göras för granater
+    if(name == "grenade")
+    {
+        x_deceleration = abs(cos(angle*0.0175)*0.1);
+        y_deceleration = abs(sin(angle*0.0175)*0.1);
+
+    }
+
 }
 
 void projectile::update()
 {
     xpos = xpos + x_movement;
     ypos = ypos + y_movement;
+    //Ska bara ske för grenade
+    if (name == "grenade")
+    {
+        if (abs(x_movement) <= x_deceleration)
+        {
+            x_movement = 0;
+        }
+        if (abs(y_movement) <= y_deceleration)
+        {
+            y_movement = 0;
+        }
+        if (x_movement > 0)
+        {
+            x_movement = x_movement - x_deceleration;
+        }
+        if (x_movement < 0)
+        {
+            x_movement = x_movement + x_deceleration;
+        }
+        if (y_movement > 0)
+        {
+            y_movement = y_movement - y_deceleration;
+        }
+        if (y_movement < 0)
+        {
+            y_movement = y_movement + y_deceleration;
+        }
+    }
+
 }

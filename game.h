@@ -14,7 +14,7 @@
 class game
 {
 public:
-    game(soundhandler &main_soundhandler);
+    game(soundhandler &main_soundhandler, int window_height = 600, int window_width = 800);
     void main_update();
     void game_loop();
 

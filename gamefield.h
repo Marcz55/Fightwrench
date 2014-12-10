@@ -14,6 +14,7 @@ class gamefield
     friend class graphic_engine;
 public:
     gamefield() = default;
+    gamefield(int win_height, int win_width):window_height{win_height}, window_width{win_width}{}
     gamefield(string map, string character_one, string character_two);
     void update();
     ~gamefield()=default;

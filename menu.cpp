@@ -127,7 +127,7 @@ void menu::mouse_clicked(const double x, const double y,soundhandler& main_sound
             SDL_DestroyTexture(Background);
             SDL_DestroyTexture(Button1);
             SDL_DestroyTexture(Button2);
-            game main_game(main_soundhandler);
+            game main_game(main_soundhandler, 800, 1500); // sätt in önskad fönsterstorlek
             main_game.game_loop();
             cout << "Button 2 clicked!";
         }

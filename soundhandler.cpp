@@ -13,7 +13,10 @@ soundhandler::soundhandler()
         exit(1);
     }
 
-    Soundtrack = Mix_LoadMUS("Testmusik.mp3");
+    create_music("Music1","Testmusik.mp3");
+    create_music("Music2","8-Bit-Rebirth.mp3");
+    create_music("Music3","Chase-101.mp3");
+    create_music("Menu_music","Royal-Flush-Party.mp3");
 
     create_sound("Gunshot","Sound1.wav");
     create_sound("Axel","Axel_laugh.wav");
@@ -22,13 +25,21 @@ soundhandler::soundhandler()
 
 soundhandler::~soundhandler()
 {
-    Mix_FreeMusic(Soundtrack);
+    for(auto it = Music_map.begin(); it != Music_map.end(); ++it)
+    {
+        Mix_FreeMusic(it->second);
+    }
     for(auto it = Sound_map.begin(); it != Sound_map.end(); ++it)
     {
         Mix_FreeChunk(it->second);
     }
     Mix_Quit();
     SDL_Quit();
+}
+
+void soundhandler::create_music(const string name, const char* filename)
+{
+    Music_map.insert(pair<string,Mix_Music*>(name, Mix_LoadMUS(filename)));
 }
 
 void soundhandler::create_sound(const string name, const char* filename)
@@ -42,14 +53,23 @@ void soundhandler::play_sound(const string name)
         Mix_PlayChannel(-1, Sound_map.at(name), 0);
 }
 
+void soundhandler::playbgm(const string Soundtrack)
+{
+    if (Music_map.at(Soundtrack) != nullptr)
+    {
+        Mix_PlayMusic(Music_map.at(Soundtrack),-1);
+    } else {
+        printf(Mix_GetError());
+    }
+}
+
 void soundhandler::playbgm()
 {
-    if (Soundtrack != nullptr)
-    {
-        Mix_PlayMusic(Soundtrack,-1);
-    } else {
-        printf("Mix_LoadMUS(\"Testmusik.mp3\"): %s\n", Mix_GetError());
-    }
+    auto it = Music_map.begin();
+    srand(time(NULL));
+    advance(it,rand()%(Music_map.size() - 1) + 1);
+    cout << it->first;
+    playbgm(it->first);
 }
 
 void soundhandler::stopbgm()

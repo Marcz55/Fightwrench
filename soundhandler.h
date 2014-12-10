@@ -8,19 +8,23 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <time.h>
 
 class soundhandler
 {
 public:
     soundhandler();
-
+    soundhandler(const soundhandler&) = default;
+    soundhandler& operator=(const soundhandler&) = default;
     ~soundhandler();
 
     //Bakgrundsmusik
-    Mix_Music* Soundtrack = nullptr;
+    std::map<std::string,Mix_Music*> Music_map;
+
     //Ljudeffekter
     std::map<std::string,Mix_Chunk*> Sound_map;
 
+    void playbgm(const std::string);
     void playbgm();
     void stopbgm();
     void pausebgm();
@@ -28,6 +32,7 @@ public:
     void rewindbgm();
 
     void create_sound(std::string const, const char*);
+    void create_music(std::string const, const char*);
     void play_sound(std::string const);
 
 };

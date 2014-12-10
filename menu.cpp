@@ -30,6 +30,11 @@ menu::menu(soundhandler &main_soundhandler)
     Menu_surface = IMG_Load("Knapp2.png");
     Button2 = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
     SDL_FreeSurface(Menu_surface);
+
+    //Sätt igång menymusik
+    menu_music(main_soundhandler);
+
+    //Starta menyloop
     menu_loop(main_soundhandler);
 
 }
@@ -70,7 +75,7 @@ void menu::menu_loop(soundhandler& main_soundhandler)
     }
 }
 
-void menu::render(int w, int h, double x, double y, SDL_Texture*& texture,SDL_Rect& rect)
+void menu::render(const int w, const int h, const double x, const double y, SDL_Texture *&texture, SDL_Rect &rect)
 {
     rect.w = w;
     rect.h = h;
@@ -109,6 +114,11 @@ void menu::update(const double mouse_x,const double mouse_y)
 
 }
 
+void menu::menu_music(soundhandler& main_soundhandler)
+{
+    main_soundhandler.playbgm("Menu_music");
+}
+
 void menu::mouse_clicked(const double x, const double y,soundhandler& main_soundhandler)
 {
     switch (state)
@@ -127,6 +137,8 @@ void menu::mouse_clicked(const double x, const double y,soundhandler& main_sound
             SDL_DestroyTexture(Background);
             SDL_DestroyTexture(Button1);
             SDL_DestroyTexture(Button2);
+            main_soundhandler.stopbgm();
+            main_soundhandler.playbgm();
             game main_game(main_soundhandler);
             main_game.game_loop();
             cout << "Button 2 clicked!";

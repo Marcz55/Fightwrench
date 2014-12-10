@@ -29,8 +29,9 @@ private:
     SDL_Rect Button1_rect;
     SDL_Rect Button2_rect;
     void menu_loop(soundhandler &main_soundhandler);
-    void render(int, int, double, double, SDL_Texture*&, SDL_Rect&);
+    void render(const int, const int, const double, const double,SDL_Texture*&, SDL_Rect &);
     void mouse_clicked(const double,const double,soundhandler&);
+    void menu_music(soundhandler& main_soundhandler);
     bool checkcollision(const SDL_Rect&,const double,const double);
 
 };

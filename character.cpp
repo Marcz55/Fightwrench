@@ -11,6 +11,7 @@ character::character(string character_name, int x_pos, int y_pos, int speed, dou
     firing_cooldown = init_firing_cooldown;
     main_soundhandler = init_soundhandler;
     current_health = init_max_health;
+    max_health=init_max_health;
     max_ammo = init_max_ammo;
     current_ammo = init_max_ammo;
     reload_time = init_reload_time;

@@ -27,12 +27,14 @@ private:
     SDL_Renderer* Renderer;
     std::map<std::string,Texture_struct> Image_map;
     SDL_Rect Current_rect;
+    int portrait_size;
 
 public:
     ~graphic_engine();
-    graphic_engine();
+    graphic_engine(int win_height = 600, int win_width = 800);
     void draw_all(gamefield &my_gamefield);
     void draw_scaled_object(std::string name, double x_coord, double y_coord, double angle, double x_scale, double y_scale);
+    void draw_portrait(string name,double x_coord,double y_coord, double angle);
     void draw_object(string name,double x_coord,double y_coord, double angle);
     void create_texture(std::string texture_name, const char *texture_file);
 

@@ -18,6 +18,7 @@ int main(int, char **)
 {
 
     soundhandler main_soundhandler;
+    main_soundhandler.playbgm();
     menu m(main_soundhandler);
     //game main_game;
     //main_game.game_loop();
@@ -42,7 +43,7 @@ int main(int, char **)
     SDL_Window* window = NULL;
 
     //The surface contained by the window
-    SDL_Surface* screenSurface = NULL;
+    SDL_Suriface* screenSurface = NULL;
 
     //Initialize SDL
     if( SDL_Init( SDL_INIT_VIDEO ) < 0 )

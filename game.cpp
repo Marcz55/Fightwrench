@@ -2,8 +2,9 @@
 #include <time.h>
 using namespace std;
 
-game::game(soundhandler& main_soundhandler)
+game::game(soundhandler& main_soundhandler, int window_height, int window_width):main_gamefield {window_height, window_width}, main_graphic_engine{window_height, window_width}
 {
+
     main_gamefield.add_character(marcus{100,100,67,main_gamefield.get_projectile_vector(),&main_soundhandler});
     main_gamefield.add_character(axel{700,500,30,main_gamefield.get_projectile_vector(),&main_soundhandler});
     main_gamefield.add_cover(standardcover(300,300,0,10,10,30));

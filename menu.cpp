@@ -140,6 +140,7 @@ void menu::mouse_clicked(const double x, const double y,soundhandler& main_sound
             main_soundhandler.stopbgm();
             main_soundhandler.playbgm();
             game main_game(main_soundhandler);
+            game main_game(main_soundhandler, 800, 1500); // sätt in önskad fönsterstorlek
             main_game.game_loop();
             cout << "Button 2 clicked!";
         }

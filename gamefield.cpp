@@ -10,3 +10,8 @@
  {
      projectile_vector.push_back(projectile_to_add);
  }
+
+ void gamefield::add_cover(cover cover_to_add)
+ {
+     cover_vector.push_back(cover_to_add);
+ }

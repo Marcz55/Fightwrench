@@ -10,6 +10,7 @@ public:
     cover(std::string name1, int x, int y, double angle, int health_input, double height_input, double width_input);
     cover()=delete;
     ~cover()=default;
+    void update() override;
 
     vector<double> get_corners();
 
@@ -26,7 +27,7 @@ public:
 
 
 
-private:
+protected:
     int health = 0;
     double height = 0;
     double width = 0;

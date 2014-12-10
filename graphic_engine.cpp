@@ -19,7 +19,7 @@ graphic_engine::graphic_engine()
     SDL_RenderSetLogicalSize(Renderer, Window_width, Window_height);
 
     //Skapa texturer
-    create_texture("Axel","Axel.png");
+    create_texture("Axel","head.png");
     create_texture("Marsus","Marsus.png");
     create_texture("bullet","bullet.png");
     create_texture("grenade","grenade.png");
@@ -28,6 +28,8 @@ graphic_engine::graphic_engine()
     create_texture("char_2", "Knapp2.png");
     create_texture("health_bar", "health_bar.png");
     create_texture("ultimate_bar", "ultimate_bar.png");
+    create_texture("characterbody","body.png");
+    create_texture("standardcover","standardcover.png");
 
 }
 
@@ -73,9 +75,14 @@ void graphic_engine::draw_all(gamefield& my_gamefield)
         SDL_RenderClear(Renderer);
         for(auto it = my_gamefield.character_vector.begin(); it != my_gamefield.character_vector.end(); it++)
         {
-            draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_direction());
+            draw_object("characterbody",it->get_xpos(),it->get_ypos(),it->get_direction());
+            draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_movement_direction());
         }
         for(auto it = my_gamefield.projectile_vector.begin(); it != my_gamefield.projectile_vector.end(); it++)
+        {
+            draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_direction());
+        }
+        for(auto it = my_gamefield.cover_vector.begin(); it != my_gamefield.cover_vector.end(); it++)
         {
             draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_direction());
         }

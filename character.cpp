@@ -39,6 +39,51 @@ void character::update_move_vector()
         y_movement = 0;
         x_movement = 0;
     };
+    if(temp_x !=0||temp_y != 0 )
+    {
+        if (temp_x == 0)
+        {
+            if (temp_y == 1)
+            {
+                movement_direction = 180;
+            }
+            else
+            {
+                movement_direction = 0;
+            }
+        }
+        else if (temp_y == 0)
+        {
+            if (temp_x == 1)
+            {
+                movement_direction = 90;
+            }
+            else
+            {
+                movement_direction = 270;
+            }
+        }
+        else
+        {
+            if (temp_x > 0 && temp_y > 0)
+            {
+                movement_direction = 135;
+            }
+            if (temp_x < 0 && temp_y > 0)
+            {
+                movement_direction = 225;
+            }
+            if (temp_x < 0 && temp_y < 0)
+            {
+                movement_direction = 315;
+            }
+            if (temp_x > 0 && temp_y < 0)
+            {
+                movement_direction = 45;
+            }
+        }
+    }
+
 }
 void character::input_set_up(const int up)
 {
@@ -92,3 +137,4 @@ void character::fire_weapon()
 
 
 }
+

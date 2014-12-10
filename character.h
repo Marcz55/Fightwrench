@@ -26,6 +26,7 @@ public:
     void input_set_turn_right(const int);
     void input_set_shoot(const bool);
     int get_up_key(){return up_key;}
+    int get_movement_direction(){return movement_direction;}
     void fire_weapon();
 
 protected:
@@ -37,6 +38,7 @@ protected:
     int right_key = 0;
     int turn_left_key = 0;
     int turn_right_key = 0;
+    double movement_direction = 0;
     bool shoot_key = false;
     int firing_cooldown; //Antal tic en karaktär måste vänta innan den kan skjuta igen.
     int firing_timer = 0;    //Den timer som räknas ner och sätt till firing_cooldown när man skjuter.

@@ -19,6 +19,7 @@ public:
     ~gamefield()=default;
     void add_character(character character_to_add);
     void add_projectile(projectile projectile_to_add);
+    void add_cover(cover cover_to_add);
     vector<character>* get_character_vector(){return &character_vector;}
     vector<cover>* get_cover_vector(){return &cover_vector;}
     vector<projectile>* get_projectile_vector(){return &projectile_vector;}

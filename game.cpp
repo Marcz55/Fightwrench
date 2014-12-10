@@ -6,6 +6,7 @@ game::game(soundhandler& main_soundhandler)
 {
     main_gamefield.add_character(marcus{100,100,67,main_gamefield.get_projectile_vector(),&main_soundhandler});
     main_gamefield.add_character(axel{700,500,30,main_gamefield.get_projectile_vector(),&main_soundhandler});
+    main_gamefield.add_cover(standardcover(300,300,0,10,10,30));
 }
 
 void game::main_update()

@@ -7,20 +7,20 @@ collision_handler::collision_handler(gamefield* gamefield_object_pointer)
     window_width = gamefield_object_pointer->get_window_width();
     return;
 }
-bool collision_handler::allowed_to_move_rectangle(double x1,double y1,double x2,double y2,double x3,double y3,double x4,double y4)
-{
+bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_to_check)/*(double x1,double y1,double x2,double y2,double x3,double y3,double x4,double y4)*/
+{//corner_vector_to_check innehåller koordinaterna för rektangelns hörn som skall kollas i ordningen, x1,y1,x2,y2,x3,....
     //Kollar först så att rektangeln inte försöker smita utanför banan
-    if(x1 < 0 or y1 < 0 or x2 < 0 or y2 < 0 or x3 < 0 or y3 < 0 or x4 < 0 or y4 < 0 or
-            x1 > window_width or y1 > window_height or x2 > window_width or y2 > window_height or
-            x3 > window_width or y3 > window_height or x4 > window_width or y4 > window_height)
+    if(corner_vector_to_check.at(0) < 0 or corner_vector_to_check.at(1)  < 0 or corner_vector_to_check.at(2) < 0 or corner_vector_to_check.at(3) < 0 or corner_vector_to_check.at(4) < 0 or corner_vector_to_check.at(5) < 0 or corner_vector_to_check.at(6) < 0 or corner_vector_to_check.at(7) < 0 or
+            corner_vector_to_check.at(0) > window_width or corner_vector_to_check.at(1) > window_height or corner_vector_to_check.at(2) > window_width or corner_vector_to_check.at(3) > window_height or
+            corner_vector_to_check.at(4) > window_width or corner_vector_to_check.at(5) > window_height or corner_vector_to_check.at(6) > window_width or corner_vector_to_check.at(7) > window_height)
         return false;
 
 
     vector<cover>* cover_vector = gamefield_pointer->get_cover_vector();
     bool collide = false;
-    //Skapar den nya basen för rektangeln
-    double base_vector_u[2] = {x2 - x1, y2 - y1}; //u uttryckt i basen x,y
-    double base_vector_v[2] = {x3 - x2, y3 - y2}; //v uttryckt i basen x,y
+    //Skapar den nya basen för rektangeln, (x2-x1,y2-y1) och (x3-x2,y3-y2)
+    double base_vector_u[2] = {corner_vector_to_check.at(2) - corner_vector_to_check.at(0), corner_vector_to_check.at(3) - corner_vector_to_check.at(1)}; //u uttryckt i basen x,y
+    double base_vector_v[2] = {corner_vector_to_check.at(4) - corner_vector_to_check.at(2), corner_vector_to_check.at(5) - corner_vector_to_check.at(3)}; //v uttryckt i basen x,y
     //Vi vill normera basvektorerna
     base_vector_u[0] = base_vector_u[0] / sqrt(pow(base_vector_u[0],2) + pow(base_vector_u[1],2));
     base_vector_u[1] = base_vector_u[1] / sqrt(pow(base_vector_u[0],2) + pow(base_vector_u[1],2));
@@ -35,12 +35,12 @@ bool collision_handler::allowed_to_move_rectangle(double x1,double y1,double x2,
     //ta ut två hörn, de "motsatta" eftersom vi gör det i en nya bas där rektangeln nu är vinkelrät
     //relativt koordinataxlarna.
     double corner_1[2];
-    corner_1[0] = base_change_matrix[0][0]*x1 + base_change_matrix[0][1]*y1;
-    corner_1[1] = base_change_matrix[1][0]*x1 + base_change_matrix[1][1]*y1;
+    corner_1[0] = base_change_matrix[0][0]*corner_vector_to_check.at(0) + base_change_matrix[0][1]*corner_vector_to_check.at(1);
+    corner_1[1] = base_change_matrix[1][0]*corner_vector_to_check.at(0) + base_change_matrix[1][1]*corner_vector_to_check.at(1);
 
     double corner_3[2];
-    corner_3[0] = base_change_matrix[0][0]*x3 + base_change_matrix[0][1]*y3;
-    corner_3[1] = base_change_matrix[1][0]*x3 + base_change_matrix[1][1]*y3;
+    corner_3[0] = base_change_matrix[0][0]*corner_vector_to_check.at(6) + base_change_matrix[0][1]*corner_vector_to_check.at(7);
+    corner_3[1] = base_change_matrix[1][0]*corner_vector_to_check.at(6) + base_change_matrix[1][1]*corner_vector_to_check.at(7);
 
     //Nu har vi initierat klart och behöver alltså kolla igenom om den nya koordinaten är okej att flytta till.
     //Vi börjar med att gå igenom cover listan (som just nu antas bara bestå av rektangelobjekt.
@@ -125,17 +125,17 @@ bool collision_handler::allowed_to_move_rectangle(double x1,double y1,double x2,
         double corner2_in_new_base[2];
         double corner3_in_new_base[2];
         double corner4_in_new_base[2];
-        corner1_in_new_base[0] = base_change_matrix2[0][0]*x1 + base_change_matrix2[0][1]*y1;
-        corner1_in_new_base[1] = base_change_matrix2[1][0]*x1 + base_change_matrix2[1][1]*y1;
+        corner1_in_new_base[0] = base_change_matrix2[0][0]*corner_vector_to_check.at(0) + base_change_matrix2[0][1]*corner_vector_to_check.at(1);
+        corner1_in_new_base[1] = base_change_matrix2[1][0]*corner_vector_to_check.at(0) + base_change_matrix2[1][1]*corner_vector_to_check.at(1);
 
-        corner2_in_new_base[0] = base_change_matrix2[0][0]*x2 + base_change_matrix2[0][1]*y2;
-        corner2_in_new_base[1] = base_change_matrix2[1][0]*x2 + base_change_matrix2[1][1]*y2;
+        corner2_in_new_base[0] = base_change_matrix2[0][0]*corner_vector_to_check.at(2) + base_change_matrix2[0][1]*corner_vector_to_check.at(3);
+        corner2_in_new_base[1] = base_change_matrix2[1][0]*corner_vector_to_check.at(2) + base_change_matrix2[1][1]*corner_vector_to_check.at(4);
 
-        corner3_in_new_base[0] = base_change_matrix2[0][0]*x3 + base_change_matrix2[0][1]*y3;
-        corner3_in_new_base[1] = base_change_matrix2[1][0]*x3 + base_change_matrix2[1][1]*y3;
+        corner3_in_new_base[0] = base_change_matrix2[0][0]*corner_vector_to_check.at(4) + base_change_matrix2[0][1]*corner_vector_to_check.at(5);
+        corner3_in_new_base[1] = base_change_matrix2[1][0]*corner_vector_to_check.at(4) + base_change_matrix2[1][1]*corner_vector_to_check.at(5);
 
-        corner4_in_new_base[0] = base_change_matrix2[0][0]*x4 + base_change_matrix2[0][1]*y4;
-        corner4_in_new_base[1] = base_change_matrix2[1][0]*x4 + base_change_matrix2[1][1]*y4;
+        corner4_in_new_base[0] = base_change_matrix2[0][0]*corner_vector_to_check.at(6) + base_change_matrix2[0][1]*corner_vector_to_check.at(7);
+        corner4_in_new_base[1] = base_change_matrix2[1][0]*corner_vector_to_check.at(6) + base_change_matrix2[1][1]*corner_vector_to_check.at(7);
 
 
 

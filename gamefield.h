@@ -10,7 +10,6 @@
 using namespace std;
 class gamefield
 {
-    friend class collision_handler;
     friend class graphic_engine;
 public:
     gamefield() = default;
@@ -24,7 +23,8 @@ public:
     vector<character>* get_character_vector(){return &character_vector;}
     vector<cover>* get_cover_vector(){return &cover_vector;}
     vector<projectile>* get_projectile_vector(){return &projectile_vector;}
-
+    int get_window_height(){return window_height;}
+    int get_window_width(){return window_width;}
 
 private:
     int window_height = 600;

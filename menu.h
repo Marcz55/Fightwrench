@@ -22,17 +22,26 @@ private:
     SDL_Window* Menu_window ;
     SDL_Renderer* Menu_renderer;
     SDL_Texture* Background;
-    SDL_Texture* Button1;
-    SDL_Texture* Button2;
+    SDL_Texture* Play_button;
+    SDL_Texture* Character_button;
+    SDL_Texture* Character1;
+    SDL_Texture* Character2;
+    SDL_Texture* Character3;
+    SDL_Texture* Character4;
     SDL_Surface* Menu_surface;
     SDL_Rect Menu_rect;
-    SDL_Rect Button1_rect;
-    SDL_Rect Button2_rect;
+    SDL_Rect Play_button_rect;
+    SDL_Rect Character_button_rect;
+    SDL_Rect Player1_rect;
+    SDL_Rect Player2_rect;
     void menu_loop(soundhandler &main_soundhandler);
     void render(const int, const int, const double, const double,SDL_Texture*&, SDL_Rect &);
     void mouse_clicked(const double,const double,soundhandler&);
     void menu_music(soundhandler& main_soundhandler);
     bool checkcollision(const SDL_Rect&,const double,const double);
+    std::string Player1;
+    std::string Player2;
+    std::map<std::string,SDL_Texture*> Characters;
 
 };
 

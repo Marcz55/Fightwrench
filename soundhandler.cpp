@@ -16,6 +16,7 @@ soundhandler::soundhandler()
     create_music("Music1","Testmusik.mp3");
     create_music("Music2","8-Bit-Rebirth.mp3");
     create_music("Music3","Chase-101.mp3");
+    create_music("Music3","Hellbreaker.mp3");
     create_music("Menu_music","Royal-Flush-Party.mp3");
 
     create_sound("Gunshot","Sound1.wav");
@@ -68,7 +69,6 @@ void soundhandler::playbgm()
     auto it = Music_map.begin();
     srand(time(NULL));
     advance(it,rand()%(Music_map.size() - 1) + 1);
-    cout << it->first;
     playbgm(it->first);
 }
 

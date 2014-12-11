@@ -20,16 +20,33 @@ menu::menu(soundhandler &main_soundhandler)
     SDL_RenderSetLogicalSize(Menu_renderer, Menu_width, Menu_height);
 
 
-    //Skapa bakgrunden
+    //Skapa bakgrunden till root
     Menu_surface = IMG_Load("Menybild.png");
     Background = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
 
-    //Skapa knappar
+    //Skapa knappar i root
     Menu_surface = IMG_Load("Knapp1.png");
-    Button1 = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
+    Play_button = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
     Menu_surface = IMG_Load("Knapp2.png");
-    Button2 = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
+    Character_button = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
+    Menu_surface = IMG_Load("Character1.png");
+    Character1 = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
+    Menu_surface = IMG_Load("Character2.png");
+    Character2 = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
+    Menu_surface = IMG_Load("Axel.png");
+    Character3 = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
+    Menu_surface = IMG_Load("Marsus.png");
+    Character4 = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
     SDL_FreeSurface(Menu_surface);
+
+    Player1 = "axel";
+    Player2 = "marcus";
+
+    //Skapa karaktärlista
+    Characters.insert(pair<string,SDL_Texture*>("axel",Character1));
+    Characters.insert(pair<string,SDL_Texture*>("marcus",Character2));
+    Characters.insert(pair<string,SDL_Texture*>("jocke",Character3));
+    Characters.insert(pair<string,SDL_Texture*>("markus",Character4));
 
     //Sätt igång menymusik
     menu_music(main_soundhandler);
@@ -44,8 +61,12 @@ menu::~menu()
     SDL_DestroyWindow(Menu_window);
     SDL_DestroyRenderer(Menu_renderer);
     SDL_DestroyTexture(Background);
-    SDL_DestroyTexture(Button1);
-    SDL_DestroyTexture(Button2);
+    SDL_DestroyTexture(Play_button);
+    SDL_DestroyTexture(Character_button);
+    SDL_DestroyTexture(Character1);
+    SDL_DestroyTexture(Character2);
+    SDL_DestroyTexture(Character3);
+    SDL_DestroyTexture(Character4);
     IMG_Quit();
     SDL_Quit();
 }
@@ -89,28 +110,43 @@ void menu::update(const double mouse_x,const double mouse_y)
     //Uppdatera bakgrunden
     switch (state)
     {
-    case 0:
+    case 0: //Root
+
         render(Menu_width,Menu_height,0,0,Background,Menu_rect);
-        if(checkcollision(Button1_rect, mouse_x, mouse_y)){
-            render(110,110,95,195,Button1,Button1_rect);
+        if(checkcollision(Play_button_rect, mouse_x, mouse_y)){
+            render(110,110,95,195,Play_button,Play_button_rect);
         } else
         {
-        render(100,100,100,200,Button1,Button1_rect);
+        render(100,100,100,200,Play_button,Play_button_rect);
         }
-        if(checkcollision(Button2_rect, mouse_x, mouse_y)){
-            render(110,110,195,195,Button2,Button2_rect);
+        if(checkcollision(Character_button_rect, mouse_x, mouse_y)){
+            render(110,110,195,195,Character_button,Character_button_rect);
         } else
         {
-        render(100,100,200,200,Button2,Button2_rect);
+        render(100,100,200,200,Character_button,Character_button_rect);
         }
         break;
-    }
+    case 1: //Character select
+        render(Menu_width,Menu_height,0,0,Background,Menu_rect);
+        if(checkcollision(Player1_rect, mouse_x, mouse_y))
+        {
+            render(110,110,95,195,Characters.at(Player1),Player1_rect);
+        } else
+        {
+        render(100,100,100,200,Characters.at(Player1),Player1_rect);
+        }
+        if(checkcollision(Player2_rect, mouse_x, mouse_y)){
+            render(110,110,195,195,Characters.at(Player2),Player2_rect);
+        } else
+        {
+        render(100,100,200,200,Characters.at(Player2),Player2_rect);
+        }
+        break;
     //Uppdatera knappar
 
-
+}
     //Rendera
     SDL_RenderPresent(Menu_renderer);
-
 
 }
 
@@ -125,18 +161,20 @@ void menu::mouse_clicked(const double x, const double y,soundhandler& main_sound
     {
     case 0:
         cout << "x: " << x << " y: " << y << "\n";
-        if(checkcollision(Button1_rect,x,y))
+        if(checkcollision(Play_button_rect,x,y))
         {
             main_soundhandler.play_sound("Axel");
             cout << "Button 1 clicked!";
+            state = 1;
+            break;
         }
-        if(checkcollision(Button2_rect,x,y))
+        if(checkcollision(Character_button_rect,x,y))
         {
             SDL_DestroyWindow(Menu_window);
             SDL_DestroyRenderer(Menu_renderer);
             SDL_DestroyTexture(Background);
-            SDL_DestroyTexture(Button1);
-            SDL_DestroyTexture(Button2);
+            SDL_DestroyTexture(Play_button);
+            SDL_DestroyTexture(Character_button);
             main_soundhandler.stopbgm();
             main_soundhandler.playbgm();
             game main_game(main_soundhandler, 800, 1500); // sätt in önskad fönsterstorlek
@@ -144,8 +182,42 @@ void menu::mouse_clicked(const double x, const double y,soundhandler& main_sound
             cout << "Button 2 clicked!";
         }
         break;
+    case 1:
+        if(checkcollision(Player1_rect,x,y))
+        {
+            auto it1 = Characters.find(Player1);
+            do
+            {
+            if((++it1) == Characters.end())
+            {
+                it1 = Characters.begin();
+                Player1 = it1->first;
+            } else {
+                Player1 = it1->first;
+            }
+            }while(Player1 == Player2);
 
-        //Fler cases
+            cout << Player1;
+            break;
+        }
+        if(checkcollision(Player2_rect,x,y))
+        {
+            auto it2 = Characters.find(Player2);
+            do
+            {
+            if((++it2) == Characters.end())
+            {
+                it2 = Characters.begin();
+                Player2 = it2->first;
+            } else {
+                Player2 = it2->first;
+            }
+            }while(Player1 == Player2);
+
+            cout << Player2;
+        }
+        break;
+
     }
 }
 

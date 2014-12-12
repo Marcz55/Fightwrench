@@ -19,29 +19,22 @@ menu::menu(soundhandler &main_soundhandler)
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     SDL_RenderSetLogicalSize(Menu_renderer, Menu_width, Menu_height);
 
+    //Skapa ikon
+    SDL_SetWindowIcon(Menu_window,IMG_Load("Icon.png"));
 
     //Skapa bakgrunder
-    Menu_surface = IMG_Load("Menybild.png");
-    Background = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
-    Menu_surface = IMG_Load("Character_selection2.png");
-    Character_select = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
+    Background = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Menybild.png"));
+    Character_select = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Character_selection2.png"));
 
     //Skapa knappar
-    Menu_surface = IMG_Load("Knapp1.png");
-    Play_button = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
-    Menu_surface = IMG_Load("Knapp2.png");
-    Character_button = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
-    Menu_surface = IMG_Load("Character1.png");
-    Character1 = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
-    Menu_surface = IMG_Load("Character2.png");
-    Character2 = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
-    Menu_surface = IMG_Load("Axel.png");
-    Character3 = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
-    Menu_surface = IMG_Load("Marsus.png");
-    Character4 = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
-    Menu_surface = IMG_Load("Back.png");
-    Back = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
-    SDL_FreeSurface(Menu_surface);
+
+    Play_button = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Knapp1.png"));
+    Character_button = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Knapp2.png"));
+    Character1 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Character1.png"));
+    Character2 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Character2.png"));
+    Character3 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Axel.png"));
+    Character4 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Marsus.png"));
+    Back = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Back.png"));
 
     Player1 = "axel";
     Player2 = "marcus";
@@ -79,6 +72,7 @@ menu::~menu()
 
 void menu::menu_loop(soundhandler& main_soundhandler)
 {
+
     double mouse_x = 0;
     double mouse_y = 0;
 
@@ -87,6 +81,11 @@ void menu::menu_loop(soundhandler& main_soundhandler)
         SDL_Event listen;
         while (SDL_PollEvent(&listen))
         {
+            if(listen.type == SDL_QUIT)
+            {
+                delete this;
+            }
+
             if(listen.type == SDL_MOUSEMOTION){
                 mouse_x = listen.motion.x;
                 mouse_y = listen.motion.y;
@@ -100,7 +99,7 @@ void menu::menu_loop(soundhandler& main_soundhandler)
         update(mouse_x,mouse_y);
         SDL_Delay(10);
     }
-}
+    }
 
 void menu::render(const int w, const int h, const double x, const double y, SDL_Texture *&texture, SDL_Rect &rect)
 {

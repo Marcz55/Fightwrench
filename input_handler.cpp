@@ -6,7 +6,10 @@ void input_handler::update(gamefield& field)
     {
         switch(event.type)
         {
-            case SDL_KEYDOWN:
+                case SDL_QUIT:
+                    running = false;
+                    break;
+                case SDL_KEYDOWN:
                 switch(event.key.keysym.sym)
                 {
                 //Fösta karaktären
@@ -120,4 +123,9 @@ void input_handler::update(gamefield& field)
 
     }
 return;
+}
+
+bool input_handler::Get_running()
+{
+    return running;
 }

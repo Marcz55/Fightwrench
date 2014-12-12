@@ -15,6 +15,7 @@ game::game(soundhandler& main_soundhandler, int window_height, int window_width,
         main_gamefield.add_character(marcus{700,500,30,main_gamefield.get_projectile_vector(),&main_soundhandler, main_gamefield.get_collision_handler_pointer()});
 
     main_gamefield.add_cover(standardcover(300,300,0,10,30,150));
+    running = true;
 
 }
 
@@ -22,6 +23,7 @@ void game::main_update()
 {
     main_graphic_engine.draw_all(main_gamefield);
     main_input_handler.update(main_gamefield);
+    running = main_input_handler.Get_running();
     for(auto it = main_gamefield.get_character_vector()->begin(); it != main_gamefield.get_character_vector()->end(); it++)
     {
         it->update();
@@ -36,7 +38,7 @@ void game::main_update()
 
 void game::game_loop()
 {
-    while(true)
+    while(running)
     {
         clock_t elapsed_time = clock();
         this->main_update();

@@ -22,6 +22,9 @@ graphic_engine::graphic_engine(int win_height, int win_width)
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     SDL_RenderSetLogicalSize(Renderer, Window_width, Window_height);
 
+    //Skapa ikon
+    SDL_SetWindowIcon(Window,IMG_Load("Icon.png"));
+
     //Skapa texturer
     create_texture("Axel","head.png");
     create_texture("Marsus","Marsus.png");

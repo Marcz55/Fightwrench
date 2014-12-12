@@ -22,6 +22,7 @@ private:
     gamefield main_gamefield;
     graphic_engine main_graphic_engine;
     input_handler main_input_handler;
+    bool running;
 };
 
 #endif // GAME_H

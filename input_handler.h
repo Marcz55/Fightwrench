@@ -10,11 +10,13 @@ private:
     SDL_Event event;
     vector<int> movement_vector_char1;
     vector<int> movement_vector_char2;
+    bool running = true;
 
 public:
     input_handler() = default;
     ~input_handler() = default;
     void update(gamefield&); //Tar hand om allt som ligger i event_queue
+    bool Get_running();
 };
 
 #endif // INPUT_HANDLER_H

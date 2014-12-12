@@ -30,7 +30,6 @@ private:
     SDL_Texture* Character3;
     SDL_Texture* Character4;
     SDL_Texture* Back;
-    SDL_Surface* Menu_surface;
     SDL_Rect Menu_rect;
     SDL_Rect Play_button_rect;
     SDL_Rect Character_button_rect;

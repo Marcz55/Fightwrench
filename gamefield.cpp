@@ -10,7 +10,7 @@ gamefield::gamefield(int win_height, int win_width)
 {
     window_height = win_height;
     window_width = win_width;
-    collision_handler_pointer = new collision_handler(this);
+    collision_handler_pointer = new class collision_handler(this);
 }
 
 //Denna ska ta in argument och lägga till specifika objekt.

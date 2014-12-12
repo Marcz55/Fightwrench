@@ -20,11 +20,13 @@ menu::menu(soundhandler &main_soundhandler)
     SDL_RenderSetLogicalSize(Menu_renderer, Menu_width, Menu_height);
 
 
-    //Skapa bakgrunden till root
+    //Skapa bakgrunder
     Menu_surface = IMG_Load("Menybild.png");
     Background = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
+    Menu_surface = IMG_Load("Character_selection2.png");
+    Character_select = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
 
-    //Skapa knappar i root
+    //Skapa knappar
     Menu_surface = IMG_Load("Knapp1.png");
     Play_button = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
     Menu_surface = IMG_Load("Knapp2.png");
@@ -37,6 +39,8 @@ menu::menu(soundhandler &main_soundhandler)
     Character3 = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
     Menu_surface = IMG_Load("Marsus.png");
     Character4 = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
+    Menu_surface = IMG_Load("Back.png");
+    Back = SDL_CreateTextureFromSurface(Menu_renderer,Menu_surface);
     SDL_FreeSurface(Menu_surface);
 
     Player1 = "axel";
@@ -61,12 +65,14 @@ menu::~menu()
     SDL_DestroyWindow(Menu_window);
     SDL_DestroyRenderer(Menu_renderer);
     SDL_DestroyTexture(Background);
+    SDL_DestroyTexture(Character_select);
     SDL_DestroyTexture(Play_button);
     SDL_DestroyTexture(Character_button);
     SDL_DestroyTexture(Character1);
     SDL_DestroyTexture(Character2);
     SDL_DestroyTexture(Character3);
     SDL_DestroyTexture(Character4);
+    SDL_DestroyTexture(Back);
     IMG_Quit();
     SDL_Quit();
 }
@@ -107,11 +113,14 @@ void menu::render(const int w, const int h, const double x, const double y, SDL_
 
 void menu::update(const double mouse_x,const double mouse_y)
 {
+
+    SDL_SetRenderDrawColor(Menu_renderer,0,0,0,255);
+    SDL_RenderClear(Menu_renderer);
+
     //Uppdatera bakgrunden
     switch (state)
     {
     case 0: //Root
-
         render(Menu_width,Menu_height,0,0,Background,Menu_rect);
         if(checkcollision(Play_button_rect, mouse_x, mouse_y)){
             render(110,110,95,195,Play_button,Play_button_rect);
@@ -127,19 +136,26 @@ void menu::update(const double mouse_x,const double mouse_y)
         }
         break;
     case 1: //Character select
-        render(Menu_width,Menu_height,0,0,Background,Menu_rect);
+        render(Menu_width,Menu_height,0,0,Character_select,Menu_rect);
+        if(checkcollision(Back_rect, mouse_x, mouse_y))
+        {
+            render(55,55,0,245,Back,Back_rect);
+        } else
+        {
+        render(50,50,5,250,Back,Back_rect);
+        }
         if(checkcollision(Player1_rect, mouse_x, mouse_y))
         {
-            render(110,110,95,195,Characters.at(Player1),Player1_rect);
+            render(110,110,45,145,Characters.at(Player1),Player1_rect);
         } else
         {
-        render(100,100,100,200,Characters.at(Player1),Player1_rect);
+        render(100,100,50,150,Characters.at(Player1),Player1_rect);
         }
         if(checkcollision(Player2_rect, mouse_x, mouse_y)){
-            render(110,110,195,195,Characters.at(Player2),Player2_rect);
+            render(110,110,245,145,Characters.at(Player2),Player2_rect);
         } else
         {
-        render(100,100,200,200,Characters.at(Player2),Player2_rect);
+        render(100,100,250,150,Characters.at(Player2),Player2_rect);
         }
         break;
     //Uppdatera knappar
@@ -160,11 +176,9 @@ void menu::mouse_clicked(const double x, const double y,soundhandler& main_sound
     switch (state)
     {
     case 0:
-        cout << "x: " << x << " y: " << y << "\n";
         if(checkcollision(Play_button_rect,x,y))
         {
             main_soundhandler.play_sound("Axel");
-            cout << "Button 1 clicked!";
             state = 1;
             break;
         }
@@ -177,12 +191,16 @@ void menu::mouse_clicked(const double x, const double y,soundhandler& main_sound
             SDL_DestroyTexture(Character_button);
             main_soundhandler.stopbgm();
             main_soundhandler.playbgm();
-            game main_game(main_soundhandler, 800, 1500); // sätt in önskad fönsterstorlek
+            game main_game(main_soundhandler, 800, 1500, Player1, Player2); // sätt in önskad fönsterstorlek
             main_game.game_loop();
-            cout << "Button 2 clicked!";
         }
         break;
     case 1:
+        if(checkcollision(Back_rect,x,y))
+        {
+            state = 0;
+            break;
+        }
         if(checkcollision(Player1_rect,x,y))
         {
             auto it1 = Characters.find(Player1);

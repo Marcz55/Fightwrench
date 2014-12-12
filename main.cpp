@@ -18,7 +18,6 @@ int main(int, char **)
 {
 
     soundhandler main_soundhandler;
-    main_soundhandler.playbgm();
     menu m(main_soundhandler);
     //game main_game;
     //main_game.game_loop();

@@ -17,7 +17,7 @@ graphic_engine::graphic_engine(int win_height, int win_width)
 
 
     //Skapa fönster
-    Window = SDL_CreateWindow("Fightwrench", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Window_width, Window_height,SDL_WINDOW_RESIZABLE);
+    Window = SDL_CreateWindow("Fightwrench: The Mindless Genocide", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Window_width, Window_height,SDL_WINDOW_RESIZABLE);
     Renderer = SDL_CreateRenderer(Window, -1, 0);
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     SDL_RenderSetLogicalSize(Renderer, Window_width, Window_height);

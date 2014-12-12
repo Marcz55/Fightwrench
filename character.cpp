@@ -4,7 +4,7 @@ using namespace std;
 character::character(string character_name, int x_pos, int y_pos, int speed, double angle,
                      string init_projectile, vector<projectile>* init_projectile_vector,
                      int init_firing_cooldown, soundhandler* init_soundhandler, int init_max_health,
-                     int init_max_ammo, int init_reload_time, double init_width, double init_height, collision_handler *init_collision_handler): gameobject(character_name, x_pos,y_pos,speed,angle)
+                     int init_max_ammo, int init_reload_time, double init_width, double init_height, collision_handler *init_collision_handler, string port_name): gameobject(character_name, x_pos,y_pos,speed,angle)
 
 {
     projectile_type = init_projectile;
@@ -19,6 +19,7 @@ character::character(string character_name, int x_pos, int y_pos, int speed, dou
     reload_time = init_reload_time;
     width = init_width;
     height = init_height;
+    portrait_name=port_name;
 }
 
 void character::update()

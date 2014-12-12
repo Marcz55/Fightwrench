@@ -113,8 +113,8 @@ void graphic_engine::draw_all(gamefield& my_gamefield)
         }
 
         draw_scaled_object("main_hud",0,Window_height - 200,0, (double) Window_width/800, 1);
-        draw_portrait(my_gamefield.character_vector.at(0).get_name(), (int) 80*Window_width/800, (int) Window_height-75,0);
-        draw_portrait(my_gamefield.character_vector.at(1).get_name(),(int) 720*Window_width/800, (int) Window_height-75,0);
+        draw_portrait(my_gamefield.character_vector.at(0).get_portrait_name(), (int) 80*Window_width/800, (int) Window_height-75,0);
+        draw_portrait(my_gamefield.character_vector.at(1).get_portrait_name(),(int) 720*Window_width/800, (int) Window_height-75,0);
         draw_scaled_object("health_bar",(int)180*Window_width/800, (int) Window_height - 180,0 ,(double)my_gamefield.character_vector.at(0).get_health_percent()*Window_width/800,1);
         draw_scaled_object("health_bar",(int)460*Window_width/800, (int) Window_height - 180,0 ,(double)my_gamefield.character_vector.at(1).get_health_percent()*Window_width/800,1);
         if((double)(my_gamefield.character_vector.at(0).get_ammo_percent()==0))

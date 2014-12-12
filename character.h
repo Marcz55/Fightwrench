@@ -16,7 +16,7 @@ public:
     character(std::string character_name,int x_pos, int y_pos, int speed, double angle,
               std::string init_projectile, std::vector<projectile>* init_projectile_vector,
               int init_firing_cooldown, soundhandler* init_soundhandler, int init_max_health,
-              int init_max_ammo, int init_reload_time, double width, double height, class collision_handler* init_collision_handler);
+              int init_max_ammo, int init_reload_time, double width, double height, class collision_handler* init_collision_handler, std::string port_name="");
 
     void update() override;
     void update_move_vector();
@@ -34,6 +34,7 @@ public:
     double get_health_percent(){return ((double)current_health)/((double)max_health);}
     double get_ammo_percent(){return ((double)current_ammo)/((double)max_ammo);}
     double get_reload_percent(){return ((double)reload_timer)/((double)reload_time);}
+    std::string get_portrait_name(){return portrait_name;}
 
     void fire_weapon();
     std::vector<double> get_corners();
@@ -64,6 +65,7 @@ protected:
     class collision_handler* gamefield_collision_handler;
     double width = 0;
     double height = 0;
+    std::string portrait_name;
 
 
 };

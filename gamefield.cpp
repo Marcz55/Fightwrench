@@ -1,4 +1,5 @@
 #include "gamefield.h"
+#include "power_up.h"
 gamefield::~gamefield()
 {
     delete collision_handler_pointer;
@@ -28,8 +29,13 @@ gamefield::gamefield(int win_height, int win_width)
  {
      cover_vector.push_back(cover_to_add);
  }
+ void gamefield::add_power_up(power_up power_up_to_add)
+ {
+     power_up_vector.push_back(power_up_to_add);
+ }
 
  collision_handler* gamefield::get_collision_handler_pointer()
  {
      return collision_handler_pointer;
  }
+

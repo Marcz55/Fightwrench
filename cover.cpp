@@ -36,20 +36,25 @@ void cover::set_width(int new_width)
      double vector_corner4[2] = {-width/2,height/2};
 
      //Skapar rotationsmatrisen
-    double rotation_matrix[2][2] = {cos(direction/180*pi), -sin(direction/180*pi), sin(direction/180*pi), cos(direction/180*pi)};
+    double rotation_matrix[2][2] = {cos(direction*pi/180), -sin(direction*pi/180), sin(direction*pi/180), cos(direction*pi/180)};
 
-     //Roterar vektorerna så att de nu pekar från mittpunkten av rektangeln till där hörnen faktiskt är (d.v.s med hänsyn på vinkeln)
-     vector_corner1[0] = rotation_matrix[0][0]*vector_corner1[0] + rotation_matrix[0][1]*vector_corner1[1];
-     vector_corner1[1] = rotation_matrix[1][0]*vector_corner1[0] + rotation_matrix[1][1]*vector_corner1[1];
+    //Roterar vektorerna så att de nu pekar från mittpunkten av rektangeln till där hörnen faktiskt är (d.v.s med hänsyn på vinkeln)
+    double corner_to_be_rotated_1x = vector_corner1[0];//Behöver använda ursprungliga x_koordinaten före och efter den roteras
+    vector_corner1[0] = rotation_matrix[0][0]*corner_to_be_rotated_1x + rotation_matrix[0][1]*vector_corner1[1];
+    vector_corner1[1] = rotation_matrix[1][0]*corner_to_be_rotated_1x + rotation_matrix[1][1]*vector_corner1[1];
 
-     vector_corner2[0] = rotation_matrix[0][0]*vector_corner2[0] + rotation_matrix[0][1]*vector_corner2[1];
-     vector_corner2[1] = rotation_matrix[1][0]*vector_corner2[0] + rotation_matrix[1][1]*vector_corner2[1];
+    double corner_to_be_rotated_2x = vector_corner2[0];//Behöver använda ursprungliga x_koordinaten före och efter den roteras
+    vector_corner2[0] = rotation_matrix[0][0]*corner_to_be_rotated_2x + rotation_matrix[0][1]*vector_corner2[1];
+    vector_corner2[1] = rotation_matrix[1][0]*corner_to_be_rotated_2x + rotation_matrix[1][1]*vector_corner2[1];
 
-     vector_corner3[0] = rotation_matrix[0][0]*vector_corner3[0] + rotation_matrix[0][1]*vector_corner3[1];
-     vector_corner3[1] = rotation_matrix[1][0]*vector_corner3[0] + rotation_matrix[1][1]*vector_corner3[1];
+    double corner_to_be_rotated_3x = vector_corner3[0];//Behöver använda ursprungliga x_koordinaten före och efter den roteras
+    vector_corner3[0] = rotation_matrix[0][0]*corner_to_be_rotated_3x + rotation_matrix[0][1]*vector_corner3[1];
+    vector_corner3[1] = rotation_matrix[1][0]*corner_to_be_rotated_3x + rotation_matrix[1][1]*vector_corner3[1];
 
-     vector_corner4[0] = rotation_matrix[0][0]*vector_corner4[0] + rotation_matrix[0][1]*vector_corner4[1];
-     vector_corner4[1] = rotation_matrix[1][0]*vector_corner4[0] + rotation_matrix[1][1]*vector_corner4[1];
+    double corner_to_be_rotated_4x = vector_corner4[0];//Behöver använda ursprungliga x_koordinaten före och efter den roteras
+    vector_corner4[0] = rotation_matrix[0][0]*corner_to_be_rotated_4x + rotation_matrix[0][1]*vector_corner4[1];
+    vector_corner4[1] = rotation_matrix[1][0]*corner_to_be_rotated_4x + rotation_matrix[1][1]*vector_corner4[1];
+
 
      //Sätter fast vektorerna på mittpunkten av rektangeln så att vektorerna nu pekar från origo till hörnen
      //istället för att peka från mittpunkten till hörnen

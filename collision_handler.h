@@ -4,22 +4,22 @@
 #include "character.h"
 #include "cover.h"
 #include "gamefield.h"
-#include "array"
 #include <cmath>
 #include "gamefield.h"
 #include <iterator>
 using namespace std;
+
 class collision_handler
 {
 public:
-    collision_handler(gamefield*);
+    collision_handler(class gamefield*);
     ~collision_handler() = default;
     bool allowed_to_move_rectangle(vector<double>);
     bool allowed_to_move_circle(double,double,int);
 
 
 private:
-    gamefield* gamefield_pointer;
+    class gamefield* gamefield_pointer;
     //vector<cover>* cover_vector_pointer;
     int window_height;
     int window_width;

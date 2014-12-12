@@ -8,15 +8,15 @@
 #include <string>
 #include <math.h>
 #include <vector>
+#include <collision_handler.h>
 
 class character : public gameobject
 {
-    //friend class input_handler;
 public:
     character(std::string character_name,int x_pos, int y_pos, int speed, double angle,
               std::string init_projectile, std::vector<projectile>* init_projectile_vector,
               int init_firing_cooldown, soundhandler* init_soundhandler, int init_max_health,
-              int init_max_ammo, int init_reload_time);
+              int init_max_ammo, int init_reload_time, double width, double height, class collision_handler* init_collision_handler);
 
     void update() override;
     void update_move_vector();
@@ -34,8 +34,10 @@ public:
     double get_health_percent(){return ((double)current_health)/((double)max_health);}
     double get_ammo_percent(){return ((double)current_ammo)/((double)max_ammo);}
     double get_reload_percent(){return ((double)reload_timer)/((double)reload_time);}
-    void fire_weapon();
 
+    void fire_weapon();
+    std::vector<double> get_corners();
+    virtual void move(double x_length, double y_length) override;
 protected:
     double x_movement = 0;
     double y_movement = 0;
@@ -58,7 +60,9 @@ protected:
     std::string projectile_type;
     std::vector<projectile>* projectile_vector;
     soundhandler* main_soundhandler;
-
+    class collision_handler* gamefield_collision_handler;
+    double width = 0;
+    double height = 0;
 
 
 };

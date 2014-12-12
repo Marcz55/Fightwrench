@@ -29,6 +29,7 @@ void gameobject::rotate(int turn_direction)
 
 void gameobject::move(double x_length, double y_length)
 {
+
     xpos = xpos + speed*x_length;
     ypos = ypos + speed*y_length;
 }

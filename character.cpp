@@ -4,17 +4,20 @@ using namespace std;
 character::character(string character_name, int x_pos, int y_pos, int speed, double angle,
                      string init_projectile, vector<projectile>* init_projectile_vector,
                      int init_firing_cooldown, soundhandler* init_soundhandler, int init_max_health,
-                     int init_max_ammo, int init_reload_time): gameobject(character_name, x_pos,y_pos,speed,angle)
+                     int init_max_ammo, int init_reload_time, double init_width, double init_height, collision_handler *init_collision_handler): gameobject(character_name, x_pos,y_pos,speed,angle)
 {
     projectile_type = init_projectile;
     projectile_vector = init_projectile_vector;
     firing_cooldown = init_firing_cooldown;
     main_soundhandler = init_soundhandler;
+    gamefield_collision_handler = init_collision_handler;
     current_health = init_max_health;
     max_health=init_max_health;
     max_ammo = init_max_ammo;
     current_ammo = init_max_ammo;
     reload_time = init_reload_time;
+    width = init_width;
+    height = init_height;
 }
 
 void character::update()
@@ -31,15 +34,15 @@ void character::update()
             reload_timer -= 1;
         }
     }
-    this->rotate(turn_right_key - turn_left_key);
-    this->move(x_movement,y_movement);
+    rotate(turn_right_key - turn_left_key);
+    move(x_movement,y_movement);
     if (firing_timer > 0)
     {
         firing_timer -= 1;
     }
     if (shoot_key && firing_timer <= 0 && current_ammo > 0)
     {
-        this->fire_weapon();
+        fire_weapon();
         current_ammo -= 1;
         if (current_ammo <= 0)
         {
@@ -161,5 +164,81 @@ void character::fire_weapon()
     }
 
 
+}
+
+vector<double> character::get_corners()
+{
+    double pi = 3.1415;
+    //hörnen utan hänsyn till vinkeln med mitten av rektangeln som origo
+    double vector_corner1[2] = {-width/2,-height/2};
+    double vector_corner2[2] = {width/2,-height/2};
+    double vector_corner3[2] = {width/2,height/2};
+    double vector_corner4[2] = {-width/2,height/2};
+
+    //Skapar rotationsmatrisen
+   double rotation_matrix[2][2] = {cos(direction*pi/180), -sin(direction*pi/180), sin(direction*pi/180), cos(direction*pi/180)};
+
+    //Roterar vektorerna så att de nu pekar från mittpunkten av rektangeln till där hörnen faktiskt är (d.v.s med hänsyn på vinkeln)
+    double corner_to_be_rotated_1x = vector_corner1[0];//Behöver använda ursprungliga x_koordinaten före och efter den roteras
+    vector_corner1[0] = rotation_matrix[0][0]*corner_to_be_rotated_1x + rotation_matrix[0][1]*vector_corner1[1];
+    vector_corner1[1] = rotation_matrix[1][0]*corner_to_be_rotated_1x + rotation_matrix[1][1]*vector_corner1[1];
+
+    double corner_to_be_rotated_2x = vector_corner2[0];//Behöver använda ursprungliga x_koordinaten före och efter den roteras
+    vector_corner2[0] = rotation_matrix[0][0]*corner_to_be_rotated_2x + rotation_matrix[0][1]*vector_corner2[1];
+    vector_corner2[1] = rotation_matrix[1][0]*corner_to_be_rotated_2x + rotation_matrix[1][1]*vector_corner2[1];
+
+    double corner_to_be_rotated_3x = vector_corner3[0];//Behöver använda ursprungliga x_koordinaten före och efter den roteras
+    vector_corner3[0] = rotation_matrix[0][0]*corner_to_be_rotated_3x + rotation_matrix[0][1]*vector_corner3[1];
+    vector_corner3[1] = rotation_matrix[1][0]*corner_to_be_rotated_3x + rotation_matrix[1][1]*vector_corner3[1];
+
+    double corner_to_be_rotated_4x = vector_corner4[0];//Behöver använda ursprungliga x_koordinaten före och efter den roteras
+    vector_corner4[0] = rotation_matrix[0][0]*corner_to_be_rotated_4x + rotation_matrix[0][1]*vector_corner4[1];
+    vector_corner4[1] = rotation_matrix[1][0]*corner_to_be_rotated_4x + rotation_matrix[1][1]*vector_corner4[1];
+
+    //Sätter fast vektorerna på mittpunkten av rektangeln så att vektorerna nu pekar från origo till hörnen
+    //istället för att peka från mittpunkten till hörnen
+
+    vector_corner1[0] = xpos + vector_corner1[0];
+    vector_corner1[1] = ypos + vector_corner1[1];
+
+    vector_corner2[0] = xpos + vector_corner2[0];
+    vector_corner2[1] = ypos + vector_corner2[1];
+
+    vector_corner3[0] = xpos + vector_corner3[0];
+    vector_corner3[1] = ypos + vector_corner3[1];
+
+    vector_corner4[0] = xpos + vector_corner4[0];
+    vector_corner4[1] = ypos + vector_corner4[1];
+
+
+   vector<double> ret;
+   ret.push_back(vector_corner1[0]);
+   ret.push_back(vector_corner1[1]);
+   ret.push_back(vector_corner2[0]);
+   ret.push_back(vector_corner2[1]);
+   ret.push_back(vector_corner3[0]);
+   ret.push_back(vector_corner3[1]);
+   ret.push_back(vector_corner4[0]);
+   ret.push_back(vector_corner4[1]);
+   return ret;//vector<double>{vector_corner1[0],vector_corner1[1],vector_corner2[0],vector_corner2[1],vector_corner3[0],vector_corner3[1],vector_corner4[0],vector_corner4[1]};
+}
+
+void character::move(double x_length, double y_length)
+{
+    //Är tvungen att sätta koordinaten vi vill flytta oss till till den aktuella koordinaten
+    //för att get_corners ska ta ut hörnen som karaktären kommer att ha vid den nya koordinaten
+    if(x_length != 0 or y_length !=0)
+    {
+        xpos = xpos + x_length;
+        ypos = ypos + y_length;
+        //kollar om koordinaten är okej att flytta sig till, om ja så är vi klara om nej så sätter vi tillbaka värdena till de gamla koordinaterna
+        if(gamefield_collision_handler -> allowed_to_move_rectangle(get_corners()))
+        {
+            return;
+        }
+        xpos = xpos - x_length;
+        ypos = ypos - y_length;
+     }
+     return;
 }
 

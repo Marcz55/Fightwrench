@@ -27,9 +27,24 @@ void game::main_update()
         it->update();
         it->update_move_vector(); //Denna bör läggas på lämplig plats i inputhanteraren.
     }
-    for(auto it = main_gamefield.get_projectile_vector()->begin(); it != main_gamefield.get_projectile_vector()->end(); it++)
+    for(auto it = main_gamefield.get_projectile_vector()->begin();/* (!main_gamefield.get_projectile_vector()->empty())&&*/(it != main_gamefield.get_projectile_vector()->end()); it++)
     {
         it->update();
+        if(it->get_explosion_timer() == 0) //Fick oförklarade "pure virtual function called"-fel när vissa projectiler togs bort, undersök varför!
+        {
+            it += 1;
+            if(it == main_gamefield.get_projectile_vector()->end())
+            {
+                it -= 1;
+                main_gamefield.get_projectile_vector()->erase(it);
+                break;
+            }
+            else
+            {
+                it -= 1;
+                main_gamefield.get_projectile_vector()->erase(it);
+            }
+        }
     }
 
 }

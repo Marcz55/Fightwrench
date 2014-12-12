@@ -52,6 +52,7 @@ protected:
     int current_ammo =0;
     int max_ammo = 0;
     int reload_time = 0;
+
     int reload_timer = 0;
     double movement_direction = 0;
     bool shoot_key = false;

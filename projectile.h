@@ -6,15 +6,19 @@
 class projectile : public gameobject
 {
 public:
-    ~projectile() = default;
+    virtual ~projectile() = default;
     projectile();
-    projectile(std::string bullet_name, double x, double y,int speed, double angle);
-    virtual void update() override;
+    projectile(std::string bullet_name, double x, double y,int speed, double angle, int init_explosion_timer, int init_explosion_radius);
+    void update() override;
+    int get_explosion_radius(){return explosion_radius;}
+    int get_explosion_timer(){return explosion_timer;}
 
 protected:
     double x_movement;
     double y_movement;
     int damage;
+    int explosion_radius = 0;
+    int explosion_timer = 1;
     double x_deceleration = 0;
     double y_deceleration = 0;
 };

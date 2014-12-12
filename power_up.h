@@ -9,9 +9,10 @@ public:
     power_up()=delete;
     power_up(std::string name1, int x, int y,double angle, int input_radius, int input_duration);
     ~power_up()=default;
-    power_up(power_up& copy_power_up)=default;
+    virtual void update() override{}
+    //power_up(power_up& copy_power_up)=default;
     bool check_pick_up_status();
-    void pick_up(character& up_picker);
+  //  void pick_up(character& up_picker);
 private:
     int radius;
     int duration; //borde ges i x*10ms .

@@ -6,6 +6,7 @@ class grenade : public projectile
 {
 public:
     grenade(double init_x, double init_y, double angle);
+    virtual ~grenade()  override = default;
 
 private:
     double x_deceleration;

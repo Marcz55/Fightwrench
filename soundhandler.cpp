@@ -21,6 +21,9 @@ soundhandler::soundhandler()
 
     create_sound("Gunshot","Sound1.wav");
     create_sound("Axel","Axel_laugh.wav");
+    create_sound("Explosion","explosion.wav");
+    create_sound("Reload","reload.wav");
+
 
 }
 

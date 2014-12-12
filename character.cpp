@@ -5,6 +5,7 @@ character::character(string character_name, int x_pos, int y_pos, int speed, dou
                      string init_projectile, vector<projectile>* init_projectile_vector,
                      int init_firing_cooldown, soundhandler* init_soundhandler, int init_max_health,
                      int init_max_ammo, int init_reload_time, double init_width, double init_height, collision_handler *init_collision_handler): gameobject(character_name, x_pos,y_pos,speed,angle)
+
 {
     projectile_type = init_projectile;
     projectile_vector = init_projectile_vector;
@@ -12,7 +13,7 @@ character::character(string character_name, int x_pos, int y_pos, int speed, dou
     main_soundhandler = init_soundhandler;
     gamefield_collision_handler = init_collision_handler;
     current_health = init_max_health;
-    max_health=init_max_health;
+    max_health = init_max_health;
     max_ammo = init_max_ammo;
     current_ammo = init_max_ammo;
     reload_time = init_reload_time;
@@ -22,18 +23,15 @@ character::character(string character_name, int x_pos, int y_pos, int speed, dou
 
 void character::update()
 {
-    if (reload_timer > 0)
-    {
-        if (reload_timer == 1)
-        {
+    if (reload_timer > 0) {
+        if (reload_timer == 1) {
             reload_timer = 0;
             current_ammo = max_ammo;
-        }
-        else
-        {
+        } else {
             reload_timer -= 1;
         }
     }
+	
     rotate(turn_right_key - turn_left_key);
     move(x_movement,y_movement);
     if (firing_timer > 0)
@@ -44,9 +42,10 @@ void character::update()
     {
         fire_weapon();
         current_ammo -= 1;
-        if (current_ammo <= 0)
-        {
+        if (current_ammo <= 0) {
             reload_timer = reload_time;
+            main_soundhandler->play_sound("Reload");
+
         }
     }
 
@@ -57,56 +56,37 @@ void character::update_move_vector()
 {
     double temp_x = right_key - left_key;
     double temp_y = down_key - up_key;
-    if(temp_x !=0||temp_y != 0 )
-    {
-        x_movement = temp_x/sqrt(temp_x*temp_x + temp_y*temp_y);
-        y_movement = temp_y/sqrt(temp_x*temp_x + temp_y*temp_y);
-    }
-    else
-    {
+    if (temp_x != 0 || temp_y != 0) {
+        x_movement = temp_x / sqrt(temp_x * temp_x + temp_y * temp_y);
+        y_movement = temp_y / sqrt(temp_x * temp_x + temp_y * temp_y);
+    } else {
         y_movement = 0;
         x_movement = 0;
     };
-    if(temp_x !=0||temp_y != 0 )
-    {
-        if (temp_x == 0)
-        {
-            if (temp_y == 1)
-            {
+    if (temp_x != 0 || temp_y != 0) {
+        if (temp_x == 0) {
+            if (temp_y == 1) {
                 movement_direction = 180;
-            }
-            else
-            {
+            } else {
                 movement_direction = 0;
             }
-        }
-        else if (temp_y == 0)
-        {
-            if (temp_x == 1)
-            {
+        } else if (temp_y == 0) {
+            if (temp_x == 1) {
                 movement_direction = 90;
-            }
-            else
-            {
+            } else {
                 movement_direction = 270;
             }
-        }
-        else
-        {
-            if (temp_x > 0 && temp_y > 0)
-            {
+        } else {
+            if (temp_x > 0 && temp_y > 0) {
                 movement_direction = 135;
             }
-            if (temp_x < 0 && temp_y > 0)
-            {
+            if (temp_x < 0 && temp_y > 0) {
                 movement_direction = 225;
             }
-            if (temp_x < 0 && temp_y < 0)
-            {
+            if (temp_x < 0 && temp_y < 0) {
                 movement_direction = 315;
             }
-            if (temp_x > 0 && temp_y < 0)
-            {
+            if (temp_x > 0 && temp_y < 0) {
                 movement_direction = 45;
             }
         }
@@ -150,15 +130,13 @@ void character::input_set_shoot(const bool shoot)
 
 void character::fire_weapon()
 {
-    if(projectile_type == "bullet")
-    {
-        projectile_vector->push_back(bullet(xpos,ypos,direction - 90));
+    if (projectile_type == "bullet") {
+        projectile_vector->push_back(bullet(xpos, ypos, direction - 90));
         firing_timer = firing_cooldown;
         main_soundhandler->play_sound("Gunshot"); //Denna rad gör att spelet krashar oftare än vad är lämpligt.
     }
-    if(projectile_type == "grenade")
-    {
-        projectile_vector->push_back(grenade(xpos,ypos,direction - 90));
+    if (projectile_type == "grenade") {
+        projectile_vector->push_back(grenade(xpos, ypos, direction - 90));
         firing_timer = firing_cooldown;
         main_soundhandler->play_sound("Gunshot"); //Denna rad gör att spelet krashar oftare än vad är lämpligt.
     }

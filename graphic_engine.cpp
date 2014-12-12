@@ -37,6 +37,7 @@ graphic_engine::graphic_engine(int win_height, int win_width)
     create_texture("ultimate_bar", "ultimate_bar.png");
     create_texture("characterbody","body.png");
     create_texture("standardcover","standardcover.png");
+    create_texture("power_up","syringe.png");
 
 }
 
@@ -103,6 +104,10 @@ void graphic_engine::draw_all(gamefield& my_gamefield)
             draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_direction());
         }
         for(auto it = my_gamefield.cover_vector.begin(); it != my_gamefield.cover_vector.end(); it++)
+        {
+            draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_direction());
+        }
+        for(auto it = my_gamefield.power_up_vector.begin(); it != my_gamefield.power_up_vector.end(); it++)
         {
             draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_direction());
         }

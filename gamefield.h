@@ -7,6 +7,7 @@
 #include "cover.h"
 #include "projectile.h"
 #include "collision_handler.h"
+#include "power_up.h"
 
 using namespace std;
 class gamefield
@@ -20,6 +21,7 @@ public:
     void add_character(class character character_to_add);
     void add_projectile(projectile projectile_to_add);
     void add_cover(cover cover_to_add);
+    void add_power_up(class power_up power_up_to_add);
     vector<class character>* get_character_vector(){return &character_vector;}
     vector<cover>* get_cover_vector(){return &cover_vector;}
     vector<projectile>* get_projectile_vector(){return &projectile_vector;}
@@ -35,7 +37,7 @@ private:
     vector<character> character_vector;
     vector<class projectile> projectile_vector;
     vector<class cover> cover_vector;
-   // vector<class power_up> power_up_vector;
+    vector<class power_up> power_up_vector;
 };
 
 #endif // GAMEFIELD_H

@@ -7,7 +7,7 @@ using namespace std;
 class cover : public gameobject
 {
 public:
-    cover(std::string name1, int x, int y, double angle, int health_input, double height_input, double width_input);
+    cover(std::string name1, int x, int y, double angle, int health_input, double height_input, double width_input,class gamefield* init_gamefield);
     cover()=delete;
     ~cover()=default;
     void update() override;

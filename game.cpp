@@ -5,17 +5,17 @@ using namespace std;
 game::game(soundhandler& main_soundhandler, int window_height, int window_width, const string Player1, const string Player2):main_gamefield {window_height, window_width}, main_graphic_engine{window_height, window_width}
 {
     if(Player1 == "axel")//Namnet som settas här MÅSTE vara samma sak som motsvarande textur i graphic engine.
-        main_gamefield.add_character(axel{700,500,30,main_gamefield.get_projectile_vector(),&main_soundhandler, main_gamefield.get_collision_handler_pointer()});
+        main_gamefield.add_character(axel{700,500,30,&main_soundhandler, main_gamefield.get_collision_handler_pointer(),&main_gamefield});
     if(Player1 == "marcus")
-        main_gamefield.add_character(marcus{700,500,30,main_gamefield.get_projectile_vector(),&main_soundhandler, main_gamefield.get_collision_handler_pointer()});
+        main_gamefield.add_character(marcus{700,500,30,&main_soundhandler, main_gamefield.get_collision_handler_pointer(),&main_gamefield});
 
     if(Player2 == "axel")
-        main_gamefield.add_character(axel{700,500,30,main_gamefield.get_projectile_vector(),&main_soundhandler, main_gamefield.get_collision_handler_pointer()});
+        main_gamefield.add_character(axel{700,500,30,&main_soundhandler, main_gamefield.get_collision_handler_pointer(),&main_gamefield});
     if(Player2 == "marcus")
-        main_gamefield.add_character(marcus{700,500,30,main_gamefield.get_projectile_vector(),&main_soundhandler, main_gamefield.get_collision_handler_pointer()});
+        main_gamefield.add_character(marcus{700,500,30,&main_soundhandler, main_gamefield.get_collision_handler_pointer(),&main_gamefield});
 
-    main_gamefield.add_cover(standardcover(300,300,0,10,30,150));
-    main_gamefield.add_power_up(power_up("power_up",600,600,0,0,0));
+    main_gamefield.add_cover(standardcover(300,300,0,10,30,150,&main_gamefield));
+    main_gamefield.add_power_up(power_up("power_up",600,600,0,0,0,&main_gamefield));
     running = true;
 
 }

@@ -2,13 +2,15 @@
 
 using namespace std;
 
-gameobject::gameobject(string object_name, int x, int y, int init_speed, double angle)
+gameobject::gameobject(string object_name, int x, int y, int init_speed, double angle,class gamefield *init_gamefield)
 {
     xpos =x;
     ypos=y;
     direction = angle;
     speed = init_speed;
     name=object_name;
+    main_gamefield = init_gamefield;
+
 
 }
 

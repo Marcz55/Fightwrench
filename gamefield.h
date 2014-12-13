@@ -6,6 +6,8 @@
 #include "character.h"
 #include "cover.h"
 #include "projectile.h"
+#include "bullet.h"
+#include "grenade.h"
 #include "collision_handler.h"
 #include "power_up.h"
 
@@ -19,7 +21,7 @@ public:
     void update();
     ~gamefield();
     void add_character(class character character_to_add);
-    void add_projectile(projectile projectile_to_add);
+    void add_projectile(string projectile_type, double projectile_x, double projectile_y, double projectile_angle);
     void add_cover(cover cover_to_add);
     void add_power_up(class power_up power_up_to_add);
     vector<class character>* get_character_vector(){return &character_vector;}

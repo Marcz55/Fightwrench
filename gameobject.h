@@ -1,11 +1,12 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 #include <string>
+//#include "gamefield.h"
 
 class gameobject
 {
 public:
-    gameobject(std::string object_name,int x, int y, int init_speed, double angle);
+    gameobject(std::string object_name,int x, int y, int init_speed, double angle, class gamefield* init_gamefield);
     virtual void update() = 0;
     virtual ~gameobject() =default;
     virtual void move(double x_length, double y_length);
@@ -17,6 +18,7 @@ public:
     virtual double get_direction(){return direction;}
 
 protected:
+    class gamefield* main_gamefield;
     std::string name;
     double xpos;
     double ypos;

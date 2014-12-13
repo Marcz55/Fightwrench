@@ -2,13 +2,13 @@
 using namespace std;
 
 character::character(string character_name, int x_pos, int y_pos, int speed, double angle,
-                     string init_projectile, vector<projectile>* init_projectile_vector,
+                     string init_projectile,
                      int init_firing_cooldown, soundhandler* init_soundhandler, int init_max_health,
-                     int init_max_ammo, int init_reload_time, double init_width, double init_height, collision_handler *init_collision_handler, string port_name): gameobject(character_name, x_pos,y_pos,speed,angle)
+                     int init_max_ammo, int init_reload_time, double init_width, double init_height,
+                     collision_handler *init_collision_handler, string port_name, class gamefield* init_gamefield): gameobject(character_name, x_pos,y_pos,speed,angle,init_gamefield)
 
 {
     projectile_type = init_projectile;
-    projectile_vector = init_projectile_vector;
     firing_cooldown = init_firing_cooldown;
     main_soundhandler = init_soundhandler;
     gamefield_collision_handler = init_collision_handler;
@@ -131,16 +131,9 @@ void character::input_set_shoot(const bool shoot)
 
 void character::fire_weapon()
 {
-    if (projectile_type == "bullet") {
-        projectile_vector->push_back(bullet(xpos, ypos, direction - 90));
-        firing_timer = firing_cooldown;
-        main_soundhandler->play_sound("Gunshot"); //Denna rad gör att spelet krashar oftare än vad är lämpligt.
-    }
-    if (projectile_type == "grenade") {
-        projectile_vector->push_back(grenade(xpos, ypos, direction - 90));
-        firing_timer = firing_cooldown;
-        main_soundhandler->play_sound("Gunshot"); //Denna rad gör att spelet krashar oftare än vad är lämpligt.
-    }
+    main_gamefield->add_projectile(projectile_type,xpos,ypos,direction);
+    firing_timer = firing_cooldown;
+    main_soundhandler->play_sound("Gunshot");
 
 
 }

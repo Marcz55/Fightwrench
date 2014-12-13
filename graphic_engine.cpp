@@ -1,5 +1,6 @@
 #include "graphic_engine.h"
 #include <algorithm>    // std::max
+#include <time.h>
 #include <iostream>
 using namespace std;
 
@@ -14,6 +15,17 @@ graphic_engine::graphic_engine(int win_height, int win_width)
     Window_height = win_height+200; // lägg till utrymme för huden
     Window_width = win_width;
     portrait_size = 0;
+    srand (time(NULL));
+    int backgroundrandomizer = rand() % 2 + 1;
+    cout << backgroundrandomizer << endl;
+    if (backgroundrandomizer == 1)
+    {
+        background = "desert";
+    }
+    if (backgroundrandomizer == 2)
+    {
+        background = "forest";
+    }
 
 
 
@@ -40,6 +52,8 @@ graphic_engine::graphic_engine(int win_height, int win_width)
     create_texture("standardcover","standardcover.png");
     create_texture("power_up","syringe.png");
     create_texture("explosion","explosion.png");
+    create_texture("desert","desertbackground.jpg");
+    create_texture("forest","forestbackground.jpg");
 
 }
 
@@ -96,6 +110,7 @@ void graphic_engine::draw_all(gamefield& my_gamefield)
     //Test för att rita ut 2 objekt
         SDL_SetRenderDrawColor(Renderer,0,0,0,255);
         SDL_RenderClear(Renderer);
+        draw_object(background,750,400,0);
         for(auto it = my_gamefield.character_vector.begin(); it != my_gamefield.character_vector.end(); it++)
         {
             draw_object("characterbody",it->get_xpos(),it->get_ypos(),it->get_direction());

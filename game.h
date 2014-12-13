@@ -17,6 +17,7 @@ public:
     game(soundhandler &main_soundhandler, int window_height = 600, int window_width = 800, const std::string Player1 = "", const std::string Player2 = "");
     void main_update();
     void game_loop();
+    void firstmap();
 
 private:
     gamefield main_gamefield;

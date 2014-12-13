@@ -28,6 +28,7 @@ private:
     std::map<std::string,Texture_struct> Image_map;
     SDL_Rect Current_rect;
     int portrait_size;
+    std::string background;
 
 public:
     ~graphic_engine();
@@ -37,6 +38,8 @@ public:
     void draw_portrait(string name,double x_coord,double y_coord, double angle);
     void draw_object(string name,double x_coord,double y_coord, double angle);
     void create_texture(std::string texture_name, const char *texture_file);
+
+
 
 
 

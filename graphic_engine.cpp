@@ -1,5 +1,6 @@
 #include "graphic_engine.h"
 #include <algorithm>    // std::max
+#include <iostream>
 using namespace std;
 
 graphic_engine::graphic_engine(int win_height, int win_width)
@@ -38,6 +39,7 @@ graphic_engine::graphic_engine(int win_height, int win_width)
     create_texture("characterbody","body.png");
     create_texture("standardcover","standardcover.png");
     create_texture("power_up","syringe.png");
+    create_texture("explosion","explosion.png");
 
 }
 
@@ -111,6 +113,11 @@ void graphic_engine::draw_all(gamefield& my_gamefield)
         {
             draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_direction());
         }
+        for(auto it = my_gamefield.explosion_vector.begin(); it != my_gamefield.explosion_vector.end(); it++)
+        {
+            draw_scaled_object("explosion",it->get_xpos()-(186*(it->get_scale())*(it->get_timer()))/10,it->get_ypos()-(186*(it->get_scale())*(it->get_timer()))/10,0,(it->get_scale()*it->get_timer())/10,(it->get_scale()*it->get_timer())/10);
+        }
+
 
         draw_scaled_object("main_hud",0,Window_height - 200,0, (double) Window_width/800, 1);
         draw_portrait(my_gamefield.character_vector.at(0).get_portrait_name(), (int) 80*Window_width/800, (int) Window_height-75,0);

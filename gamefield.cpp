@@ -48,6 +48,11 @@ void gamefield::add_power_up(power_up power_up_to_add)
     power_up_vector.push_back(power_up_to_add);
 }
 
+void gamefield::add_explosion(double scale, double explosion_x, double explosion_y)
+{
+    explosion_vector.push_back(explosion(scale,explosion_x,explosion_y,this));
+}
+
 collision_handler* gamefield::get_collision_handler_pointer()
 {
     return collision_handler_pointer;
@@ -58,5 +63,50 @@ collision_handler* gamefield::get_collision_handler_pointer()
 void gamefield::play_sound(const string sound_name)
 {
     main_soundhandler->play_sound(sound_name);
+}
+
+void gamefield::update()
+{
+    for(auto it = explosion_vector.begin(); it != explosion_vector.end(); it++)
+    {
+        it->update();
+        if(it->get_timer() == 0)
+        {
+            it += 1;
+            if (it == explosion_vector.end())
+            {
+                it -=1;
+                explosion_vector.erase(it);
+                break;
+            }
+            else
+            {
+                it -=1;
+                explosion_vector.erase(it);
+            }
+        }
+    }
+
+    for(auto it = projectile_vector.begin(); it != projectile_vector.end(); it++)
+    {
+        it->update();
+        if(it->get_explosion_timer() == 0)
+        {
+            add_explosion(0.5,it->get_xpos(),it->get_ypos());
+            main_soundhandler->play_sound("Explosion");
+            it += 1;
+            if (it == projectile_vector.end())
+            {
+                it -=1;
+                projectile_vector.erase(it);
+                break;
+            }
+            else
+            {
+                it -=1;
+                projectile_vector.erase(it);
+            }
+        }
+    }
 }
 

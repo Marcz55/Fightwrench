@@ -30,10 +30,7 @@ void game::main_update()
         it->update();
         it->update_move_vector(); //Denna bör läggas på lämplig plats i inputhanteraren.
     }
-    for(auto it = main_gamefield.get_projectile_vector()->begin(); it != main_gamefield.get_projectile_vector()->end(); it++)
-    {
-        it->update();
-    }
+    main_gamefield.update();
 
 }
 

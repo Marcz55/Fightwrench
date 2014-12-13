@@ -1,7 +1,8 @@
 #include "projectile.h"
+#include <iostream>
 using namespace std;
 
-projectile::projectile(string bullet_name, double x, double y, int speed, double angle, int init_explosion_timer, int init_explosion_radius,class gamefield *init_gamefield):gameobject(bullet_name,x,y,speed,angle,init_gamefield)
+projectile::projectile(string bullet_name, double x, double y, int speed, double angle, int init_explosion_timer, int init_explosion_radius,class gamefield* init_gamefield):gameobject(bullet_name,x,y,speed,angle,init_gamefield)
 {
     direction = angle;
     x_movement = speed*cos(direction*0.0175); //0.0175 ungefär pi/180

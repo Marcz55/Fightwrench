@@ -8,8 +8,9 @@ class projectile : public gameobject
 public:
     virtual ~projectile() = default;
     projectile();
-    projectile(std::string bullet_name, double x, double y,int speed, double angle, int init_explosion_timer, int init_explosion_radius, class gamefield* init_gamefield);
+    projectile(std::string bullet_name, double x, double y,int speed, double angle, int init_explosion_timer, int init_explosion_radius, class gamefield* init_gamefield = nullptr);
     void update() override;
+    void test();
     int get_explosion_radius(){return explosion_radius;}
     int get_explosion_timer(){return explosion_timer;}
 

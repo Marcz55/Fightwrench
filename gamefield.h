@@ -10,6 +10,7 @@
 #include "grenade.h"
 #include "collision_handler.h"
 #include "power_up.h"
+#include "explosion.h"
 
 using namespace std;
 class gamefield
@@ -24,6 +25,7 @@ public:
     void add_projectile(string projectile_type, double projectile_x, double projectile_y, double projectile_angle);
     void add_cover(cover cover_to_add);
     void add_power_up(class power_up power_up_to_add);
+    void add_explosion(double scale, double explosion_x, double explosion_y);
     vector<class character>* get_character_vector(){return &character_vector;}
     vector<cover>* get_cover_vector(){return &cover_vector;}
     vector<projectile>* get_projectile_vector(){return &projectile_vector;}
@@ -42,6 +44,7 @@ private:
     vector<class projectile> projectile_vector;
     vector<class cover> cover_vector;
     vector<class power_up> power_up_vector;
+    vector<explosion> explosion_vector;
 };
 
 #endif // GAMEFIELD_H

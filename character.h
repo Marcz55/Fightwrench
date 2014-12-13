@@ -15,7 +15,7 @@ class character : public gameobject
 public:
     character(std::string character_name, int x_pos, int y_pos, int speed, double angle,
               std::string init_projectile,
-              int init_firing_cooldown, soundhandler* init_soundhandler, int init_max_health,
+              int init_firing_cooldown,int init_max_health,
               int init_max_ammo, int init_reload_time, double width, double height, class collision_handler* init_collision_handler, std::string port_name = "", class gamefield* init_gamefield = nullptr);
 
     void update() override;
@@ -59,7 +59,8 @@ public:
 
     void fire_weapon();
     std::vector<double> get_corners();
-    virtual void move(double x_length, double y_length) override;
+    void move(double x_length, double y_length,int turn_direction);
+
 protected:
     double x_movement = 0;
     double y_movement = 0;
@@ -81,7 +82,7 @@ protected:
     int firing_cooldown; //Antal tic en karaktär måste vänta innan den kan skjuta igen.
     int firing_timer = 0;    //Den timer som räknas ner och sätt till firing_cooldown när man skjuter.
     std::string projectile_type;
-    soundhandler* main_soundhandler;
+    //soundhandler* main_soundhandler;
     class collision_handler* gamefield_collision_handler;
     double width = 0;
     double height = 0;

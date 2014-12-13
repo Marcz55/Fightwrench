@@ -17,7 +17,7 @@ class gamefield
     friend class graphic_engine;
 public:
     gamefield() = default;
-    gamefield(int win_height, int win_width);
+    gamefield(int win_height, int win_width, class soundhandler& init_soundhandler);
     void update();
     ~gamefield();
     void add_character(class character character_to_add);
@@ -30,8 +30,10 @@ public:
     int get_window_height(){return window_height;}
     int get_window_width(){return window_width;}
     class collision_handler* get_collision_handler_pointer();
+    void play_sound(const string sound_name);
 
 private:
+    soundhandler* main_soundhandler;
     int window_height = 900;
     int window_width = 1500;
     string map1;

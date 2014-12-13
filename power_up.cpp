@@ -1,9 +1,10 @@
 #include "power_up.h"
 
-power_up::power_up(std::string name1, int x, int y, double angle, int input_radius, int input_duration, gamefield *init_gamefield):gameobject(name1, x, y,0,angle, init_gamefield)
+power_up::power_up(std::string name1, int x, int y, double angle, int input_radius, gamefield *init_gamefield, int dmg, int health):gameobject(name1, x, y,0,angle, init_gamefield)
 {
     radius = input_radius;
-    duration=input_duration;
+    delta_health=health;
+    delta_damage = dmg;
 }
 bool power_up::check_pick_up_status()
 {

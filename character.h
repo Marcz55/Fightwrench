@@ -8,6 +8,7 @@
 #include <string>
 #include <math.h>
 #include <vector>
+#include "power_up.h"
 #include <collision_handler.h>
 
 class character : public gameobject
@@ -60,6 +61,7 @@ public:
     void fire_weapon();
     std::vector<double> get_corners();
     void move(double x_length, double y_length,int turn_direction);
+    void pick_up_power_up(power_up& po_up);
 
 protected:
     double x_movement = 0;
@@ -87,6 +89,7 @@ protected:
     double width = 0;
     double height = 0;
     std::string portrait_name;
+    std::vector<class power_up> power_up_vector;
 
 
 };

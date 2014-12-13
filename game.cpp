@@ -15,7 +15,7 @@ game::game(soundhandler& main_soundhandler, int window_height, int window_width,
         main_gamefield.add_character(marcus{700,500,30,main_gamefield.get_collision_handler_pointer(),&main_gamefield});
 
     main_gamefield.add_cover(standardcover(300,300,0,10,30,150,&main_gamefield));
-    main_gamefield.add_power_up(power_up("power_up",600,600,0,0,0,&main_gamefield));
+    main_gamefield.add_power_up(power_up("power_up",600,600,0,0,&main_gamefield, 0, 0));
     running = true;
 
 }

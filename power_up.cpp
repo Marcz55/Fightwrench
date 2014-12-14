@@ -6,7 +6,3 @@ power_up::power_up(std::string name1, int x, int y, double angle, int input_radi
     delta_health=health;
     delta_damage = dmg;
 }
-bool power_up::check_pick_up_status()
-{
-    return is_picked_up;
-}

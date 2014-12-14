@@ -10,14 +10,13 @@
 #include <vector>
 #include "power_up.h"
 #include <collision_handler.h>
-
 class character : public gameobject
 {
 public:
     character(std::string character_name, int x_pos, int y_pos, int speed, double angle,
               std::string init_projectile,
               int init_firing_cooldown,int init_max_health,
-              int init_max_ammo, int init_reload_time, double width, double height, class collision_handler* init_collision_handler, std::string port_name = "", class gamefield* init_gamefield = nullptr);
+              int init_max_ammo, int init_reload_time, double width, double height, class collision_handler* init_collision_handler, std::string port_name = "", class gamefield* init_gamefield = nullptr, int init_damage=0);
 
     void update() override;
     void update_move_vector();
@@ -61,7 +60,10 @@ public:
     void fire_weapon();
     std::vector<double> get_corners();
     void move(double x_length, double y_length,int turn_direction);
-    void pick_up_power_up(power_up& po_up);
+    virtual void pick_up_power_up(const power_up& po_up);
+    virtual void set_health(int new_health){current_health=new_health;}
+
+
 
 protected:
     double x_movement = 0;
@@ -70,6 +72,7 @@ protected:
     int down_key = 0;
     int left_key = 0;
     int right_key = 0;
+
     int turn_left_key = 0;
     int turn_right_key = 0;
     int current_health = 0;
@@ -77,6 +80,7 @@ protected:
     int current_ammo = 0;
     int max_ammo = 0;
     int reload_time = 0;
+    int damage = 0;
 
     int reload_timer = 0;
     double movement_direction = 0;
@@ -89,7 +93,7 @@ protected:
     double width = 0;
     double height = 0;
     std::string portrait_name;
-    std::vector<class power_up> power_up_vector;
+    std::vector<class power_up> active_power_ups;
 
 
 };

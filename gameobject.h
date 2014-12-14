@@ -11,10 +11,10 @@ public:
     //virtual void move(double x_length, double y_length);
     //virtual void rotate(int turn_direction); //turn_direction är 0 eller +-1 för att avgöra om
                                              //objektet ska vridas och åt vilket håll.
-    virtual std::string get_name(){return name;}
-    virtual double get_xpos(){return xpos;}
-    virtual double get_ypos(){return ypos;}
-    virtual double get_direction(){return direction;}
+    virtual std::string get_name()const {return name;}
+    virtual double get_xpos()const {return xpos;}
+    virtual double get_ypos()const{return ypos;}
+    virtual double get_direction()const{return direction;}
 
 protected:
     class gamefield* main_gamefield;

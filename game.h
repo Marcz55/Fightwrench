@@ -9,6 +9,8 @@
 #include "standardcover.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_main.h>
+#include "power_up.h"
+#include "temporary_power_up.h"
 
 
 class game

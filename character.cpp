@@ -1,11 +1,13 @@
 #include "character.h"
+#include "temporary_power_up.h"
+#include <iostream>
 using namespace std;
 
 character::character(string character_name, int x_pos, int y_pos, int speed, double angle,
                      string init_projectile,
                      int init_firing_cooldown, int init_max_health,
                      int init_max_ammo, int init_reload_time, double init_width, double init_height,
-                     collision_handler *init_collision_handler, string port_name, class gamefield* init_gamefield): gameobject(character_name, x_pos,y_pos,speed,angle,init_gamefield)
+                     collision_handler *init_collision_handler, string port_name, class gamefield* init_gamefield, int init_damage): gameobject(character_name, x_pos,y_pos,speed,angle,init_gamefield)
 
 {
     projectile_type = init_projectile;
@@ -19,6 +21,7 @@ character::character(string character_name, int x_pos, int y_pos, int speed, dou
     width = init_width;
     height = init_height;
     portrait_name=port_name;
+    damage=init_damage;
 }
 
 void character::update()
@@ -129,7 +132,7 @@ void character::input_set_shoot(const bool shoot)
 
 void character::fire_weapon()
 {
-    main_gamefield->add_projectile(projectile_type,xpos,ypos,direction);
+    main_gamefield->add_projectile(projectile_type,xpos,ypos,direction, damage);
     firing_timer = firing_cooldown;
 }
 
@@ -210,4 +213,41 @@ void character::move(double x_length, double y_length,int turn_direction)
      }
      return;
 }
+void character::pick_up_power_up(const power_up &po_up)
+{
+
+    if(po_up.get_type())
+    {
+
+        if(po_up.get_delta_health()+current_health > max_health)//delta_health ska vara den faktor som vi vill öka livet med.
+        {
+            current_health=max_health;
+            damage=damage+po_up.get_delta_damage();
+        }
+        else
+        {
+           current_health=current_health+po_up.get_delta_health();
+           damage=damage+po_up.get_delta_damage();
+        }
+    }
+    else
+    {
+
+        if(po_up.get_delta_health()+current_health > max_health)//delta_health ska vara den faktor som vi vill öka livet med.
+        {
+            std::cout<<"PLOCKAT UPP!";
+            current_health=max_health;
+            damage=damage+po_up.get_delta_damage();
+        }
+        else
+        {
+           current_health=current_health+po_up.get_delta_health();
+           damage=damage+po_up.get_delta_damage();
+           active_power_ups.push_back(temporary_power_up(po_up.get_name(), po_up.get_xpos(), po_up.get_ypos(), po_up.get_direction(), 3, main_gamefield, po_up.get_delta_damage(), po_up.get_delta_health(), po_up.get_duration()));
+           std::cout<<"PLOCKAT UPP!";
+
+        }
+    }
+}
+
 

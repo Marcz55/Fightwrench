@@ -13,7 +13,8 @@ game::game(soundhandler& main_soundhandler, int window_height, int window_width,
         main_gamefield.add_character(axel{1400,700,135,main_gamefield.get_collision_handler_pointer(),&main_gamefield});
     if(Player2 == "marcus")
         main_gamefield.add_character(marcus{1400,700,135,main_gamefield.get_collision_handler_pointer(),&main_gamefield});
-    main_gamefield.add_power_up(power_up("power_up",600,600,0,0,&main_gamefield, 0, 0));
+    main_gamefield.add_power_up(temporary_power_up("power_up", 300, 600, 0, 3, &main_gamefield, 3, 2, 3));
+   (main_gamefield.get_character_vector())->at(0).pick_up_power_up(temporary_power_up("power_up",600,600,0,0,&main_gamefield, 0, 0, 3));
     running = true;
     firstmap();
 

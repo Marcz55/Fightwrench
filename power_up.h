@@ -11,15 +11,18 @@ public:
     ~power_up()=default;
     virtual void update() override{}
     //power_up(power_up& copy_power_up)=default;
-    bool check_pick_up_status();
+
   //  void pick_up(character& up_picker);
-    virtual int get_delta_health(){return delta_health;}
-    virtual int get_delta_damage(){return delta_damage;}
-private:
+    virtual int get_delta_health()const{return delta_health;}
+    virtual int get_delta_damage()const{return delta_damage;}
+    virtual bool get_type()const{return is_permanent;}
+    int get_duration()const{return duration;}
+protected:
     int radius;
     int delta_health;
     int delta_damage;
-    bool is_picked_up = false; //
+    bool is_permanent = false; //
+    int duration;
 
 };
 

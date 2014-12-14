@@ -24,16 +24,16 @@ void gamefield::add_character(character character_to_add)
     character_vector.push_back(character_to_add);
 }
 
-void gamefield::add_projectile(string projectile_type, double projectile_x, double projectile_y, double projectile_angle)
+void gamefield::add_projectile(string projectile_type, double projectile_x, double projectile_y, double projectile_angle, int damage)
 {
     if (projectile_type == "bullet")
     {
-        projectile_vector.push_back(bullet(projectile_x,projectile_y,projectile_angle + 90,this));
+        projectile_vector.push_back(bullet(projectile_x,projectile_y,projectile_angle + 90,this, damage));
         main_soundhandler->play_sound("Gunshot");
     }
     else if (projectile_type == "grenade")
     {
-        projectile_vector.push_back(grenade(projectile_x,projectile_y,projectile_angle + 90,this));
+        projectile_vector.push_back(grenade(projectile_x,projectile_y,projectile_angle + 90,this,damage));
         main_soundhandler->play_sound("Gunshot");
     }
 

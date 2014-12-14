@@ -34,6 +34,7 @@ public:
     int get_window_width(){return window_width;}
     class collision_handler* get_collision_handler_pointer();
     void play_sound(const string sound_name);
+    void check_powerups();
 
 private:
     soundhandler* main_soundhandler;

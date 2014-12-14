@@ -11,6 +11,7 @@
 #include <SDL2/SDL_main.h>
 #include "power_up.h"
 #include "temporary_power_up.h"
+#include "permanent_power_up.h"
 
 
 class game
@@ -20,12 +21,14 @@ public:
     void main_update();
     void game_loop();
     void firstmap();
+    void spawn_powerup();
 
 private:
     gamefield main_gamefield;
     graphic_engine main_graphic_engine;
     input_handler main_input_handler;
     bool running;
+    int power_up_spawn_timer = 1000;
 };
 
 #endif // GAME_H

@@ -1,5 +1,6 @@
 #include "game.h"
 #include <time.h>
+#include <iostream>
 using namespace std;
 
 game::game(soundhandler& main_soundhandler, int window_height, int window_width, const string Player1, const string Player2):main_gamefield {window_height, window_width,main_soundhandler}, main_graphic_engine{window_height, window_width}
@@ -13,8 +14,6 @@ game::game(soundhandler& main_soundhandler, int window_height, int window_width,
         main_gamefield.add_character(axel{1400,700,135,main_gamefield.get_collision_handler_pointer(),&main_gamefield});
     if(Player2 == "marcus")
         main_gamefield.add_character(marcus{1400,700,135,main_gamefield.get_collision_handler_pointer(),&main_gamefield});
-    main_gamefield.add_power_up(temporary_power_up("power_up", 300, 600, 0, 3, &main_gamefield, 3, 2, 3));
-   (main_gamefield.get_character_vector())->at(0).pick_up_power_up(temporary_power_up("power_up",600,600,0,0,&main_gamefield, 0, 0, 3));
     running = true;
     firstmap();
 
@@ -62,6 +61,11 @@ void game::main_update()
         it->update_move_vector(); //Denna bör läggas på lämplig plats i inputhanteraren.
     }
     main_gamefield.update();
+    power_up_spawn_timer -= 1;
+    if(power_up_spawn_timer <= 0)
+    {
+        spawn_powerup();
+    }
 
 }
 
@@ -77,4 +81,55 @@ void game::game_loop()
             SDL_Delay(10-elapsed_time);
         }
     }
+}
+
+void game::spawn_powerup()
+{
+    srand (time(NULL));
+    int spawn_randomizer = rand() % 5 + 1;
+    int xpos_randomizer = rand() % 1300 + 100;
+    int ypos_randomizer = rand() % 600 + 100;
+    //Denna helar permanent
+    if(spawn_randomizer == 1)
+    {
+        main_gamefield.add_power_up(permanent_power_up("steroids", xpos_randomizer, ypos_randomizer, 0, 25, &main_gamefield,100));
+    }
+
+
+    //Denna ger temporär ökning i liv
+    if(spawn_randomizer == 2)
+    {
+        main_gamefield.add_power_up(temporary_power_up("life", xpos_randomizer, ypos_randomizer, 0, 25, &main_gamefield, 1, 1.25,1,1,1000));
+        cout << "temp liv" << endl;
+    }
+
+
+    //Denna ger temporär ökning i skada
+    if(spawn_randomizer == 3)
+    {
+        main_gamefield.add_power_up(temporary_power_up("damage_buff", xpos_randomizer, ypos_randomizer, 0, 25, &main_gamefield, 1.25, 1,1,1,1000));
+        cout << "temp skada" << endl;
+    }
+
+
+
+    //Denna ger temporär ökning i eldhastighet
+    if(spawn_randomizer == 4)
+    {
+        main_gamefield.add_power_up(temporary_power_up("firing_speed_buff", xpos_randomizer, ypos_randomizer, 0, 25, &main_gamefield, 1, 1,0.5,1,1000));
+        cout << "temp eldhast" << endl;
+    }
+
+
+    //Denna ger temporär ökning i rörelsehastighet
+    if(spawn_randomizer == 5)
+    {
+        main_gamefield.add_power_up(temporary_power_up("speed_buff", xpos_randomizer, ypos_randomizer, 0, 25, &main_gamefield, 1, 1,1,2,1000));
+        cout << "temp rörhast" << endl;
+    }
+
+
+
+
+    power_up_spawn_timer = 1000 + (rand() % 1000);
 }

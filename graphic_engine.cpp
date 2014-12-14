@@ -50,7 +50,13 @@ graphic_engine::graphic_engine(int win_height, int win_width)
     create_texture("ultimate_bar", "ultimate_bar.png");
     create_texture("characterbody","body.png");
     create_texture("standardcover","standardcover.png");
-    create_texture("power_up","syringe.png");
+
+    create_texture("steroids","syringe.png");
+    create_texture("speed_buff","speed_buff.png");
+    create_texture("damage_buff","damage_buff.png");
+    create_texture("firing_speed_buff","firing_speed_buff.png");
+    create_texture("life","life.png");
+
     create_texture("explosion","explosion.png");
     create_texture("desert","desertbackground.jpg");
     create_texture("forest","forestbackground.jpg");

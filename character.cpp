@@ -51,6 +51,28 @@ void character::update()
         }
     }
 
+    for(auto it=active_power_ups.begin();it!=active_power_ups.end();it++)
+    {
+        it->update();
+        cout << it->get_duration() << endl;
+        if(it->get_duration()<=0)
+        {
+            cout << "Togs bort!!" << endl;
+            max_health=max_health/it->get_delta_health();
+            damage=damage/it->get_delta_damage();
+            speed = speed/it->get_delta_move_speed();
+            firing_cooldown = firing_cooldown/it->get_delta_fire_speed();
+            if(current_health>max_health)
+            {
+            current_health=max_health;
+            }
+
+            active_power_ups.erase(it--);
+            cout << active_power_ups.size() << endl;
+        }
+    }
+
+
 
 }
 
@@ -200,16 +222,31 @@ void character::move(double x_length, double y_length,int turn_direction)
     if(x_length != 0 or y_length !=0 or turn_direction != 0)
     {
         direction += turn_direction;
-        xpos += x_length;
-        ypos += y_length;
+        xpos += speed*x_length;
+        ypos += speed*y_length;
         //kollar om koordinaten är okej att flytta sig till, om ja så är vi klara om nej så sätter vi tillbaka värdena till de gamla koordinaterna
         if(gamefield_collision_handler -> allowed_to_move_rectangle(get_corners()))
         {
             return;
         }
-        xpos -= x_length;
-        ypos -= y_length;
         direction -= turn_direction;
+        if(gamefield_collision_handler -> allowed_to_move_rectangle(get_corners()))
+        {
+            return;
+        }
+        xpos -= speed*x_length;
+        if(gamefield_collision_handler -> allowed_to_move_rectangle(get_corners()))
+        {
+            return;
+        }
+        xpos += speed*x_length;
+        ypos -= speed*y_length;
+        if(gamefield_collision_handler -> allowed_to_move_rectangle(get_corners()))
+        {
+            return;
+        }
+        xpos -= speed*x_length;
+
      }
      return;
 }
@@ -219,34 +256,26 @@ void character::pick_up_power_up(const power_up &po_up)
     if(po_up.get_type())
     {
 
-        if(po_up.get_delta_health()+current_health > max_health)//delta_health ska vara den faktor som vi vill öka livet med.
+        if(po_up.get_delta_health()+current_health > max_health)
         {
             current_health=max_health;
-            damage=damage+po_up.get_delta_damage();
         }
         else
         {
            current_health=current_health+po_up.get_delta_health();
-           damage=damage+po_up.get_delta_damage();
         }
     }
     else
     {
-
-        if(po_up.get_delta_health()+current_health > max_health)//delta_health ska vara den faktor som vi vill öka livet med.
-        {
-            std::cout<<"PLOCKAT UPP!";
-            current_health=max_health;
-            damage=damage+po_up.get_delta_damage();
-        }
-        else
-        {
-           current_health=current_health+po_up.get_delta_health();
-           damage=damage+po_up.get_delta_damage();
-           active_power_ups.push_back(temporary_power_up(po_up.get_name(), po_up.get_xpos(), po_up.get_ypos(), po_up.get_direction(), 3, main_gamefield, po_up.get_delta_damage(), po_up.get_delta_health(), po_up.get_duration()));
+           current_health=current_health*po_up.get_delta_health();
+           max_health=max_health*po_up.get_delta_health();
+           damage=damage*po_up.get_delta_damage();
+           speed = speed*po_up.get_delta_move_speed();
+           firing_cooldown = firing_cooldown*po_up.get_delta_fire_speed();
+           active_power_ups.push_back(temporary_power_up(po_up.get_name(), po_up.get_xpos(), po_up.get_ypos(), po_up.get_direction(), 3, main_gamefield, po_up.get_delta_damage(), po_up.get_delta_health(), po_up.get_delta_fire_speed(), po_up.get_delta_move_speed(), po_up.get_duration()));
            std::cout<<"PLOCKAT UPP!";
 
-        }
+
     }
 }
 

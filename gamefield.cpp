@@ -67,6 +67,7 @@ void gamefield::play_sound(const string sound_name)
 
 void gamefield::update()
 {
+    check_powerups();
     for(auto it = explosion_vector.begin(); it != explosion_vector.end(); it++)
     {
         it->update();
@@ -105,6 +106,22 @@ void gamefield::update()
             {
                 it -=1;
                 projectile_vector.erase(it);
+            }
+        }
+    }
+}
+
+void gamefield::check_powerups()
+{
+    for(auto itchar = character_vector.begin(); itchar != character_vector.end(); itchar ++)
+    {
+        for(auto itpow = power_up_vector.begin(); itpow != power_up_vector.end(); itpow ++)
+        {
+            double distance_sqrd = pow(itchar->get_xpos() - itpow->get_xpos(),2) + pow(itchar->get_ypos() - itpow->get_ypos(),2);
+            if(distance_sqrd <= pow(itpow->get_radius(),2))
+            {
+                itchar->pick_up_power_up(*itpow);
+                power_up_vector.erase(itpow--);
             }
         }
     }

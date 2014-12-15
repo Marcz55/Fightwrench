@@ -16,7 +16,7 @@ public:
     character(std::string character_name, int x_pos, int y_pos, int speed, double angle,
               std::string init_projectile,
               int init_firing_cooldown,int init_max_health,
-              int init_max_ammo, int init_reload_time, double width, double height, class collision_handler* init_collision_handler, std::string port_name = "", class gamefield* init_gamefield = nullptr, int init_damage=0);
+              int init_max_ammo, int init_reload_time, double width, double height, std::string port_name = "", class gamefield* init_gamefield = nullptr, int init_damage=0);
 
     void update() override;
     void update_move_vector();
@@ -89,7 +89,6 @@ protected:
     int firing_timer = 0;    //Den timer som räknas ner och sätt till firing_cooldown när man skjuter.
     std::string projectile_type;
     //soundhandler* main_soundhandler;
-    class collision_handler* gamefield_collision_handler;
     double width = 0;
     double height = 0;
     std::string portrait_name;

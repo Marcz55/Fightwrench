@@ -8,7 +8,6 @@
 #include "projectile.h"
 #include "bullet.h"
 #include "grenade.h"
-#include "collision_handler.h"
 #include "power_up.h"
 
 #include "explosion.h"
@@ -32,9 +31,10 @@ public:
     vector<projectile>* get_projectile_vector(){return &projectile_vector;}
     int get_window_height(){return window_height;}
     int get_window_width(){return window_width;}
-    class collision_handler* get_collision_handler_pointer();
     void play_sound(const string sound_name);
     void check_powerups();
+    bool allowed_to_move_rectangle(vector<double> rectangle_corners);
+    bool allowed_to_move_circle(double circle_x, double circle_y, int circle_radius);
 
 private:
     soundhandler* main_soundhandler;

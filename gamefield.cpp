@@ -1,5 +1,6 @@
 #include "gamefield.h"
 #include "power_up.h"
+#include "collision_handler.h"
 
 using namespace std;
 
@@ -52,12 +53,6 @@ void gamefield::add_explosion(double scale, double explosion_x, double explosion
 {
     explosion_vector.push_back(explosion(scale,explosion_x,explosion_y,this));
 }
-
-collision_handler* gamefield::get_collision_handler_pointer()
-{
-    return collision_handler_pointer;
-}
-
 
 
 void gamefield::play_sound(const string sound_name)
@@ -125,5 +120,15 @@ void gamefield::check_powerups()
             }
         }
     }
+}
+
+bool gamefield::allowed_to_move_rectangle(vector<double> rectangle_corners)
+{
+    return collision_handler_pointer->allowed_to_move_rectangle(rectangle_corners);
+}
+
+bool gamefield::allowed_to_move_circle(double circle_x, double circle_y, int circle_radius)
+{
+    return collision_handler_pointer->allowed_to_move_circle(circle_x,circle_y,circle_radius);
 }
 

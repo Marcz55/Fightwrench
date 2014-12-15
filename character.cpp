@@ -7,12 +7,11 @@ character::character(string character_name, int x_pos, int y_pos, int speed, dou
                      string init_projectile,
                      int init_firing_cooldown, int init_max_health,
                      int init_max_ammo, int init_reload_time, double init_width, double init_height,
-                     collision_handler *init_collision_handler, string port_name, class gamefield* init_gamefield, int init_damage): gameobject(character_name, x_pos,y_pos,speed,angle,init_gamefield)
+                     string port_name, class gamefield* init_gamefield, int init_damage): gameobject(character_name, x_pos,y_pos,speed,angle,init_gamefield)
 
 {
     projectile_type = init_projectile;
     firing_cooldown = init_firing_cooldown;
-    gamefield_collision_handler = init_collision_handler;
     current_health = init_max_health;
     max_health = init_max_health;
     max_ammo = init_max_ammo;
@@ -225,23 +224,23 @@ void character::move(double x_length, double y_length,int turn_direction)
         xpos += speed*x_length;
         ypos += speed*y_length;
         //kollar om koordinaten är okej att flytta sig till, om ja så är vi klara om nej så sätter vi tillbaka värdena till de gamla koordinaterna
-        if(gamefield_collision_handler -> allowed_to_move_rectangle(get_corners()))
+        if(main_gamefield -> allowed_to_move_rectangle(get_corners()))
         {
             return;
         }
         direction -= turn_direction;
-        if(gamefield_collision_handler -> allowed_to_move_rectangle(get_corners()))
+        if(main_gamefield -> allowed_to_move_rectangle(get_corners()))
         {
             return;
         }
         xpos -= speed*x_length;
-        if(gamefield_collision_handler -> allowed_to_move_rectangle(get_corners()))
+        if(main_gamefield->allowed_to_move_rectangle(get_corners()))
         {
             return;
         }
         xpos += speed*x_length;
         ypos -= speed*y_length;
-        if(gamefield_collision_handler -> allowed_to_move_rectangle(get_corners()))
+        if(main_gamefield -> allowed_to_move_rectangle(get_corners()))
         {
             return;
         }

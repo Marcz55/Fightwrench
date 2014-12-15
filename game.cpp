@@ -6,14 +6,14 @@ using namespace std;
 game::game(soundhandler& main_soundhandler, int window_height, int window_width, const string Player1, const string Player2):main_gamefield {window_height, window_width,main_soundhandler}, main_graphic_engine{window_height, window_width}
 {
     if(Player1 == "axel")//Namnet som settas här MÅSTE vara samma sak som motsvarande textur i graphic engine.
-        main_gamefield.add_character(axel{100,100,315,main_gamefield.get_collision_handler_pointer(),&main_gamefield});
+        main_gamefield.add_character(axel{100,100,315,&main_gamefield});
     if(Player1 == "marcus")
-        main_gamefield.add_character(marcus{100,100,315,main_gamefield.get_collision_handler_pointer(),&main_gamefield});
+        main_gamefield.add_character(marcus{100,100,315,&main_gamefield});
 
     if(Player2 == "axel")
-        main_gamefield.add_character(axel{1400,700,135,main_gamefield.get_collision_handler_pointer(),&main_gamefield});
+        main_gamefield.add_character(axel{1400,700,135,&main_gamefield});
     if(Player2 == "marcus")
-        main_gamefield.add_character(marcus{1400,700,135,main_gamefield.get_collision_handler_pointer(),&main_gamefield});
+        main_gamefield.add_character(marcus{1400,700,135,&main_gamefield});
     running = true;
     firstmap();
 
@@ -87,8 +87,8 @@ void game::spawn_powerup()
 {
     srand (time(NULL));
     int spawn_randomizer = rand() % 5 + 1;
-    int xpos_randomizer = rand() % 1300 + 100;
-    int ypos_randomizer = rand() % 600 + 100;
+    double xpos_randomizer = rand() % 1300 + 100;
+    double ypos_randomizer = rand() % 600 + 100;
     //Denna helar permanent
     if(spawn_randomizer == 1)
     {

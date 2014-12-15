@@ -18,6 +18,9 @@ class game
 {
 public:
     game(soundhandler &main_soundhandler, int window_height = 600, int window_width = 800, const std::string Player1 = "", const std::string Player2 = "",const int window_height_scale = 600, const int window_width_scale = 800);
+    game(const game&) = delete;
+    game& operator=(const game&) = delete;
+    ~game() = default;
     void main_update();
     void game_loop();
     void firstmap();

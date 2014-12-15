@@ -1,5 +1,6 @@
 #include "projectile.h"
 #include <iostream>
+#include "gamefield.h"
 using namespace std;
 
 projectile::projectile(string bullet_name, double x, double y, int speed, double angle, int init_explosion_timer, int init_explosion_radius,int init_damage,class gamefield* init_gamefield):gameobject(bullet_name,x,y,speed,angle,init_gamefield)
@@ -23,10 +24,17 @@ projectile::projectile(string bullet_name, double x, double y, int speed, double
 
 void projectile::update()
 {
+
+    /*if((main_gamefield->get_collision_handler_pointer())->allowed_to_move_bullet(xpos,ypos,xpos + x_movement,ypos + y_movement,false,this))
+    {
+        xpos = xpos + x_movement;
+        ypos = ypos + y_movement;
+
+    }*/
     xpos = xpos + x_movement;
     ypos = ypos + y_movement;
     //Ska bara ske för grenade
-    if (name == "grenade")
+   /* if (name == "grenade")
     {
         if (abs(x_movement) <= x_deceleration)
         {
@@ -54,6 +62,7 @@ void projectile::update()
         }
     }
 
+
     //Ska bara ske för projektiler som ska använda timer
     if (name == "grenade")
     {
@@ -62,5 +71,7 @@ void projectile::update()
             explosion_timer -= 1;
         }
     }
+    */
+    return;
 
 }

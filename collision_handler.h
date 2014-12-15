@@ -7,6 +7,9 @@
 #include <cmath>
 #include "gamefield.h"
 #include <iterator>
+#include "projectile.h"
+#include "bullet.h"
+#include <iostream>
 using namespace std;
 
 class collision_handler
@@ -16,6 +19,7 @@ public:
     ~collision_handler() = default;
     bool allowed_to_move_rectangle(vector<double>);
     bool allowed_to_move_circle(double,double,int);
+    bool allowed_to_move_bullet(double, double, double, double, bool, double, double);
 
 
 private:

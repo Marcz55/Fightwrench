@@ -1,4 +1,5 @@
 #include "collision_handler.h"
+#include <iostream>
 collision_handler::collision_handler(gamefield* gamefield_object_pointer)
 {
     gamefield_pointer = gamefield_object_pointer;
@@ -63,9 +64,8 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
         //Längden mellan rektanglarnas mittpunkter
         double length_between_midpoints = sqrt(pow(corner_vector_to_check[6]+help_vector_rec_1[0]/2 - (corner_vector[6] + help_vector_rec_2[0]/2),2) + pow(corner_vector_to_check[7]+help_vector_rec_1[1]/2 - (corner_vector[7] + help_vector_rec_2[1]/2),2));
         //Om längden mellan rektanglarnas mittpunkter är mindre än summan av dess diagonaler så kan det vara bra att utföra kollisionskontroll.
-      //  cout /*<< " " << length_dia_1 << " " << length_dia_2 <<*/ << length_between_midpoints << " ";
-        if(length_dia_1/2 + length_dia_2/2 >= length_between_midpoints)
-        {   cout << " HEJ ";
+        if(length_dia_1/2 + length_dia_2/2 + 1 >= length_between_midpoints)
+        {
             double corner_to_check1[2];
             double corner_to_check2[2];
             double corner_to_check3[2];
@@ -218,7 +218,7 @@ bool collision_handler::allowed_to_move_circle(double x_pos, double y_pos, int r
         //Cirkelns mittpunkt måste vara minst en radie ifrån varje hörn
         for(std::vector<double>::iterator it = corner_vector.begin(); it < corner_vector.end(); it = it + 2)
         {
-            if(pow(pow(x_pos - corner_vector.at(*it),2) + pow(y_pos - corner_vector.at(*(it+1)),2),1/2) < radius)
+            if(sqrt(pow((x_pos - *it),2) + pow(y_pos - *(it+1),2)) < radius)
                 return false;
         }
 
@@ -258,6 +258,215 @@ bool collision_handler::allowed_to_move_circle(double x_pos, double y_pos, int r
         //Notera att bredden på rektangeln är utmed u vektorn och höjden utmed v vektorn
         if(abs(rectangle_position_new[0] - circle_position_new[0]) < it->get_width() + radius or abs(rectangle_position_new[1] - circle_position_new[1]) < it->get_height() + radius)
             return false;
+    }
+    return true;
+}
+
+bool collision_handler::allowed_to_move_bullet(double x_before, double y_before, double x_after, double y_after, bool move_trought_covers, double bullet_speed, double bullet_damage)
+{   //Kollar först så att inte kulan försöker åka utanför banan, om ja deleta den!
+    if(x_after < 0 or y_after < 0 or x_after > window_width or y_after > window_height)
+    {
+        return false;
+    }
+    //Tänker att det kan finnas en ultimate som gör att ens kulor går rakt igenom skydd:
+    if(!move_trought_covers)
+    {
+        //Används i kollisionshanteringen senare, t och s är parametrar för riktningsvektorer
+        double t;
+        double s;
+        double bullet_vector[2] = {x_after - x_before, y_after - y_before};
+
+        vector<cover>* cover_vector = gamefield_pointer->get_cover_vector(); //Hämtar listan med covers i
+        for(std::vector<cover>::iterator it = cover_vector->begin(); it != cover_vector->end(); ++it)
+        {
+            vector<double>corner_vector = it->get_corners();
+
+            //Vektorer mellan hörnen i ordning 1->2,2->3,3->4,4->1
+            double corner1_corner2[2] ={corner_vector[2]-corner_vector[0], corner_vector[3] - corner_vector[1]};
+            double corner2_corner3[2] ={corner_vector[4]-corner_vector[2], corner_vector[5] - corner_vector[3]};
+            double corner3_corner4[2] ={corner_vector[6]-corner_vector[4], corner_vector[7] - corner_vector[5]};
+            double corner4_corner1[2] ={corner_vector[0]-corner_vector[6], corner_vector[1] - corner_vector[7]};
+            //Onödigt att kolla kollision mot varje rektangel, väljer bara de som befinner sig relativt nära
+            //Denna vektor är diagonalen på vektorn, ifrån andra hörnet till 4.
+            double help_vector_rec[2] = {corner_vector[2] - corner_vector[6], corner_vector[3] - corner_vector[7]};
+
+            //Längden av diagonalen
+            double length_dia = sqrt(pow(help_vector_rec[0],2) + pow(help_vector_rec[1],2));
+
+            //Längden mellan rektanglen och kulan
+            double length_between_midpoints = sqrt(pow(x_before - (corner_vector[6] + help_vector_rec[0]/2),2) + pow(y_before - (corner_vector[7] + help_vector_rec[1]/2),2));
+            //Kommer alltså bara att kolla på kollision för covers som ligger närmare än avståndet mellan mittpunkten på rektangeln och kulan + kulans hastighet + 1
+            if(length_dia + bullet_speed + 1 >= length_between_midpoints)
+            {
+                //Det är onödigt att kolla om kulan går över alla sidor på rektangeln när det räcker med att kontrollera de 2 närmaste sidorna, de 2 närmaste sidorna
+                //är de som båda har hörnet som ligger närmast kulan.
+                //Således kontrolleras olika sidor beroende på vilket hörn som ligger närmast
+
+                //Avstånden mellan varje hörn och kulamn
+                double distance_corner_1 = sqrt(pow(corner_vector.at(0) - x_before,2) + pow(corner_vector.at(1) - y_before,2));
+                double distance_corner_2 = sqrt(pow(corner_vector.at(2) - x_before,2) + pow(corner_vector.at(3) - y_before,2));
+                double distance_corner_3 = sqrt(pow(corner_vector.at(4) - x_before,2) + pow(corner_vector.at(5) - y_before,2));
+                double distance_corner_4 = sqrt(pow(corner_vector.at(6) - x_before,2) + pow(corner_vector.at(7) - y_before,2));
+                //Om hörn 1 ligger närmast, notera att om kulan ligger lika långt ifrån två hörn så spelar det ingen roll vilket hörn som väljs som närmst.
+                if(distance_corner_1 <= distance_corner_2 and distance_corner_1 <= distance_corner_3 and distance_corner_1 <= distance_corner_4)
+                {
+                    //Om hörn 1 ligger närmst ska vi kontrollera mot sidorna med hörn1-hörn2 och hörn1-hörn4
+                    //Kollisionen kontrolleras på det sätt att man löser ekvationen för när linjen som sträcker sig utmed kulans pos. innan till efter
+                    // med just den riktningsvektorn skär med linjen som går utmed hörn1->hörn2 och hörn1->hörn4 med just de riktningsvektorerna, om
+                    // någon av ekvationerna löses med en parameter mellan 0-1 på bägge riktningsvektorer så är det en kollision.
+                    // Lösningen på riktnigsparametrarna ges genom följande ekvation (erhållen från Wolfram Alpha)
+
+                    //Börjar med hörn4->hörn1
+                    if(bullet_vector[0]*corner4_corner1[1]-bullet_vector[1]*corner4_corner1[0] != 0)//Kontrollerar först så att kulan inte rör sig parallellt med kanten, om ja->EJ KOLLISION
+                    {
+                        //Dessa lösningar är alltså tagna direkt ifrån wolframalpha
+                        t = (corner4_corner1[0]*corner_vector[7] - corner4_corner1[0]*y_before - corner4_corner1[1]*corner_vector[6] + corner4_corner1[1]*x_before)
+                                / (bullet_vector[1]*corner4_corner1[0]-bullet_vector[0]*corner4_corner1[1]);
+
+                        s = (bullet_vector[0]*corner_vector[7] - bullet_vector[0]*y_before - bullet_vector[1]*corner_vector[6] + bullet_vector[1]*x_before)
+                                / (bullet_vector[1]*corner4_corner1[0] - bullet_vector[0]*corner4_corner1[1]);
+                        if(t >= 0 and t <= 1 and s >= 0 and s <= 1) //Om bägge parametrar är mellan 0-1 så skedde en kollision
+                        {
+                            it->set_health(it->get_health() - bullet_damage); //Kulan gör skada på skyddet
+                            return false;
+                        }
+                    }
+
+                    //Dags för hörn1->hörn2
+                    if(bullet_vector[0]*corner1_corner2[1]-bullet_vector[1]*corner1_corner2[0] != 0)//Kontrollerar först så att kulan inte rör sig parallellt med kanten, om ja->EJ KOLLISION
+                    {
+                        //Dessa lösningar är alltså tagna direkt ifrån wolframalpha
+                        t = (corner1_corner2[0]*corner_vector[1] - corner1_corner2[0]*y_before - corner1_corner2[1]*corner_vector[0] + corner1_corner2[1]*x_before)
+                                / (bullet_vector[1]*corner1_corner2[0]-bullet_vector[0]*corner1_corner2[1]);
+
+                        s = (bullet_vector[0]*corner_vector[1] - bullet_vector[0]*y_before - bullet_vector[1]*corner_vector[0] + bullet_vector[1]*x_before)
+                                / (bullet_vector[1]*corner1_corner2[0] - bullet_vector[0]*corner1_corner2[1]);
+                        if(t >= 0 and t <= 1 and s >= 0 and s <= 1) //Om bägge parametrar är mellan 0-1 så skedde en kollision
+                        {
+                            it->set_health(it->get_health() - bullet_damage); //Kulan gör skada på skyddet
+                            return false;
+
+                        }
+                    }
+
+                }
+
+
+
+                //Om hörn 2 ligger närmast, notera att om kulan ligger lika långt ifrån två hörn så spelar det ingen roll vilket hörn som väljs som närmst.
+                if(distance_corner_2 <= distance_corner_1 and distance_corner_2 <= distance_corner_3 and distance_corner_2 <= distance_corner_4)
+                {
+                    //Om hörn 2 ligger närmst ska vi kontrollera mot sidorna med hörn1-hörn2 och hörn2-hörn3
+                    //Kollisionen kontrolleras på det sätt att man löser ekvationen för när linjen som sträcker sig utmed kulans pos. innan till efter
+                    // med just den riktningsvektorn skär med linjen som går utmed hörn1->hörn2 och hörn1->hörn4 med just de riktningsvektorerna, om
+                    // någon av ekvationerna löses med en parameter mellan 0-1 på bägge riktningsvektorer så är det en kollision.
+                    // Lösningen på riktnigsparametrarna ges genom följande ekvation (erhållen från Wolfram Alpha)
+
+                    //Börjar med hörn2->hörn3
+                    if(bullet_vector[0]*corner2_corner3[1]-bullet_vector[1]*corner2_corner3[0] != 0)//Kontrollerar först så att kulan inte rör sig parallellt med kanten, om ja->EJ KOLLISION
+                    {
+                        //Dessa lösningar är alltså tagna direkt ifrån wolframalpha
+                        t = (corner2_corner3[0]*corner_vector[3] - corner2_corner3[0]*y_before - corner2_corner3[1]*corner_vector[2] + corner2_corner3[1]*x_before)
+                                / (bullet_vector[1]*corner2_corner3[0]-bullet_vector[0]*corner2_corner3[1]);
+
+                        s = (bullet_vector[0]*corner_vector[3] - bullet_vector[0]*y_before - bullet_vector[1]*corner_vector[2] + bullet_vector[1]*x_before)
+                                / (bullet_vector[1]*corner2_corner3[0] - bullet_vector[0]*corner2_corner3[1]);
+                        if(t >= 0 and t <= 1 and s >= 0 and s <= 1) //Om bägge parametrar är mellan 0-1 så skedde en kollision
+                        {
+                            it->set_health(it->get_health() - bullet_damage); //Kulan gör skada på skyddet
+                            return false;
+                        }
+                    }
+
+                    //Dags för hörn4->hörn1
+                    if(bullet_vector[0]*corner4_corner1[1]-bullet_vector[1]*corner4_corner1[0] != 0)//Kontrollerar först så att kulan inte rör sig parallellt med kanten, om ja->EJ KOLLISION
+                    {
+                        //Dessa lösningar är alltså tagna direkt ifrån wolframalpha
+                        t = (corner4_corner1[0]*corner_vector[7] - corner4_corner1[0]*y_before - corner4_corner1[1]*corner_vector[6] + corner4_corner1[1]*x_before)
+                                / (bullet_vector[1]*corner4_corner1[0]-bullet_vector[0]*corner4_corner1[1]);
+
+                        s = (bullet_vector[0]*corner_vector[7] - bullet_vector[0]*y_before - bullet_vector[1]*corner_vector[6] + bullet_vector[1]*x_before)
+                                / (bullet_vector[1]*corner4_corner1[0] - bullet_vector[0]*corner4_corner1[1]);
+                        if(t >= 0 and t <= 1 and s >= 0 and s <= 1) //Om bägge parametrar är mellan 0-1 så skedde en kollision
+                        {
+                            it->set_health(it->get_health() - bullet_damage); //Kulan gör skada på skyddet
+                            return false;
+                        }
+                    }
+
+
+
+                }
+                //Om hörn 3 ligger närmast:
+                if(distance_corner_3 <= distance_corner_2 and distance_corner_3 <= distance_corner_1 and distance_corner_3 <= distance_corner_4)
+                {
+                    //Börjar med hörn 3->4:
+                    if(bullet_vector[0]*corner3_corner4[1]-bullet_vector[1]*corner3_corner4[0] != 0)//Kontrollerar först så att kulan inte rör sig parallellt med kanten, om ja->EJ KOLLISION
+                    {
+                        //Dessa lösningar är alltså tagna direkt ifrån wolframalpha
+                        t = (corner3_corner4[0]*corner_vector[5] - corner3_corner4[0]*y_before - corner3_corner4[1]*corner_vector[4] + corner3_corner4[1]*x_before)
+                                / (bullet_vector[1]*corner3_corner4[0]-bullet_vector[0]*corner3_corner4[1]);
+
+                        s = (bullet_vector[0]*corner_vector[5] - bullet_vector[0]*y_before - bullet_vector[1]*corner_vector[4] + bullet_vector[1]*x_before)
+                                / (bullet_vector[1]*corner3_corner4[0] - bullet_vector[0]*corner3_corner4[1]);
+                        if(t >= 0 and t <= 1 and s >= 0 and s <= 1) //Om bägge parametrar är mellan 0-1 så skedde en kollision
+                        {
+                            it->set_health(it->get_health() - bullet_damage); //Kulan gör skada på skyddet
+                            return false;
+                        }
+                    }
+                    //dags för hörn 2->3:
+                    if(bullet_vector[0]*corner2_corner3[1]-bullet_vector[1]*corner2_corner3[0] != 0)//Kontrollerar först så att kulan inte rör sig parallellt med kanten, om ja->EJ KOLLISION
+                    {
+                        //Dessa lösningar är alltså tagna direkt ifrån wolframalpha
+                        t = (corner2_corner3[0]*corner_vector[3] - corner2_corner3[0]*y_before - corner2_corner3[1]*corner_vector[2] + corner2_corner3[1]*x_before)
+                                / (bullet_vector[1]*corner2_corner3[0]-bullet_vector[0]*corner2_corner3[1]);
+
+                        s = (bullet_vector[0]*corner_vector[3] - bullet_vector[0]*y_before - bullet_vector[1]*corner_vector[2] + bullet_vector[1]*x_before)
+                                / (bullet_vector[1]*corner2_corner3[0] - bullet_vector[0]*corner2_corner3[1]);
+                        if(t >= 0 and t <= 1 and s >= 0 and s <= 1) //Om bägge parametrar är mellan 0-1 så skedde en kollision
+                        {
+                            it->set_health(it->get_health() - bullet_damage); //Kulan gör skada på skyddet
+                            return false;
+                        }
+                    }
+                }
+                //Om hörn 4 ligger närmast:
+                if(distance_corner_4 <= distance_corner_2 and distance_corner_4 <= distance_corner_1 and distance_corner_4 <= distance_corner_3)
+                {
+                    //Börjar med hörn 4->1:
+                    if(bullet_vector[0]*corner4_corner1[1]-bullet_vector[1]*corner4_corner1[0] != 0)//Kontrollerar först så att kulan inte rör sig parallellt med kanten, om ja->EJ KOLLISION
+                    {
+                        //Dessa lösningar är alltså tagna direkt ifrån wolframalpha
+                        t = (corner4_corner1[0]*corner_vector[7] - corner4_corner1[0]*y_before - corner4_corner1[1]*corner_vector[6] + corner4_corner1[1]*x_before)
+                                / (bullet_vector[1]*corner4_corner1[0]-bullet_vector[0]*corner4_corner1[1]);
+
+                        s = (bullet_vector[0]*corner_vector[7] - bullet_vector[0]*y_before - bullet_vector[1]*corner_vector[6] + bullet_vector[1]*x_before)
+                                / (bullet_vector[1]*corner4_corner1[0] - bullet_vector[0]*corner4_corner1[1]);
+                        if(t >= 0 and t <= 1 and s >= 0 and s <= 1) //Om bägge parametrar är mellan 0-1 så skedde en kollision
+                        {
+                            it->set_health(it->get_health() - bullet_damage); //Kulan gör skada på skyddet
+                            return false;
+                        }
+                    }
+                    //Dags för hörn 3->4:
+                    if(bullet_vector[0]*corner3_corner4[1]-bullet_vector[1]*corner3_corner4[0] != 0)//Kontrollerar först så att kulan inte rör sig parallellt med kanten, om ja->EJ KOLLISION
+                    {
+                        //Dessa lösningar är alltså tagna direkt ifrån wolframalpha
+                        t = (corner3_corner4[0]*corner_vector[5] - corner3_corner4[0]*y_before - corner3_corner4[1]*corner_vector[4] + corner3_corner4[1]*x_before)
+                                / (bullet_vector[1]*corner3_corner4[0]-bullet_vector[0]*corner3_corner4[1]);
+
+                        s = (bullet_vector[0]*corner_vector[5] - bullet_vector[0]*y_before - bullet_vector[1]*corner_vector[4] + bullet_vector[1]*x_before)
+                                / (bullet_vector[1]*corner3_corner4[0] - bullet_vector[0]*corner3_corner4[1]);
+                        if(t >= 0 and t <= 1 and s >= 0 and s <= 1) //Om bägge parametrar är mellan 0-1 så skedde en kollision
+                        {
+                            it->set_health(it->get_health() - bullet_damage); //Kulan gör skada på skyddet
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
     }
     return true;
 }

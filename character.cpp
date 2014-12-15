@@ -25,6 +25,19 @@ character::character(string character_name, int x_pos, int y_pos, int speed, dou
 
 void character::update()
 {
+    if (ultimate_timer > 0)
+    {
+        ultimate_timer -= 1;
+    }
+    if (ultimate_active_timer > 0)
+    {
+        ultimate_active_timer -= 1;
+    }
+    if (ultimate_active_timer == 0)
+    {
+        firing_cooldown = firing_cooldown/0.5;
+        ultimate_active_timer -= 1;
+    }
     if (reload_timer > 0) {
         if (reload_timer == 1) {
             reload_timer = 0;
@@ -157,6 +170,16 @@ void character::fire_weapon()
     firing_timer = firing_cooldown;
 }
 
+void character::ultimate()
+{
+    if(ultimate_timer == 0)
+    {
+        firing_cooldown = firing_cooldown*0.5;
+        ultimate_timer = ultimate_cooldown_time;
+        ultimate_active_timer = ultimate_active_time;
+    }
+}
+
 vector<double> character::get_corners()
 {
     double pi = 3.1415;
@@ -221,6 +244,15 @@ void character::move(double x_length, double y_length,int turn_direction)
     if(x_length != 0 or y_length !=0 or turn_direction != 0)
     {
         direction += turn_direction;
+        if(direction>360)
+        {
+            direction = direction - 360;
+        }
+        if(direction<0)
+        {
+            direction = direction + 360;
+        }
+
         xpos += speed*x_length;
         ypos += speed*y_length;
         //kollar om koordinaten är okej att flytta sig till, om ja så är vi klara om nej så sätter vi tillbaka värdena till de gamla koordinaterna

@@ -20,7 +20,7 @@ public:
 
     void update() override;
     void update_move_vector();
-    void ultimate() {}
+    void ultimate();
     void input_set_up(const int);
     void input_set_down(const int);
     void input_set_left(const int);
@@ -28,34 +28,14 @@ public:
     void input_set_turn_left(const int);
     void input_set_turn_right(const int);
     void input_set_shoot(const bool);
-    int get_up_key()
-    {
-        return up_key;
-    }
-    int get_movement_direction()
-    {
-        return movement_direction;
-    }
-    int get_health()
-    {
-        return current_health;
-    }
-    double get_health_percent()
-    {
-        return ((double)current_health) / ((double)max_health);
-    }
-    double get_ammo_percent()
-    {
-        return ((double)current_ammo) / ((double)max_ammo);
-    }
-    double get_reload_percent()
-    {
-        return ((double)reload_timer) / ((double)reload_time);
-    }
-    std::string get_portrait_name()
-    {
-        return portrait_name;
-    }
+    int get_up_key(){return up_key;}
+    int get_movement_direction(){return movement_direction;}
+    int get_health(){return current_health;}
+    double get_health_percent(){return ((double)current_health) / ((double)max_health);}
+    double get_ammo_percent(){return ((double)current_ammo) / ((double)max_ammo);}
+    double get_reload_percent(){return ((double)reload_timer) / ((double)reload_time);}
+    double get_ultimate_percent(){return (double)ultimate_timer/(double)ultimate_cooldown_time;}
+    std::string get_portrait_name(){return portrait_name;}
 
     void fire_weapon();
     std::vector<double> get_corners();
@@ -76,7 +56,7 @@ protected:
     int turn_left_key = 0;
     int turn_right_key = 0;
     int current_health = 0;
-    int max_health = 0;
+    double max_health = 0;
     int current_ammo = 0;
     int max_ammo = 0;
     int reload_time = 0;
@@ -85,8 +65,14 @@ protected:
     int reload_timer = 0;
     double movement_direction = 0;
     bool shoot_key = false;
-    int firing_cooldown; //Antal tic en karaktär måste vänta innan den kan skjuta igen.
+    double firing_cooldown; //Antal tic en karaktär måste vänta innan den kan skjuta igen.
     int firing_timer = 0;    //Den timer som räknas ner och sätt till firing_cooldown när man skjuter.
+
+    int ultimate_cooldown_time = 3000;
+    int ultimate_timer = 0;
+    int ultimate_active_timer = -1;
+    int ultimate_active_time = 1000;
+
     std::string projectile_type;
     //soundhandler* main_soundhandler;
     double width = 0;

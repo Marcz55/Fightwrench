@@ -61,6 +61,7 @@ graphic_engine::graphic_engine(int win_height, int win_width, const int Window_w
     create_texture("explosion","explosion.png");
     create_texture("desert","desertbackground.jpg");
     create_texture("forest","forestbackground.jpg");
+    create_texture("ammo_bar","ammo_bar.png");
 
 }
 
@@ -148,20 +149,25 @@ void graphic_engine::draw_all(gamefield& my_gamefield)
         draw_scaled_object("health_bar",(int)460*Window_width/800, (int) Window_height - 180,0 ,(double)my_gamefield.character_vector.at(1).get_health_percent()*Window_width/800,1);
         if((double)(my_gamefield.character_vector.at(0).get_ammo_percent()==0))
         {
-              draw_scaled_object("ultimate_bar",(int)180*Window_width/800, (int)Window_height-140,0 ,(double)(1 - my_gamefield.character_vector.at(0).get_reload_percent())*Window_width/800,1);
+              draw_scaled_object("ammo_bar",(int)180*Window_width/800, (int)Window_height-140,0 ,(double)(1 - my_gamefield.character_vector.at(0).get_reload_percent())*Window_width/800,1);
         }
         else
         {
-              draw_scaled_object("ultimate_bar",(int)180*Window_width/800, (int)Window_height-140,0 ,(double)(my_gamefield.character_vector.at(0).get_ammo_percent())*Window_width/800,1);
+              draw_scaled_object("ammo_bar",(int)180*Window_width/800, (int)Window_height-140,0 ,(double)(my_gamefield.character_vector.at(0).get_ammo_percent())*Window_width/800,1);
         }
         if((double)(my_gamefield.character_vector.at(1).get_ammo_percent()==0))
         {
-            draw_scaled_object("ultimate_bar",(int)460*Window_width/800, (int)Window_height-140,0 ,(double)(1 - my_gamefield.character_vector.at(1).get_reload_percent())*Window_width/800,1);
+            draw_scaled_object("ammo_bar",(int)460*Window_width/800, (int)Window_height-140,0 ,(double)(1 - my_gamefield.character_vector.at(1).get_reload_percent())*Window_width/800,1);
         }
         else
         {
-            draw_scaled_object("ultimate_bar",(int)460*Window_width/800, (int)Window_height-140,0 ,(double)(my_gamefield.character_vector.at(1).get_ammo_percent())*Window_width/800,1);
+            draw_scaled_object("ammo_bar",(int)460*Window_width/800, (int)Window_height-140,0 ,(double)(my_gamefield.character_vector.at(1).get_ammo_percent())*Window_width/800,1);
         }
+
+        draw_scaled_object("ultimate_bar",(int)180*Window_width/800, (int)Window_height-100,0 ,(double)(my_gamefield.character_vector.at(0).get_ultimate_percent())*Window_width/800,1);
+
+        draw_scaled_object("ultimate_bar",(int)460*Window_width/800, (int)Window_height-100,0 ,(double)(my_gamefield.character_vector.at(1).get_ultimate_percent())*Window_width/800,1);
+
 
 
         SDL_RenderPresent(Renderer);

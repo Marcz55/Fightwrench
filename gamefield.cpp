@@ -62,6 +62,7 @@ void gamefield::play_sound(const string sound_name)
 
 void gamefield::update()
 {
+    cout << projectile_vector.size() << endl;
     check_powerups();
     for(auto it = explosion_vector.begin(); it != explosion_vector.end(); it++)
     {

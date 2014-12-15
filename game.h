@@ -17,7 +17,7 @@
 class game
 {
 public:
-    game(soundhandler &main_soundhandler, int window_height = 600, int window_width = 800, const std::string Player1 = "", const std::string Player2 = "");
+    game(soundhandler &main_soundhandler, int window_height = 600, int window_width = 800, const std::string Player1 = "", const std::string Player2 = "",const int window_height_scale = 600, const int window_width_scale = 800);
     void main_update();
     void game_loop();
     void firstmap();
@@ -29,6 +29,8 @@ private:
     input_handler main_input_handler;
     bool running;
     int power_up_spawn_timer = 1000;
+    int window_height_scale;
+    int window_width_scale;
 };
 
 #endif // GAME_H

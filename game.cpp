@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace std;
 
-game::game(soundhandler& main_soundhandler, int window_height, int window_width, const string Player1, const string Player2):main_gamefield {window_height, window_width,main_soundhandler}, main_graphic_engine{window_height, window_width}
+game::game(soundhandler& main_soundhandler, int window_height, int window_width, const string Player1, const string Player2,const int window_height_scale,const int window_width_scale):main_gamefield {window_height, window_width,main_soundhandler}, main_graphic_engine{window_height, window_width,window_height_scale,window_width_scale}
 {
     if(Player1 == "axel")//Namnet som settas här MÅSTE vara samma sak som motsvarande textur i graphic engine.
         main_gamefield.add_character(axel{100,100,315,&main_gamefield});

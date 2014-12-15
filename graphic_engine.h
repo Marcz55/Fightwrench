@@ -23,6 +23,8 @@ private:
 
     int Window_width;
     int Window_height;
+    int Window_height_scale;
+    int Window_width_scale;
     SDL_Window* Window ;
     SDL_Renderer* Renderer;
     std::map<std::string,Texture_struct> Image_map;
@@ -32,7 +34,7 @@ private:
 
 public:
     ~graphic_engine();
-    graphic_engine(int win_height = 600, int win_width = 800);
+    graphic_engine(int win_height = 600, int win_width = 800, const int Window_width_scale = 600, const int Window_height_scale = 800);
     void draw_all(gamefield &my_gamefield);
     void draw_scaled_object(std::string name, double x_coord, double y_coord, double angle, double x_scale, double y_scale);
     void draw_portrait(string name,double x_coord,double y_coord, double angle);

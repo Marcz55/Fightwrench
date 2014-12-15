@@ -1,3 +1,12 @@
+/*
+ * menu.h och menu.cpp är, sånär som på små detaljer, skriven av Marcus Wälivaara.
+ *
+ * Menyn är till för att skapas i början av spelet, och skapa detta med vissa parametrar.
+ * Det är i menu som spelfönstrets storlek anges, vilka karaktärer som spelare 1 respektive
+ * spelare 2 ska spela som, samt vilken musik som ska spelas.
+ *
+ */
+
 #include "menu.h"
 
 using namespace std;
@@ -12,6 +21,8 @@ menu::menu(soundhandler &main_soundhandler)
     Menu_width = 400;
     Menu_height = 300;
     state = 0;
+    Resolution_height = 600;
+    Resolution_width = 800;
 
     //Skapa fönster
     Menu_window = SDL_CreateWindow("Fightwrench - The Mindless Genocide", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Menu_width, Menu_height,SDL_WINDOW_RESIZABLE);
@@ -24,7 +35,7 @@ menu::menu(soundhandler &main_soundhandler)
 
     //Skapa bakgrunder
     Background = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Menybild.png"));
-    Character_select = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Character_selection2.png"));
+    Character_select = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("VS.png"));
 
     //Skapa knappar
 
@@ -35,6 +46,11 @@ menu::menu(soundhandler &main_soundhandler)
     Character3 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Axel.png"));
     Character4 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Marsus.png"));
     Back = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Back.png"));
+    Res800x600 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("800x600.png"));
+    Res1280x720 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("1280x720.png"));
+    Res1366x768 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("1366x768.png"));
+    Res1680x1050 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("1680x1050.png"));
+    Res1920x1080 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("1920x1080.png"));
 
     Player1 = "axel";
     Player2 = "marcus";
@@ -44,6 +60,20 @@ menu::menu(soundhandler &main_soundhandler)
     Characters.insert(pair<string,SDL_Texture*>("marcus",Character2));
     Characters.insert(pair<string,SDL_Texture*>("jocke",Character3));
     Characters.insert(pair<string,SDL_Texture*>("markus",Character4));
+
+    //Skapa lista med olika skärmupplösningar, bredden är unik för varje upplösning, varför den används för att ta reda på vilken bild som ska visas.
+    Resolutions.insert(pair<int,SDL_Texture*>(800,Res800x600));
+    Resolutions.insert(pair<int,SDL_Texture*>(1280,Res1280x720));
+    Resolutions.insert(pair<int,SDL_Texture*>(1366,Res1366x768));
+    Resolutions.insert(pair<int,SDL_Texture*>(1680,Res1680x1050));
+    Resolutions.insert(pair<int,SDL_Texture*>(1920,Res1920x1080));
+
+    //Skapa en lista med motsvarande höjd vör varje bredd
+    Heights.insert(pair<int,int>(800,600));
+    Heights.insert(pair<int,int>(1280,720));
+    Heights.insert(pair<int,int>(1366,768));
+    Heights.insert(pair<int,int>(1680,1050));
+    Heights.insert(pair<int,int>(1920,1080));
 
     //Sätt igång menymusik
     menu_music(main_soundhandler);
@@ -65,6 +95,11 @@ menu::~menu()
     SDL_DestroyTexture(Character2);
     SDL_DestroyTexture(Character3);
     SDL_DestroyTexture(Character4);
+    SDL_DestroyTexture(Res800x600);
+    SDL_DestroyTexture(Res1280x720);
+    SDL_DestroyTexture(Res1366x768);
+    SDL_DestroyTexture(Res1680x1050);
+    SDL_DestroyTexture(Res1920x1080);
     SDL_DestroyTexture(Back);
     IMG_Quit();
     SDL_Quit();
@@ -83,7 +118,14 @@ void menu::menu_loop(soundhandler& main_soundhandler)
         {
             if(listen.type == SDL_QUIT)
             {
-                delete this;
+                if(state == 1)
+                {
+                    state = 0;
+                }
+                else
+                {
+                    delete this;
+                }
             }
 
             if(listen.type == SDL_MOUSEMOTION){
@@ -116,22 +158,31 @@ void menu::update(const double mouse_x,const double mouse_y)
     SDL_SetRenderDrawColor(Menu_renderer,0,0,0,255);
     SDL_RenderClear(Menu_renderer);
 
-    //Uppdatera bakgrunden
+    /*
+     * Denna del av koden är till för att uppdatera menyfönstret. Menyn har flera states, ett för varje
+     * fönster i menyn. När musen är över en knapp skall den renderas i en större storlek.
+     */
     switch (state)
     {
     case 0: //Root
         render(Menu_width,Menu_height,0,0,Background,Menu_rect);
         if(checkcollision(Play_button_rect, mouse_x, mouse_y)){
-            render(110,110,95,195,Play_button,Play_button_rect);
+            render(110,110,65,145,Play_button,Play_button_rect);
         } else
         {
-        render(100,100,100,200,Play_button,Play_button_rect);
+        render(100,100,70,150,Play_button,Play_button_rect);
         }
         if(checkcollision(Character_button_rect, mouse_x, mouse_y)){
-            render(110,110,195,195,Character_button,Character_button_rect);
+            render(110,110,225,145,Character_button,Character_button_rect);
         } else
         {
-        render(100,100,200,200,Character_button,Character_button_rect);
+        render(100,100,230,150,Character_button,Character_button_rect);
+        }
+        if(checkcollision(Res_rect, mouse_x, mouse_y)){
+            render(60,30,330,270,Resolutions.at(Resolution_width),Res_rect);
+        } else
+        {
+        render(50,20,335,275,Resolutions.at(Resolution_width),Res_rect);
         }
         break;
     case 1: //Character select
@@ -157,7 +208,6 @@ void menu::update(const double mouse_x,const double mouse_y)
         render(100,100,250,150,Characters.at(Player2),Player2_rect);
         }
         break;
-    //Uppdatera knappar
 
 }
     //Rendera
@@ -169,6 +219,13 @@ void menu::menu_music(soundhandler& main_soundhandler)
 {
     main_soundhandler.playbgm("Menu_music");
 }
+
+/*
+ * Följande del i koden kollar var någonstans man klickar. Beroende på vilket
+ * menyfönster vi är i kommer kollision mot olika knappar att kollas. I character
+ * select är tanken att man ska kunna klicka på ett av porträtten för att byta till
+ * en ledig karaktär. Denna kod finns här.
+ */
 
 void menu::mouse_clicked(const double x, const double y,soundhandler& main_soundhandler)
 {
@@ -190,9 +247,23 @@ void menu::mouse_clicked(const double x, const double y,soundhandler& main_sound
             SDL_DestroyTexture(Character_button);
             main_soundhandler.stopbgm();
             main_soundhandler.playbgm();
-            game main_game(main_soundhandler, 800, 1500, Player1, Player2); // sätt in önskad fönsterstorlek
+            game main_game(main_soundhandler, 800, 1500, Player1, Player2,Resolution_width,Resolution_height); // sätt in önskad fönsterstorlek
             main_game.game_loop();
         }
+        if(checkcollision(Res_rect,x,y))
+        {
+            auto it = Resolutions.find(Resolution_width);
+            if((++it) == Resolutions.end())
+            {
+                it = Resolutions.begin();
+                Resolution_width = it->first;
+                Resolution_height = Heights.at(Resolution_width);
+            } else {
+                Resolution_width = it->first;
+                Resolution_height = Heights.at(Resolution_width);
+            }
+        }
+
         break;
     case 1:
         if(checkcollision(Back_rect,x,y))

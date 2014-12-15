@@ -4,7 +4,7 @@
 #include <iostream>
 using namespace std;
 
-graphic_engine::graphic_engine(int win_height, int win_width)
+graphic_engine::graphic_engine(int win_height, int win_width, const int Window_width_scale, const int Window_height_scale)
 {
     //Kolla så SDL fungerar, initiera
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -27,13 +27,14 @@ graphic_engine::graphic_engine(int win_height, int win_width)
         background = "forest";
     }
 
-
-
     //Skapa fönster
     Window = SDL_CreateWindow("Fightwrench: The Mindless Genocide", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Window_width, Window_height,SDL_WINDOW_RESIZABLE);
     Renderer = SDL_CreateRenderer(Window, -1, 0);
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     SDL_RenderSetLogicalSize(Renderer, Window_width, Window_height);
+
+    //Skala fönstret beroende på vad som angetts i menyn
+    SDL_SetWindowSize(Window,Window_width_scale,Window_height_scale);
 
     //Skapa ikon
     SDL_SetWindowIcon(Window,IMG_Load("Icon.png"));

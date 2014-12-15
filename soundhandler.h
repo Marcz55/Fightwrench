@@ -1,3 +1,14 @@
+/*
+ * soundhandler.h och soundhandler.cpp är skrivna av Marcus Wälivaara.
+ *
+ * Soundhandler är ett objekt som skapas i main-filen. Menyn har objektet som inparameter.
+ * När spelet sedan startas skickas soundhandlern vidare för att användas även där.
+ *
+ * När soundhandlern skapas laddas all musik och alla ljudeffekter in i två maps.
+ * Sedan kan man anropa ljudeffekter eller musik med dess namn, för att spela upp denna.
+ * Funktioner finns för att pausa, spola tillbaka och stoppa pågående musik.
+ */
+
 #ifndef SOUNDHANDLER_H
 #define SOUNDHANDLER_H
 
@@ -15,7 +26,9 @@ class soundhandler
 public:
     soundhandler();
     soundhandler(const soundhandler&) = default;
+    soundhandler(soundhandler&&) = default;
     soundhandler& operator=(const soundhandler&) = default;
+    soundhandler& operator=(soundhandler&&) = default;
     ~soundhandler();
 
     //Bakgrundsmusik

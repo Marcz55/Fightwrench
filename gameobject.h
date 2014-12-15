@@ -1,7 +1,6 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 #include <string>
-
 class gameobject
 {
 public:
@@ -15,7 +14,7 @@ public:
     virtual double get_xpos()const {return xpos;}
     virtual double get_ypos()const{return ypos;}
     virtual double get_direction()const{return direction;}
-
+    virtual double get_speed()const{return direction;}
 protected:
     class gamefield* main_gamefield;
     std::string name;

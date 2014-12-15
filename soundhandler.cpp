@@ -98,3 +98,12 @@ void soundhandler::rewindbgm()
 {
     Mix_RewindMusic();
 }
+
+void soundhandler::setbgmvolume(int level)
+{
+    if(level < 0)
+        level = 0;
+    if(level > 128)
+        level = 128;
+    Mix_VolumeMusic(level);
+}

@@ -43,6 +43,7 @@ public:
     void pausebgm();
     void resumebgm();
     void rewindbgm();
+    void setbgmvolume(int);
 
     void create_sound(std::string const, const char*);
     void create_music(std::string const, const char*);

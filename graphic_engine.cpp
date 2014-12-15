@@ -42,11 +42,13 @@ graphic_engine::graphic_engine(int win_height, int win_width, const int Window_w
     //Skapa texturer
     create_texture("Axel","head.png");
     create_texture("Marsus","Marsus.png");
+    create_texture("Nassehuvud","Nassehuvud.png");
     create_texture("bullet","bullet.png");
     create_texture("grenade","grenade.png");
     create_texture("main_hud","wrenchhud.png");
     create_texture("char_1", "Character1.png");
     create_texture("char_2", "Character2.png");
+    create_texture("Nasse", "Nasse.png");
     create_texture("health_bar", "health_bar.png");
     create_texture("ultimate_bar", "ultimate_bar.png");
     create_texture("characterbody","body.png");

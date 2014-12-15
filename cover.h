@@ -9,6 +9,8 @@ class cover : public gameobject
 public:
     cover(std::string name1, int x, int y, double angle, int health_input, double height_input, double width_input,class gamefield* init_gamefield);
     cover()=delete;
+    cover(const cover&) = default;
+    cover& operator=(const cover&) = default;
     ~cover()=default;
     void update() override;
 

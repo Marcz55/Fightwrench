@@ -43,8 +43,7 @@ menu::menu(soundhandler &main_soundhandler)
     Character_button = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Knapp2.png"));
     Character1 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Character1.png"));
     Character2 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Character2.png"));
-    Character3 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Axel.png"));
-    Character4 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Marsus.png"));
+    Character3 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Nasse.png"));
     Back = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Back.png"));
     Res800x600 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("800x600.png"));
     Res1280x720 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("1280x720.png"));
@@ -58,8 +57,7 @@ menu::menu(soundhandler &main_soundhandler)
     //Skapa karaktärlista
     Characters.insert(pair<string,SDL_Texture*>("axel",Character1));
     Characters.insert(pair<string,SDL_Texture*>("marcus",Character2));
-    Characters.insert(pair<string,SDL_Texture*>("jocke",Character3));
-    Characters.insert(pair<string,SDL_Texture*>("markus",Character4));
+    Characters.insert(pair<string,SDL_Texture*>("nasse",Character3));
 
     //Skapa lista med olika skärmupplösningar, bredden är unik för varje upplösning, varför den används för att ta reda på vilken bild som ska visas.
     Resolutions.insert(pair<int,SDL_Texture*>(800,Res800x600));
@@ -94,7 +92,6 @@ menu::~menu()
     SDL_DestroyTexture(Character1);
     SDL_DestroyTexture(Character2);
     SDL_DestroyTexture(Character3);
-    SDL_DestroyTexture(Character4);
     SDL_DestroyTexture(Res800x600);
     SDL_DestroyTexture(Res1280x720);
     SDL_DestroyTexture(Res1366x768);

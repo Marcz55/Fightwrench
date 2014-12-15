@@ -12,6 +12,7 @@
 #include "power_up.h"
 #include "temporary_power_up.h"
 #include "permanent_power_up.h"
+#include "nasse.h"
 
 
 class game

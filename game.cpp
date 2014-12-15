@@ -9,11 +9,15 @@ game::game(soundhandler& main_soundhandler, int window_height, int window_width,
         main_gamefield.add_character(axel{100,100,315,&main_gamefield});
     if(Player1 == "marcus")
         main_gamefield.add_character(marcus{100,100,315,&main_gamefield});
+    if(Player1 == "nasse")
+        main_gamefield.add_character(nasse{100,100,315,&main_gamefield});
 
     if(Player2 == "axel")
         main_gamefield.add_character(axel{1400,700,135,&main_gamefield});
     if(Player2 == "marcus")
         main_gamefield.add_character(marcus{1400,700,135,&main_gamefield});
+    if(Player2 == "nasse")
+        main_gamefield.add_character(nasse{1400,700,135,&main_gamefield});
     running = true;
     firstmap();
 

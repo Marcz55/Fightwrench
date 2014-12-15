@@ -43,7 +43,6 @@ private:
     SDL_Texture* Character1;
     SDL_Texture* Character2;
     SDL_Texture* Character3;
-    SDL_Texture* Character4;
     SDL_Texture* Back;
     SDL_Texture* Res800x600;
     SDL_Texture* Res1280x720;

@@ -103,6 +103,10 @@ void gamefield::update()
                 projectile_vector.erase(it);
             }
         }
+        if(!collision_handler_pointer->allowed_to_move_bullet(it->get_xpos() - it->get_x_movement(),it->get_ypos() - it->get_y_movement(),it->get_xpos(),it->get_ypos(),false,it->get_speed(),it->get_damage()))
+        {
+            projectile_vector.erase(it--);
+        }
     }
 }
 

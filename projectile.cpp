@@ -24,17 +24,10 @@ projectile::projectile(string bullet_name, double x, double y, int speed, double
 
 void projectile::update()
 {
-
-    /*if((main_gamefield->get_collision_handler_pointer())->allowed_to_move_bullet(xpos,ypos,xpos + x_movement,ypos + y_movement,false,this))
-    {
-        xpos = xpos + x_movement;
-        ypos = ypos + y_movement;
-
-    }*/
     xpos = xpos + x_movement;
     ypos = ypos + y_movement;
     //Ska bara ske för grenade
-   /* if (name == "grenade")
+    if (name == "grenade")
     {
         if (abs(x_movement) <= x_deceleration)
         {
@@ -71,7 +64,6 @@ void projectile::update()
             explosion_timer -= 1;
         }
     }
-    */
     return;
 
 }

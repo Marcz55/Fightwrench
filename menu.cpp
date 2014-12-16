@@ -39,8 +39,8 @@ menu::menu(soundhandler &main_soundhandler)
 
     //Skapa knappar
 
-    Play_button = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Knapp1.png"));
-    Character_button = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Knapp2.png"));
+    Character_button = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Knapp1.png"));
+    Play_button = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Knapp2.png"));
     Character1 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Character1.png"));
     Character2 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Character2.png"));
     Character3 = SDL_CreateTextureFromSurface(Menu_renderer,IMG_Load("Nasse.png"));
@@ -89,22 +89,21 @@ menu::~menu()
     SDL_DestroyTexture(Character_select);
     SDL_DestroyTexture(Play_button);
     SDL_DestroyTexture(Character_button);
-    SDL_DestroyTexture(Character1);
-    SDL_DestroyTexture(Character2);
-    SDL_DestroyTexture(Character3);
-    SDL_DestroyTexture(Res800x600);
-    SDL_DestroyTexture(Res1280x720);
-    SDL_DestroyTexture(Res1366x768);
-    SDL_DestroyTexture(Res1680x1050);
-    SDL_DestroyTexture(Res1920x1080);
     SDL_DestroyTexture(Back);
+    for(auto it = Characters.begin(); it != Characters.end(); ++it)
+    {
+        SDL_DestroyTexture(it->second);
+    }
+    for(auto it = Resolutions.begin(); it != Resolutions.end(); ++it)
+    {
+        SDL_DestroyTexture(it->second);
+    }
     IMG_Quit();
     SDL_Quit();
 }
 
 void menu::menu_loop(soundhandler& main_soundhandler)
 {
-
     double mouse_x = 0;
     double mouse_y = 0;
 
@@ -164,16 +163,16 @@ void menu::update(const double mouse_x,const double mouse_y)
     case 0: //Root
         render(Menu_width,Menu_height,0,0,Background,Menu_rect);
         if(checkcollision(Play_button_rect, mouse_x, mouse_y)){
-            render(110,110,65,145,Play_button,Play_button_rect);
+            render(110,110,225,145,Play_button,Play_button_rect);
         } else
         {
-        render(100,100,70,150,Play_button,Play_button_rect);
+        render(100,100,230,150,Play_button,Play_button_rect);
         }
         if(checkcollision(Character_button_rect, mouse_x, mouse_y)){
-            render(110,110,225,145,Character_button,Character_button_rect);
+            render(110,110,65,145,Character_button,Character_button_rect);
         } else
         {
-        render(100,100,230,150,Character_button,Character_button_rect);
+        render(100,100,70,150,Character_button,Character_button_rect);
         }
         if(checkcollision(Res_rect, mouse_x, mouse_y)){
             render(60,30,330,270,Resolutions.at(Resolution_width),Res_rect);
@@ -229,13 +228,13 @@ void menu::mouse_clicked(const double x, const double y,soundhandler& main_sound
     switch (state)
     {
     case 0:
-        if(checkcollision(Play_button_rect,x,y))
+        if(checkcollision(Character_button_rect,x,y))
         {
             main_soundhandler.play_sound("Axel");
             state = 1;
             break;
         }
-        if(checkcollision(Character_button_rect,x,y))
+        if(checkcollision(Play_button_rect,x,y))
         {
             SDL_DestroyWindow(Menu_window);
             SDL_DestroyRenderer(Menu_renderer);
@@ -244,7 +243,7 @@ void menu::mouse_clicked(const double x, const double y,soundhandler& main_sound
             SDL_DestroyTexture(Character_button);
             main_soundhandler.stopbgm();
             main_soundhandler.playbgm();
-            game main_game(main_soundhandler, 800, 1500, Player1, Player2,Resolution_width,Resolution_height); // sätt in önskad fönsterstorlek
+            game main_game(main_soundhandler, 800, 1500, Player1, Player2,Resolution_width,Resolution_height); // sätt in önskad fönsterstorlek, vilka karaktärer som ska vara med och vilken storlek fönstret ska ha!
             main_game.game_loop();
         }
         if(checkcollision(Res_rect,x,y))

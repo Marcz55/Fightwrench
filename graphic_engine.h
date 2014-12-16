@@ -42,6 +42,7 @@ public:
     void draw_portrait(string name,double x_coord,double y_coord, double angle);
     void draw_object(string name,double x_coord,double y_coord, double angle);
     void create_texture(std::string texture_name, const char *texture_file);
+    void display_winner(std::string port_name);
 
 
 

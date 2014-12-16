@@ -84,7 +84,35 @@ void game::game_loop()
         {
             SDL_Delay(10-elapsed_time);
         }
+
+        while(main_gamefield.get_character_vector()->at(0).get_health()<=0)
+        {
+            main_graphic_engine.display_winner(main_gamefield.get_character_vector()->at(1).get_portrait_name());
+
+
+            while (SDL_PollEvent(&event))	{
+                if ( event.type == SDL_KEYDOWN )	{
+                    cout << "Closing window..." << event.type << endl;
+                    return;
+                }
+            }
+
+        }
+        while(main_gamefield.get_character_vector()->at(1).get_health()<=0)
+        {
+           main_graphic_engine.display_winner(main_gamefield.get_character_vector()->at(0).get_portrait_name());
+
+
+            while (SDL_PollEvent(&event))	{
+                if ( event.type == SDL_KEYDOWN )	{
+                    cout << "Closing window..." << event.type << endl;
+                    return;
+                }
+            }
+        }
+
     }
+    return;
 }
 
 void game::spawn_powerup()

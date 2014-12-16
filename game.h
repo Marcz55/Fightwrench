@@ -35,6 +35,7 @@ private:
     int power_up_spawn_timer = 1000;
     int window_height_scale;
     int window_width_scale;
+    SDL_Event event;
 };
 
 #endif // GAME_H

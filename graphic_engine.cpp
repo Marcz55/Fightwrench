@@ -69,6 +69,7 @@ graphic_engine::graphic_engine(int win_height, int win_width, const int Window_w
     create_texture("body1","body1.png");
     create_texture("body2","body2.png");
     create_texture("body3","body3.png");
+    create_texture("winner","skull.png");
 
 }
 
@@ -106,6 +107,15 @@ void graphic_engine::draw_portrait(string name,double x_coord,double y_coord, do
     Current_rect.x = x_coord - Current_rect.w/2;
     Current_rect.y = y_coord - Current_rect.h/2;
     SDL_RenderCopyEx(Renderer, Image_map.at(name).Texture, nullptr, &Current_rect,angle,nullptr,SDL_FLIP_NONE);
+}
+void graphic_engine::display_winner(std::string port_name)
+{
+    SDL_RenderClear(Renderer);
+    draw_object("winner",Window_width/2,Window_height/2, 0);
+    draw_object(port_name,Window_width/2,Window_height/2, 0);
+    SDL_RenderPresent(Renderer);
+    std::cout<<"OMGWTFBBQ";
+
 }
 
 graphic_engine::~graphic_engine()

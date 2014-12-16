@@ -45,6 +45,7 @@ graphic_engine::graphic_engine(int win_height, int win_width, const int Window_w
     create_texture("Nassehuvud","Nassehuvud.png");
     create_texture("bullet","bullet.png");
     create_texture("grenade","grenade.png");
+    create_texture("rocket","rocket2.png");
     create_texture("main_hud","wrenchhud.png");
     create_texture("char_1", "Character1.png");
     create_texture("char_2", "Character2.png");
@@ -64,6 +65,9 @@ graphic_engine::graphic_engine(int win_height, int win_width, const int Window_w
     create_texture("desert","desertbackground.jpg");
     create_texture("forest","forestbackground.jpg");
     create_texture("ammo_bar","ammo_bar.png");
+    create_texture("body1","body1.png");
+    create_texture("body2","body2.png");
+    create_texture("body3","body3.png");
 
 }
 
@@ -123,7 +127,7 @@ void graphic_engine::draw_all(gamefield& my_gamefield)
         draw_object(background,750,400,0);
         for(auto it = my_gamefield.character_vector.begin(); it != my_gamefield.character_vector.end(); it++)
         {
-            draw_object("characterbody",it->get_xpos(),it->get_ypos(),it->get_direction());
+            draw_object(it->get_body_name(),it->get_xpos(),it->get_ypos(),it->get_direction());
             draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_movement_direction());
         }
         for(auto it = my_gamefield.projectile_vector.begin(); it != my_gamefield.projectile_vector.end(); it++)
@@ -166,9 +170,9 @@ void graphic_engine::draw_all(gamefield& my_gamefield)
             draw_scaled_object("ammo_bar",(int)460*Window_width/800, (int)Window_height-140,0 ,(double)(my_gamefield.character_vector.at(1).get_ammo_percent())*Window_width/800,1);
         }
 
-        draw_scaled_object("ultimate_bar",(int)180*Window_width/800, (int)Window_height-100,0 ,(double)(my_gamefield.character_vector.at(0).get_ultimate_percent())*Window_width/800,1);
+        draw_scaled_object("ultimate_bar",(int)180*Window_width/800, (int)Window_height-100,0 ,(double)(1 - my_gamefield.character_vector.at(0).get_ultimate_percent())*Window_width/800,1);
 
-        draw_scaled_object("ultimate_bar",(int)460*Window_width/800, (int)Window_height-100,0 ,(double)(my_gamefield.character_vector.at(1).get_ultimate_percent())*Window_width/800,1);
+        draw_scaled_object("ultimate_bar",(int)460*Window_width/800, (int)Window_height-100,0 ,(double)(1 - my_gamefield.character_vector.at(1).get_ultimate_percent())*Window_width/800,1);
 
 
 

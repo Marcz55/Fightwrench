@@ -32,6 +32,11 @@ void gamefield::add_projectile(string projectile_type, double projectile_x, doub
         projectile_vector.push_back(bullet(projectile_x,projectile_y,projectile_angle + 90,this, damage, character_pointer));
         main_soundhandler->play_sound("Gunshot");
     }
+    else if (projectile_type == "rocket")
+    {
+        projectile_vector.push_back(rocket(projectile_x,projectile_y,projectile_angle + 90,this,damage));
+        main_soundhandler->play_sound("Rocket");
+    }
     else if (projectile_type == "grenade")
     {
         projectile_vector.push_back(grenade(projectile_x,projectile_y,projectile_angle + 90,this,damage,character_pointer));

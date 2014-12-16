@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace std;
 
-character::character(string character_name, int x_pos, int y_pos, int speed, double angle,
+character::character(string character_name, string init_body, int x_pos, int y_pos, int speed, double angle,
                      string init_projectile,
                      int init_firing_cooldown, int init_max_health,
                      int init_max_ammo, int init_reload_time, double init_width, double init_height,
@@ -21,6 +21,7 @@ character::character(string character_name, int x_pos, int y_pos, int speed, dou
     height = init_height;
     portrait_name=port_name;
     damage=init_damage;
+    body_name = init_body;
 }
 
 void character::update()
@@ -166,7 +167,7 @@ void character::input_set_shoot(const bool shoot)
 
 void character::fire_weapon()
 {
-    main_gamefield->add_projectile(projectile_type,xpos,ypos,direction,damage,this);
+    main_gamefield->add_projectile(projectile_type,xpos + 30*cos(direction*0.0175),ypos + 30*sin(direction*0.0175),direction, damage,this);
     firing_timer = firing_cooldown;
 }
 
@@ -175,6 +176,7 @@ void character::ultimate()
     if(ultimate_timer == 0)
     {
         firing_cooldown = firing_cooldown*0.5;
+        //spela upp ljud här
         ultimate_timer = ultimate_cooldown_time;
         ultimate_active_timer = ultimate_active_time;
     }

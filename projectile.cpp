@@ -20,6 +20,14 @@ projectile::projectile(string bullet_name, double x, double y, int speed, double
 
     }
 
+    if(name == "rocket")
+    {
+        x_deceleration = cos(angle*0.0175)*0.1;
+        y_deceleration = sin(angle*0.0175)*0.1;
+
+    }
+
+
 }
 
 void projectile::update()
@@ -53,6 +61,12 @@ void projectile::update()
         {
             y_movement = y_movement + y_deceleration;
         }
+    }
+
+    if (name == "rocket")
+    {
+        x_movement += x_deceleration;
+        y_movement += y_deceleration;
     }
 
 

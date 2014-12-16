@@ -13,7 +13,7 @@
 class character : public gameobject
 {
 public:
-    character(std::string character_name, int x_pos, int y_pos, int speed, double angle,
+    character(std::string character_name,std::string init_body, int x_pos, int y_pos, int speed, double angle,
               std::string init_projectile,
               int init_firing_cooldown,int init_max_health,
               int init_max_ammo, int init_reload_time, double width, double height, std::string port_name = "", class gamefield* init_gamefield = nullptr, int init_damage=0);
@@ -36,7 +36,12 @@ public:
     double get_reload_percent(){return ((double)reload_timer) / ((double)reload_time);}
     double get_ultimate_percent(){return (double)ultimate_timer/(double)ultimate_cooldown_time;}
     std::string get_portrait_name(){return portrait_name;}
+
     character* get_pointer_to_yourself(){return this;}
+
+    std::string get_body_name(){return body_name;}
+
+
     void fire_weapon();
     std::vector<double> get_corners();
     void move(double x_length, double y_length,int turn_direction);
@@ -74,6 +79,8 @@ protected:
     int ultimate_timer = 0;
     int ultimate_active_timer = -1;
     int ultimate_active_time = 1000;
+
+    std::string body_name;
 
     std::string projectile_type;
     //soundhandler* main_soundhandler;

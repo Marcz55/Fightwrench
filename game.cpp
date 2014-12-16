@@ -6,16 +6,16 @@ using namespace std;
 game::game(soundhandler& main_soundhandler, int window_height, int window_width, const string Player1, const string Player2,const int window_height_scale,const int window_width_scale):main_gamefield {window_height, window_width,main_soundhandler}, main_graphic_engine{window_height, window_width,window_height_scale,window_width_scale}
 {
     if(Player1 == "axel")//Namnet som settas här MÅSTE vara samma sak som motsvarande textur i graphic engine.
-        main_gamefield.add_character(axel{100,100,315,&main_gamefield});
+        main_gamefield.add_character(axel{100,100,0,&main_gamefield});
     if(Player1 == "marcus")
-        main_gamefield.add_character(marcus{100,100,315,&main_gamefield});
+        main_gamefield.add_character(marcus{100,100,0,&main_gamefield});
     if(Player1 == "nasse")
         main_gamefield.add_character(nasse{100,100,315,&main_gamefield});
 
     if(Player2 == "axel")
-        main_gamefield.add_character(axel{1400,700,135,&main_gamefield});
+        main_gamefield.add_character(axel{1400,700,90,&main_gamefield});
     if(Player2 == "marcus")
-        main_gamefield.add_character(marcus{1400,700,135,&main_gamefield});
+        main_gamefield.add_character(marcus{1400,700,90,&main_gamefield});
     if(Player2 == "nasse")
         main_gamefield.add_character(nasse{1400,700,135,&main_gamefield});
     running = true;

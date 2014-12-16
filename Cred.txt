@@ -15,3 +15,6 @@ Sounds (Soundbible.com)
 Mike Koenig - Eject Clip And Re-Load Sound
 
 Mike Koenig - Grenade Explosion Sound
+
+
+Mike Koenig - Bottle Rocket Sound

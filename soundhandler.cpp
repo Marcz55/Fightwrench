@@ -23,6 +23,7 @@ soundhandler::soundhandler()
     create_sound("Axel","Axel_laugh.wav");
     create_sound("Explosion","explosion.wav");
     create_sound("Reload","reload.wav");
+    create_sound("Rocket","Rocket.wav");
 
 
 }

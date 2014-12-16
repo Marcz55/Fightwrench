@@ -8,6 +8,7 @@
 #include "projectile.h"
 #include "bullet.h"
 #include "grenade.h"
+#include "rocket.h"
 #include "power_up.h"
 
 #include "explosion.h"

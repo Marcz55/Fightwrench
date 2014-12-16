@@ -19,8 +19,8 @@ public:
     ~collision_handler() = default;
     bool allowed_to_move_rectangle(vector<double>);
     bool allowed_to_move_circle(double,double,int);
-    bool allowed_to_move_bullet(double, double, double, double, bool, double, double);
-
+    bool allowed_to_move_bullet(double, double, double, double, bool, double, double,class character*);
+    void apply_explosion_damage(double, double, int, int);
 
 private:
     class gamefield* gamefield_pointer;

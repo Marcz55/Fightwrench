@@ -36,12 +36,14 @@ public:
     double get_reload_percent(){return ((double)reload_timer) / ((double)reload_time);}
     double get_ultimate_percent(){return (double)ultimate_timer/(double)ultimate_cooldown_time;}
     std::string get_portrait_name(){return portrait_name;}
-
+    character* get_pointer_to_yourself(){return this;}
     void fire_weapon();
     std::vector<double> get_corners();
     void move(double x_length, double y_length,int turn_direction);
     virtual void pick_up_power_up(const power_up& po_up);
     virtual void set_health(int new_health){current_health=new_health;}
+    virtual double get_width(){return width;}
+    virtual double get_height(){return height;}
 
 
 

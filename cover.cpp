@@ -2,7 +2,7 @@
 
 void cover::update()
 {
-    health+= 1;
+    return;
 }
 
 cover::cover(std::string name1, int x, int y, double angle, int health_input, double height_input, double width_input,class gamefield *init_gamefield):gameobject(name1, x, y, 0,angle,init_gamefield)

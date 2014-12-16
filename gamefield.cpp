@@ -25,16 +25,16 @@ void gamefield::add_character(character character_to_add)
     character_vector.push_back(character_to_add);
 }
 
-void gamefield::add_projectile(string projectile_type, double projectile_x, double projectile_y, double projectile_angle, int damage)
+void gamefield::add_projectile(string projectile_type, double projectile_x, double projectile_y, double projectile_angle, int damage, character* character_pointer)
 {
     if (projectile_type == "bullet")
     {
-        projectile_vector.push_back(bullet(projectile_x,projectile_y,projectile_angle + 90,this, damage));
+        projectile_vector.push_back(bullet(projectile_x,projectile_y,projectile_angle + 90,this, damage, character_pointer));
         main_soundhandler->play_sound("Gunshot");
     }
     else if (projectile_type == "grenade")
     {
-        projectile_vector.push_back(grenade(projectile_x,projectile_y,projectile_angle + 90,this,damage));
+        projectile_vector.push_back(grenade(projectile_x,projectile_y,projectile_angle + 90,this,damage,character_pointer));
         main_soundhandler->play_sound("Gunshot");
     }
 
@@ -62,7 +62,6 @@ void gamefield::play_sound(const string sound_name)
 
 void gamefield::update()
 {
-    cout << projectile_vector.size() << endl;
     check_powerups();
     for(auto it = explosion_vector.begin(); it != explosion_vector.end(); it++)
     {
@@ -89,6 +88,7 @@ void gamefield::update()
         it->update();
         if(it->get_explosion_timer() == 0)
         {
+            collision_handler_pointer->apply_explosion_damage(it->get_xpos(),it->get_ypos(),it->get_explosion_radius(),it->get_damage());
             add_explosion(0.5,it->get_xpos(),it->get_ypos());
             main_soundhandler->play_sound("Explosion");
             it += 1;
@@ -104,10 +104,17 @@ void gamefield::update()
                 projectile_vector.erase(it);
             }
         }
-        if(!collision_handler_pointer->allowed_to_move_bullet(it->get_xpos() - it->get_x_movement(),it->get_ypos() - it->get_y_movement(),it->get_xpos(),it->get_ypos(),false,it->get_speed(),it->get_damage()))
+        //Om någon kula har kolliderat med något så ska den tas bort, "false" skickas just nu med som en bool och betyder
+        //att kulan inte får röra sig igenom skydd, är tänkt att en ultimate ska kunna ändra på detta möjligen
+        if(!collision_handler_pointer->allowed_to_move_bullet(it->get_xpos() - it->get_x_movement(),it->get_ypos() - it->get_y_movement(),it->get_xpos(),it->get_ypos(),false,it->get_speed(),it->get_damage(),it->get_owner_pointer()))
         {
             projectile_vector.erase(it--);
         }
+    }
+    for(auto it = cover_vector.begin(); it != cover_vector.end(); it++)//Om något skydd har tagit tillräckligt med skada så ska det destrueras
+    {
+        if(it->get_health() <= 0)
+            cover_vector.erase(it--);
     }
 }
 

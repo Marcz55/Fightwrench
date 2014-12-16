@@ -3,7 +3,7 @@
 #include "gamefield.h"
 using namespace std;
 
-projectile::projectile(string bullet_name, double x, double y, int speed, double angle, int init_explosion_timer, int init_explosion_radius,int init_damage,class gamefield* init_gamefield):gameobject(bullet_name,x,y,speed,angle,init_gamefield)
+projectile::projectile(string bullet_name, double x, double y, int speed, double angle, int init_explosion_timer, int init_explosion_radius, int init_damage, class gamefield* init_gamefield, character *character_pointer):gameobject(bullet_name,x,y,speed,angle,init_gamefield)
 {
     direction = angle;
     x_movement = speed*cos(direction*0.0175); //0.0175 ungefär pi/180
@@ -11,7 +11,7 @@ projectile::projectile(string bullet_name, double x, double y, int speed, double
     explosion_timer = init_explosion_timer;
     explosion_radius = init_explosion_radius;
     damage = init_damage;
-
+    character_owner_pointer = character_pointer;
     //Detta ska abra göras för granater
     if(name == "grenade")
     {
@@ -66,4 +66,8 @@ void projectile::update()
     }
     return;
 
+}
+class character* projectile::get_owner_pointer()
+{
+    return character_owner_pointer;
 }

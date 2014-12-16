@@ -25,21 +25,21 @@ void gamefield::add_character(character character_to_add)
     character_vector.push_back(character_to_add);
 }
 
-void gamefield::add_projectile(string projectile_type, double projectile_x, double projectile_y, double projectile_angle, int damage, character* character_pointer)
+void gamefield::add_projectile(string projectile_type, double projectile_x, double projectile_y,double projectile_x_movement,double projectile_y_movement, double projectile_angle, int damage, character* character_pointer)
 {
     if (projectile_type == "bullet")
     {
-        projectile_vector.push_back(bullet(projectile_x,projectile_y,projectile_angle + 90,this, damage, character_pointer));
+        projectile_vector.push_back(bullet(projectile_x,projectile_y,projectile_x_movement,projectile_y_movement,projectile_angle + 90,this, damage, character_pointer));
         main_soundhandler->play_sound("Gunshot");
     }
     else if (projectile_type == "rocket")
     {
-        projectile_vector.push_back(rocket(projectile_x,projectile_y,projectile_angle + 90,this,damage));
+        projectile_vector.push_back(rocket(projectile_x,projectile_y,projectile_x_movement,projectile_y_movement,projectile_angle + 90,this,damage, character_pointer));
         main_soundhandler->play_sound("Rocket");
     }
     else if (projectile_type == "grenade")
     {
-        projectile_vector.push_back(grenade(projectile_x,projectile_y,projectile_angle + 90,this,damage,character_pointer));
+        projectile_vector.push_back(grenade(projectile_x,projectile_y,projectile_x_movement,projectile_y_movement,projectile_angle + 90,this,damage,character_pointer));
         main_soundhandler->play_sound("Gunshot");
     }
 

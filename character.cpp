@@ -167,7 +167,7 @@ void character::input_set_shoot(const bool shoot)
 
 void character::fire_weapon()
 {
-    main_gamefield->add_projectile(projectile_type,xpos + 30*cos(direction*0.0175),ypos + 30*sin(direction*0.0175),direction, damage,this);
+    main_gamefield->add_projectile(projectile_type,xpos + 30*cos(direction*0.0175),ypos + 30*sin(direction*0.0175),x_movement*speed,y_movement*speed,direction, damage,this);
     firing_timer = firing_cooldown;
 }
 

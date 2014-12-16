@@ -3,11 +3,11 @@
 #include "gamefield.h"
 using namespace std;
 
-projectile::projectile(string bullet_name, double x, double y, int speed, double angle, int init_explosion_timer, int init_explosion_radius, int init_damage, class gamefield* init_gamefield, character *character_pointer):gameobject(bullet_name,x,y,speed,angle,init_gamefield)
+projectile::projectile(string bullet_name, double x, double y,double init_x_movement,double init_y_movement, int speed, double angle, int init_explosion_timer, int init_explosion_radius, int init_damage, class gamefield* init_gamefield, character *character_pointer):gameobject(bullet_name,x,y,speed,angle,init_gamefield)
 {
     direction = angle;
-    x_movement = speed*cos(direction*0.0175); //0.0175 ungefär pi/180
-    y_movement = speed*sin(direction*0.0175);
+    x_movement = speed*cos(direction*0.0175) + init_x_movement; //0.0175 ungefär pi/180
+    y_movement = speed*sin(direction*0.0175) + init_y_movement;
     explosion_timer = init_explosion_timer;
     explosion_radius = init_explosion_radius;
     damage = init_damage;

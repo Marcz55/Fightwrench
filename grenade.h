@@ -5,7 +5,7 @@
 class grenade : public projectile
 {
 public:
-    grenade(double init_x, double init_y, double angle, class gamefield* init_gamefield, int damage, class character* character_pointer);
+    grenade(double init_x, double init_y,double init_x_movement, double init_y_movement, double angle, class gamefield* init_gamefield, int damage, class character* character_pointer);
     virtual ~grenade()  override = default;
 
 private:

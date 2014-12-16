@@ -31,7 +31,17 @@ public:
     int get_up_key(){return up_key;}
     int get_movement_direction(){return movement_direction;}
     int get_health(){return current_health;}
-    double get_health_percent(){return ((double)current_health) / ((double)max_health);}
+    double get_health_percent()
+    {
+        if(current_health > 0)
+        {
+            return ((double)current_health) / ((double)max_health);
+        }
+        else
+        {
+            return 0;
+        }
+    }
     double get_ammo_percent(){return ((double)current_ammo) / ((double)max_ammo);}
     double get_reload_percent(){return ((double)reload_timer) / ((double)reload_time);}
     double get_ultimate_percent(){return (double)ultimate_timer/(double)ultimate_cooldown_time;}

@@ -9,6 +9,7 @@
 #include "bullet.h"
 #include "grenade.h"
 #include "rocket.h"
+#include "guided_rocket.h"
 #include "power_up.h"
 
 #include "explosion.h"
@@ -36,6 +37,9 @@ public:
     void check_powerups();
     bool allowed_to_move_rectangle(vector<double> rectangle_corners);
     bool allowed_to_move_circle(double circle_x, double circle_y, int circle_radius);
+
+    void send_disable_control();
+    void send_command(int turn_direction);
 
 private:
     soundhandler* main_soundhandler;

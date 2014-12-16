@@ -42,6 +42,11 @@ void gamefield::add_projectile(string projectile_type, double projectile_x, doub
         projectile_vector.push_back(grenade(projectile_x,projectile_y,projectile_x_movement,projectile_y_movement,projectile_angle + 90,this,damage,character_pointer));
         main_soundhandler->play_sound("Gunshot");
     }
+    else if (projectile_type == "guided rocket")
+    {
+        projectile_vector.push_back(guided_rocket(projectile_x,projectile_y,projectile_x_movement,projectile_y_movement,projectile_angle + 90,this,damage, character_pointer));
+        main_soundhandler->play_sound("Rocket");
+    }
 
 }
 
@@ -94,7 +99,7 @@ void gamefield::update()
         if(it->get_explosion_timer() == 0)
         {
             collision_handler_pointer->apply_explosion_damage(it->get_xpos(),it->get_ypos(),it->get_explosion_radius(),it->get_damage());
-            add_explosion(0.5,it->get_xpos(),it->get_ypos());
+            add_explosion(it->get_explosion_radius(),it->get_xpos(),it->get_ypos());
             main_soundhandler->play_sound("Explosion");
             it += 1;
             if (it == projectile_vector.end())
@@ -113,6 +118,10 @@ void gamefield::update()
         //att kulan inte får röra sig igenom skydd, är tänkt att en ultimate ska kunna ändra på detta möjligen
         if(!collision_handler_pointer->allowed_to_move_bullet(it->get_xpos() - it->get_x_movement(),it->get_ypos() - it->get_y_movement(),it->get_xpos(),it->get_ypos(),false,it->get_speed(),it->get_damage(),it->get_owner_pointer()))
         {
+            if(it->get_name() == "guided rocket" or it->get_name() == "rocket")
+            {
+                add_explosion(it->get_explosion_radius(),it->get_xpos(),it->get_ypos());
+            }
             projectile_vector.erase(it--);
         }
     }
@@ -147,5 +156,30 @@ bool gamefield::allowed_to_move_rectangle(vector<double> rectangle_corners)
 bool gamefield::allowed_to_move_circle(double circle_x, double circle_y, int circle_radius)
 {
     return collision_handler_pointer->allowed_to_move_circle(circle_x,circle_y,circle_radius);
+}
+
+
+void gamefield::send_disable_control()
+{
+    if(character_vector.at(0).get_name() == "Nassehuvud")
+    {
+        character_vector.at(0).disable_controlling();
+    }
+    else
+    {
+        character_vector.at(1).disable_controlling();
+    }
+}
+
+void gamefield::send_command(int turn_direction)
+{
+    for(auto it = projectile_vector.begin(); it != projectile_vector.end(); it++)
+    {
+        if (it->get_name() == "guided rocket")
+        {
+            it->turn(turn_direction);
+
+        }
+    }
 }
 

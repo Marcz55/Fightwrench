@@ -13,6 +13,7 @@
 class character : public gameobject
 {
 public:
+    virtual ~character() = default;
     character(std::string character_name,std::string init_body, int x_pos, int y_pos, int speed, double angle,
               std::string init_projectile,
               int init_firing_cooldown,int init_max_health,
@@ -60,6 +61,8 @@ public:
     virtual double get_width(){return width;}
     virtual double get_height(){return height;}
 
+    void disable_controlling(){controlling = false;}
+
 
 
 protected:
@@ -98,6 +101,8 @@ protected:
     double height = 0;
     std::string portrait_name;
     std::vector<class power_up> active_power_ups;
+
+    bool controlling = false;
 
 
 };

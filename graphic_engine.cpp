@@ -46,6 +46,7 @@ graphic_engine::graphic_engine(int win_height, int win_width, const int Window_w
     create_texture("bullet","bullet.png");
     create_texture("grenade","grenade.png");
     create_texture("rocket","rocket2.png");
+    create_texture("guided rocket","rocket2.png");
     create_texture("main_hud","wrenchhud.png");
     create_texture("char_1", "Character1.png");
     create_texture("char_2", "Character2.png");

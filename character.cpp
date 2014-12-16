@@ -34,7 +34,7 @@ void character::update()
     {
         ultimate_active_timer -= 1;
     }
-    if (ultimate_active_timer == 0)
+    if (ultimate_active_timer == 0 && name == "Marsus")
     {
         firing_cooldown = firing_cooldown/0.5;
         ultimate_active_timer -= 1;
@@ -100,30 +100,44 @@ void character::update_move_vector()
         y_movement = 0;
         x_movement = 0;
     };
-    if (temp_x != 0 || temp_y != 0) {
-        if (temp_x == 0) {
-            if (temp_y == 1) {
+    if (temp_x != 0 || temp_y != 0)
+    {
+        if (temp_x == 0)
+        {
+            if (temp_y == 1)
+            {
                 movement_direction = 180;
-            } else {
+            }
+            else
+            {
                 movement_direction = 0;
             }
-        } else if (temp_y == 0) {
-            if (temp_x == 1) {
+        }
+        else if (temp_y == 0)
+        {
+            if (temp_x == 1)
+            {
                 movement_direction = 90;
             } else {
                 movement_direction = 270;
             }
-        } else {
-            if (temp_x > 0 && temp_y > 0) {
+        }
+        else
+        {
+            if (temp_x > 0 && temp_y > 0)
+            {
                 movement_direction = 135;
             }
-            if (temp_x < 0 && temp_y > 0) {
+            if (temp_x < 0 && temp_y > 0)
+            {
                 movement_direction = 225;
             }
-            if (temp_x < 0 && temp_y < 0) {
+            if (temp_x < 0 && temp_y < 0)
+            {
                 movement_direction = 315;
             }
-            if (temp_x > 0 && temp_y < 0) {
+            if (temp_x > 0 && temp_y < 0)
+            {
                 movement_direction = 45;
             }
         }
@@ -175,10 +189,38 @@ void character::ultimate()
 {
     if(ultimate_timer == 0)
     {
-        firing_cooldown = firing_cooldown*0.5;
-        //spela upp ljud här
+
         ultimate_timer = ultimate_cooldown_time;
         ultimate_active_timer = ultimate_active_time;
+
+        if(name == "Marsus")
+        {
+        firing_cooldown = firing_cooldown*0.75;
+        //spela upp ljud här
+        }
+        if (name == "Nassehuvud")
+        {
+            main_gamefield->add_projectile("guided rocket",xpos + 30*cos(direction*0.0175),ypos + 30*sin(direction*0.0175),0,0,direction, damage,this);
+            controlling = true;
+        }
+        if (name == "Axel")
+        {
+            double ultimate_jump_x = 10*cos((direction + 90)*0.0175);
+            double ultimate_jump_y = 10*sin((direction + 90)*0.0175);
+            double jump_xpos = xpos;
+            double jump_ypos = ypos;
+            for (int ulti_iterator = 1; ulti_iterator <= 50; ulti_iterator ++)
+            {
+                xpos = jump_xpos + ulti_iterator*ultimate_jump_x;
+                ypos = jump_ypos + ulti_iterator*ultimate_jump_y;
+                if(!main_gamefield->allowed_to_move_rectangle(get_corners()))
+                {
+                    xpos = jump_xpos + (ulti_iterator - 1)*ultimate_jump_x;
+                    ypos = jump_ypos + (ulti_iterator - 1)*ultimate_jump_y;
+                    return;
+                }
+            }
+        }
     }
 }
 
@@ -245,6 +287,13 @@ void character::move(double x_length, double y_length,int turn_direction)
     //för att get_corners ska ta ut hörnen som karaktären kommer att ha vid den nya koordinaten
     if(x_length != 0 or y_length !=0 or turn_direction != 0)
     {
+        if(controlling)
+        {
+            main_gamefield->send_command(turn_direction);
+        }
+
+
+
         direction += turn_direction;
         if(direction>360)
         {
@@ -311,5 +360,6 @@ void character::pick_up_power_up(const power_up &po_up)
 
     }
 }
+
 
 

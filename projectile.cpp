@@ -3,7 +3,7 @@
 #include "gamefield.h"
 using namespace std;
 
-projectile::projectile(string bullet_name, double x, double y,double init_x_movement,double init_y_movement, int speed, double angle, int init_explosion_timer, int init_explosion_radius, int init_damage, class gamefield* init_gamefield, character *character_pointer):gameobject(bullet_name,x,y,speed,angle,init_gamefield)
+projectile::projectile(string bullet_name, double x, double y,double init_x_movement,double init_y_movement, int speed, double angle, int init_explosion_timer, double init_explosion_radius, int init_damage, class gamefield* init_gamefield, character *character_pointer):gameobject(bullet_name,x,y,speed,angle,init_gamefield)
 {
     direction = angle;
     x_movement = speed*cos(direction*0.0175) + init_x_movement; //0.0175 ungefär pi/180
@@ -77,6 +77,12 @@ void projectile::update()
         {
             explosion_timer -= 1;
         }
+    }
+
+    if (name == "guided rocket")
+    {
+        x_movement = speed*cos(direction*0.0175);
+        y_movement = speed*sin(direction*0.0175);
     }
     return;
 

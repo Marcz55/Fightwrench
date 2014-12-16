@@ -98,7 +98,7 @@ void gamefield::update()
         it->update();
         if(it->get_explosion_timer() == 0)
         {
-            collision_handler_pointer->apply_explosion_damage(it->get_xpos(),it->get_ypos(),it->get_explosion_radius(),it->get_damage());
+            collision_handler_pointer->apply_explosion_damage(it->get_xpos(),it->get_ypos(),it->get_explosion_radius()*150,it->get_damage());
             add_explosion(it->get_explosion_radius(),it->get_xpos(),it->get_ypos());
             main_soundhandler->play_sound("Explosion");
             it += 1;
@@ -120,7 +120,13 @@ void gamefield::update()
         {
             if(it->get_name() == "guided rocket" or it->get_name() == "rocket")
             {
+                collision_handler_pointer->apply_explosion_damage(it->get_xpos(),it->get_ypos(),it->get_explosion_radius()*150,it->get_damage());
                 add_explosion(it->get_explosion_radius(),it->get_xpos(),it->get_ypos());
+                main_soundhandler->play_sound("Explosion");
+                if(it->get_name() == "guided rocket")
+                {
+                    send_disable_control();
+                }
             }
             projectile_vector.erase(it--);
         }

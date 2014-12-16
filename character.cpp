@@ -36,7 +36,7 @@ void character::update()
     }
     if (ultimate_active_timer == 0 && name == "Marsus")
     {
-        firing_cooldown = firing_cooldown/0.5;
+        firing_cooldown = firing_cooldown/0.75;
         ultimate_active_timer -= 1;
     }
     if (reload_timer > 0) {
@@ -75,6 +75,7 @@ void character::update()
             damage=damage/it->get_delta_damage();
             speed = speed/it->get_delta_move_speed();
             firing_cooldown = firing_cooldown/it->get_delta_fire_speed();
+            reload_time = reload_time/it->get_delta_fire_speed();
             if(current_health>max_health)
             {
             current_health=max_health;
@@ -291,10 +292,14 @@ void character::move(double x_length, double y_length,int turn_direction)
         {
             main_gamefield->send_command(turn_direction);
         }
+        else
+        {
+            direction += turn_direction;
+        }
 
 
 
-        direction += turn_direction;
+
         if(direction>360)
         {
             direction = direction - 360;
@@ -311,7 +316,14 @@ void character::move(double x_length, double y_length,int turn_direction)
         {
             return;
         }
-        direction -= turn_direction;
+
+        if(!controlling)
+        {
+            direction -= turn_direction;
+        }
+
+
+
         if(main_gamefield -> allowed_to_move_rectangle(get_corners()))
         {
             return;
@@ -354,6 +366,7 @@ void character::pick_up_power_up(const power_up &po_up)
            damage=damage*po_up.get_delta_damage();
            speed = speed*po_up.get_delta_move_speed();
            firing_cooldown = firing_cooldown*po_up.get_delta_fire_speed();
+           reload_time = reload_time*po_up.get_delta_fire_speed();
            active_power_ups.push_back(temporary_power_up(po_up.get_name(), po_up.get_xpos(), po_up.get_ypos(), po_up.get_direction(), 3, main_gamefield, po_up.get_delta_damage(), po_up.get_delta_health(), po_up.get_delta_fire_speed(), po_up.get_delta_move_speed(), po_up.get_duration()));
            std::cout<<"PLOCKAT UPP!";
 

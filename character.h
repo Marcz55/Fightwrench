@@ -104,6 +104,10 @@ protected:
     std::string portrait_name;
     std::vector<class power_up> active_power_ups;
 
+    double allowed_x_movement;
+    double allowed_y_movement;
+
+
     bool controlling = false;
 
 

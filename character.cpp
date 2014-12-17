@@ -26,6 +26,8 @@ character::character(string character_name, string init_body, int x_pos, int y_p
 
 void character::update()
 {
+    allowed_x_movement = 0;
+    allowed_y_movement = 0;
     if (ultimate_timer > 0)
     {
         ultimate_timer -= 1;
@@ -182,7 +184,7 @@ void character::input_set_shoot(const bool shoot)
 
 void character::fire_weapon()
 {
-    main_gamefield->add_projectile(projectile_type,xpos + 30*cos(direction*0.0175),ypos + 30*sin(direction*0.0175),x_movement*speed,y_movement*speed,direction, damage,this);
+    main_gamefield->add_projectile(projectile_type,xpos + 30*cos(direction*0.0175),ypos + 30*sin(direction*0.0175),allowed_x_movement,allowed_y_movement,direction, damage,this);
     firing_timer = firing_cooldown;
 }
 
@@ -314,6 +316,9 @@ void character::move(double x_length, double y_length,int turn_direction)
         //kollar om koordinaten är okej att flytta sig till, om ja så är vi klara om nej så sätter vi tillbaka värdena till de gamla koordinaterna
         if(main_gamefield -> allowed_to_move_rectangle(get_corners(),this))
         {
+
+            allowed_x_movement = speed*x_length;
+            allowed_y_movement = speed*y_length;
             return;
         }
 
@@ -326,17 +331,26 @@ void character::move(double x_length, double y_length,int turn_direction)
 
         if(main_gamefield -> allowed_to_move_rectangle(get_corners(),this))
         {
+
+            allowed_x_movement = speed*x_length;
+            allowed_y_movement = speed*y_length;
             return;
         }
         xpos -= speed*x_length;
         if(main_gamefield->allowed_to_move_rectangle(get_corners(),this))
         {
+
+            allowed_x_movement = 0;
+            allowed_y_movement = speed*y_length;
             return;
         }
         xpos += speed*x_length;
         ypos -= speed*y_length;
         if(main_gamefield -> allowed_to_move_rectangle(get_corners(),this))
         {
+
+            allowed_x_movement = speed*x_length;
+            allowed_y_movement = 0;
             return;
         }
         xpos -= speed*x_length;

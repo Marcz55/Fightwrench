@@ -71,6 +71,8 @@ graphic_engine::graphic_engine(int win_height, int win_width, const int Window_w
     create_texture("body3","body3.png");
     create_texture("winner","skull.png");
 
+    create_texture("box","box.png");
+
 }
 
 void graphic_engine::create_texture(string texture_name, const char *texture_file)

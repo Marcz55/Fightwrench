@@ -19,39 +19,63 @@ game::game(soundhandler& main_soundhandler, int window_height, int window_width,
     if(Player2 == "nasse")
         main_gamefield.add_character(nasse{1400,700,135,&main_gamefield});
     running = true;
-    firstmap();
+    secondmap();
 
 }
 
 void game::firstmap()
 {
-    main_gamefield.add_cover(standardcover(300,300,0,10,30,150,&main_gamefield));
-    main_gamefield.add_cover(standardcover(450,300,0,10,30,150,&main_gamefield));
-    main_gamefield.add_cover(standardcover(600,300,0,10,30,150,&main_gamefield));
+    main_gamefield.add_cover(standardcover(300,300,0,10,30,80,&main_gamefield));
+    main_gamefield.add_cover(standardcover(450,300,0,10,30,80,&main_gamefield));
+    main_gamefield.add_cover(standardcover(600,300,0,10,30,80,&main_gamefield));
 
-    main_gamefield.add_cover(standardcover(450,210,90,10,30,150,&main_gamefield));
+    main_gamefield.add_cover(standardcover(450,210,90,10,30,80,&main_gamefield));
 
-    main_gamefield.add_cover(standardcover(210,360,90,10,30,150,&main_gamefield));
-    main_gamefield.add_cover(standardcover(210,510,90,10,30,150,&main_gamefield));
+    main_gamefield.add_cover(standardcover(210,360,90,10,30,80,&main_gamefield));
+    main_gamefield.add_cover(standardcover(210,510,90,10,30,80,&main_gamefield));
 
-    main_gamefield.add_cover(standardcover(440,610,90,10,30,150,&main_gamefield));
-    main_gamefield.add_cover(standardcover(500,700,0,10,30,150,&main_gamefield));
-    main_gamefield.add_cover(standardcover(650,700,0,10,30,150,&main_gamefield));
-    main_gamefield.add_cover(standardcover(800,700,0,10,30,150,&main_gamefield));
+    main_gamefield.add_cover(standardcover(440,610,90,10,30,80,&main_gamefield));
+    main_gamefield.add_cover(standardcover(500,700,0,10,30,80,&main_gamefield));
+    main_gamefield.add_cover(standardcover(650,700,0,10,30,80,&main_gamefield));
+    main_gamefield.add_cover(standardcover(800,700,0,10,30,80,&main_gamefield));
 
-    main_gamefield.add_cover(standardcover(700,500,0,10,30,150,&main_gamefield));
-    main_gamefield.add_cover(standardcover(850,500,0,10,30,150,&main_gamefield));
+    main_gamefield.add_cover(standardcover(700,500,0,10,30,80,&main_gamefield));
+    main_gamefield.add_cover(standardcover(850,500,0,10,30,80,&main_gamefield));
 
-    main_gamefield.add_cover(standardcover(1050,450,90,10,30,150,&main_gamefield));
-    main_gamefield.add_cover(standardcover(1050,300,90,10,30,150,&main_gamefield));
-    main_gamefield.add_cover(standardcover(1000,180,45,10,30,150,&main_gamefield));
-    main_gamefield.add_cover(standardcover(1100,180,135,10,30,150,&main_gamefield));
+    main_gamefield.add_cover(standardcover(1050,450,90,10,30,80,&main_gamefield));
+    main_gamefield.add_cover(standardcover(1050,300,90,10,30,80,&main_gamefield));
+    main_gamefield.add_cover(standardcover(1000,180,45,10,30,80,&main_gamefield));
+    main_gamefield.add_cover(standardcover(1100,180,135,10,30,80,&main_gamefield));
 
-    main_gamefield.add_cover(standardcover(1425,300,0,10,30,150,&main_gamefield));
-    main_gamefield.add_cover(standardcover(1335,360,90,10,30,150,&main_gamefield));
+    main_gamefield.add_cover(standardcover(1425,300,0,10,30,80,&main_gamefield));
+    main_gamefield.add_cover(standardcover(1335,360,90,10,30,80,&main_gamefield));
 
 
 
+}
+
+void game::secondmap()
+{
+    for(int cov_it = 0; cov_it <= 16; cov_it ++)
+    {
+        main_gamefield.add_cover(standardcover(200 + cov_it*80,150,0,10,30,80,&main_gamefield));
+        main_gamefield.add_cover(standardcover(40 + cov_it*80,650,0,10,30,80,&main_gamefield));
+    }
+    for(int cov_it = 0; cov_it <= 3; cov_it ++)
+    {
+        main_gamefield.add_cover(standardcover(175,205 + cov_it*80,90,10,30,80,&main_gamefield));
+        main_gamefield.add_cover(standardcover(1345,595 - cov_it*80,90,10,30,80,&main_gamefield));
+    }
+
+     main_gamefield.add_cover(box(700,350,0,10,90,90,&main_gamefield));
+     main_gamefield.add_cover(box(700,450,0,10,90,90,&main_gamefield));
+     main_gamefield.add_cover(box(800,400,0,10,90,90,&main_gamefield));
+     main_gamefield.add_cover(box(750,400,0,10,90,90,&main_gamefield));
+     main_gamefield.add_cover(box(300,300,0,10,90,90,&main_gamefield));
+     main_gamefield.add_cover(box(900,250,0,10,90,90,&main_gamefield));
+
+     main_gamefield.add_cover(box(1290,500,0,10,90,90,&main_gamefield));
+     main_gamefield.add_cover(box(1250,300,0,10,90,90,&main_gamefield));
 }
 
 void game::main_update()
@@ -121,6 +145,11 @@ void game::spawn_powerup()
     int spawn_randomizer = rand() % 5 + 1;
     double xpos_randomizer = rand() % 1300 + 100;
     double ypos_randomizer = rand() % 600 + 100;
+    while(!main_gamefield.allowed_to_move_circle(xpos_randomizer,ypos_randomizer,25))
+    {
+        xpos_randomizer = rand() % 1300 + 100;
+        ypos_randomizer = rand() % 600 + 100;
+    }
     //Denna helar permanent
     if(spawn_randomizer == 1)
     {

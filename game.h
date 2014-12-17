@@ -6,6 +6,7 @@
 #include "axel.h"
 #include "marcus.h"
 #include "soundhandler.h"
+#include "box.h"
 #include "standardcover.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_main.h>
@@ -25,6 +26,7 @@ public:
     void main_update();
     void game_loop();
     void firstmap();
+    void secondmap();
     void spawn_powerup();
 
 private:

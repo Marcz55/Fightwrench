@@ -13,7 +13,7 @@
 class character : public gameobject
 {
 public:
-    virtual ~character() = default;
+    virtual ~character() override = default;
     character(std::string character_name,std::string init_body, int x_pos, int y_pos, int speed, double angle,
               std::string init_projectile,
               int init_firing_cooldown,int init_max_health,

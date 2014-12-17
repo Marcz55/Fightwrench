@@ -11,7 +11,7 @@ public:
     cover()=delete;
     cover(const cover&) = default;
     cover& operator=(const cover&) = default;
-    ~cover()=default;
+    virtual ~cover() override =default;
     void update() override;
     cover* get_pointer_to_yourself(){return this;}
 

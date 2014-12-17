@@ -8,7 +8,11 @@ class power_up : public gameobject
 public:
     power_up()=delete;
     power_up(std::string name1, int x, int y,double angle, int input_radius,class gamefield* init_gamefield, double dmg, double health,double fire_speed, double move_speed,int init_duration);
-    ~power_up()=default;
+    virtual ~power_up() override = default;
+    power_up(const power_up&) = default;
+    power_up(power_up&&) = default;
+    power_up& operator=(const power_up&) = default;
+    power_up& operator=(power_up&&) = default;
     virtual void update() override{duration=duration-1;}
     //power_up(power_up& copy_power_up)=default;
 

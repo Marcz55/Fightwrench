@@ -7,9 +7,13 @@
 class projectile : public gameobject
 {
 public:
-    virtual ~projectile() = default;
+    virtual ~projectile() override = default;
     projectile();
     projectile(std::string bullet_name, double x, double y,double init_x_movement,double init_y_movement,int speed, double angle, int init_explosion_timer, double init_explosion_radius,int init_damage, class gamefield* init_gamefield = nullptr,class character* character_pointer = nullptr);
+    projectile(const projectile&) = default;
+    projectile(projectile&&) = default;
+    projectile& operator=(const projectile&) = default;
+    projectile& operator=(projectile&&) = default;
     virtual void update() override;
     void test();
     double get_explosion_radius(){return explosion_radius;}

@@ -15,6 +15,10 @@ private:
 public:
     input_handler() = default;
     ~input_handler() = default;
+    input_handler(const input_handler&) = delete;
+    input_handler(input_handler&&) = delete;
+    input_handler& operator=(const input_handler&) = delete;
+    input_handler& operator=(input_handler&&) = delete;
     void update(gamefield&); //Tar hand om allt som ligger i event_queue
     bool Get_running();
 };

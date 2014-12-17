@@ -23,6 +23,7 @@ menu::menu(soundhandler &main_soundhandler)
     state = 0;
     Resolution_height = 600;
     Resolution_width = 800;
+    Running = true;
 
     //Skapa fönster
     Menu_window = SDL_CreateWindow("Fightwrench - The Mindless Genocide", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Menu_width, Menu_height,SDL_WINDOW_RESIZABLE);
@@ -120,7 +121,7 @@ void menu::menu_loop(soundhandler& main_soundhandler)
                 }
                 else
                 {
-                    delete this;
+                    return;
                 }
             }
 
@@ -134,8 +135,11 @@ void menu::menu_loop(soundhandler& main_soundhandler)
             }
 
         }
+        if(!Running)
+            return;
         update(mouse_x,mouse_y);
         SDL_Delay(10);
+
     }
     }
 
@@ -245,6 +249,8 @@ void menu::mouse_clicked(const double x, const double y,soundhandler& main_sound
             main_soundhandler.playbgm();
             game main_game(main_soundhandler, 800, 1500, Player1, Player2,Resolution_width,Resolution_height); // sätt in önskad fönsterstorlek, vilka karaktärer som ska vara med och vilken storlek fönstret ska ha!
             main_game.game_loop();
+            Running = false;
+            return;
         }
         if(checkcollision(Res_rect,x,y))
         {

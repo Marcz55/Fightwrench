@@ -23,6 +23,8 @@ public:
     gamefield(int win_height, int win_width, class soundhandler& init_soundhandler);
     void update();
     ~gamefield();
+    gamefield(const gamefield&) = delete;
+    gamefield& operator=(const gamefield&) = delete;
     void add_character(class character character_to_add);
     void add_projectile(string projectile_type, double projectile_x, double projectile_y,double projectile_x_movement,double projectile_y_movement, double projectile_angle, int damage, character* character_pointer);
     void add_cover(cover cover_to_add);

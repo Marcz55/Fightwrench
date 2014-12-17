@@ -134,9 +134,9 @@ void gamefield::update()
     }
     for(auto it = cover_vector.begin(); it != cover_vector.end(); it++)//Om något skydd har tagit tillräckligt med skada så ska det destrueras
     {
+        it->update();
         if(it->get_health() <= 0)
             cover_vector.erase(it--);
-        it->update();
     }
 }
 

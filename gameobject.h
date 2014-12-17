@@ -7,6 +7,10 @@ public:
     gameobject(std::string object_name,int x, int y, int init_speed, double angle, class gamefield* init_gamefield);
     virtual void update() = 0;
     virtual ~gameobject() =default;
+    gameobject(const gameobject&) = default;
+    gameobject(gameobject&&) = default;
+    gameobject& operator=(const gameobject&) = default;
+    gameobject& operator=(gameobject&&) = default;
     //virtual void move(double x_length, double y_length);
     //virtual void rotate(int turn_direction); //turn_direction är 0 eller +-1 för att avgöra om
                                              //objektet ska vridas och åt vilket håll.

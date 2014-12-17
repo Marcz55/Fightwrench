@@ -61,6 +61,7 @@ private:
     void mouse_clicked(const double,const double,soundhandler&);
     void menu_music(soundhandler& main_soundhandler);
     bool checkcollision(const SDL_Rect&,const double,const double);
+    bool Running;
     std::string Player1;
     std::string Player2;
     std::map<std::string,SDL_Texture*> Characters;

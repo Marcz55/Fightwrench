@@ -116,7 +116,7 @@ void graphic_engine::display_winner(std::string port_name)
     draw_object("winner",Window_width/2,Window_height/2, 0);
     draw_object(port_name,Window_width/2,Window_height/2, 0);
     SDL_RenderPresent(Renderer);
-    SDL_Delay(5000);
+
 
 
 }

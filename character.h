@@ -19,6 +19,12 @@ public:
               int init_firing_cooldown,int init_max_health,
               int init_max_ammo, int init_reload_time, double width, double height, std::string port_name = "", class gamefield* init_gamefield = nullptr, int init_damage=0);
 
+    character(const character&) = default;
+    character(character&&) = default;
+    character& operator=(const character&) = default;
+    character& operator=(character&&) = default;
+
+
     void update() override;
     void update_move_vector();
     void ultimate();

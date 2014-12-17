@@ -58,19 +58,18 @@ void game::secondmap()
 {
     for(int cov_it = 0; cov_it <= 16; cov_it ++)
     {
-        main_gamefield.add_cover(standardcover(200 + cov_it*80,150,0,10,30,80,&main_gamefield));
-        main_gamefield.add_cover(standardcover(40 + cov_it*80,650,0,10,30,80,&main_gamefield));
+        main_gamefield.add_cover(standardcover(200 + cov_it*81,150,0,10,30,80,&main_gamefield));
+        main_gamefield.add_cover(standardcover(40 + cov_it*81,650,0,10,30,80,&main_gamefield));
     }
     for(int cov_it = 0; cov_it <= 3; cov_it ++)
     {
-        main_gamefield.add_cover(standardcover(175,205 + cov_it*80,90,10,30,80,&main_gamefield));
-        main_gamefield.add_cover(standardcover(1345,595 - cov_it*80,90,10,30,80,&main_gamefield));
+        main_gamefield.add_cover(standardcover(175,205 + cov_it*81,90,10,30,80,&main_gamefield));
+        main_gamefield.add_cover(standardcover(1345,595 - cov_it*81,90,10,30,80,&main_gamefield));
     }
 
      main_gamefield.add_cover(box(700,350,0,10,90,90,&main_gamefield));
      main_gamefield.add_cover(box(700,450,0,10,90,90,&main_gamefield));
      main_gamefield.add_cover(box(800,400,0,10,90,90,&main_gamefield));
-     main_gamefield.add_cover(box(750,400,0,10,90,90,&main_gamefield));
      main_gamefield.add_cover(box(300,300,0,10,90,90,&main_gamefield));
      main_gamefield.add_cover(box(900,250,0,10,90,90,&main_gamefield));
 
@@ -147,11 +146,6 @@ void game::spawn_powerup()
     int spawn_randomizer = rand() % 5 + 1;
     double xpos_randomizer = rand() % 1300 + 100;
     double ypos_randomizer = rand() % 600 + 100;
-    while(!main_gamefield.allowed_to_move_circle(xpos_randomizer,ypos_randomizer,25))
-    {
-        xpos_randomizer = rand() % 1300 + 100;
-        ypos_randomizer = rand() % 600 + 100;
-    }
     //Denna helar permanent
     if(spawn_randomizer == 1)
     {
@@ -162,7 +156,7 @@ void game::spawn_powerup()
     //Denna ger temporär ökning i liv
     if(spawn_randomizer == 2)
     {
-        main_gamefield.add_power_up(temporary_power_up("life", xpos_randomizer, ypos_randomizer, 0, 25, &main_gamefield, 1, 1.25,1,1,1000));
+        main_gamefield.add_power_up(temporary_power_up("life", xpos_randomizer, ypos_randomizer, 0, 25, &main_gamefield, 1, 2,1,1,1000));
         cout << "temp liv" << endl;
     }
 
@@ -170,7 +164,7 @@ void game::spawn_powerup()
     //Denna ger temporär ökning i skada
     if(spawn_randomizer == 3)
     {
-        main_gamefield.add_power_up(temporary_power_up("damage_buff", xpos_randomizer, ypos_randomizer, 0, 25, &main_gamefield, 1.25, 1,1,1,1000));
+        main_gamefield.add_power_up(temporary_power_up("damage_buff", xpos_randomizer, ypos_randomizer, 0, 25, &main_gamefield, 2, 1,1,1,1000));
         cout << "temp skada" << endl;
     }
 

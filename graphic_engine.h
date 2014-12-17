@@ -18,7 +18,6 @@ struct Texture_struct{
 
 class graphic_engine
 {
-friend class gamefield;
 private:
 
     int Window_width;

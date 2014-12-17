@@ -17,7 +17,6 @@
 using namespace std;
 class gamefield
 {
-    friend class graphic_engine;
 public:
     gamefield() = default;
     gamefield(int win_height, int win_width, class soundhandler& init_soundhandler);
@@ -33,6 +32,8 @@ public:
     vector<class character>* get_character_vector(){return &character_vector;}
     vector<cover>* get_cover_vector(){return &cover_vector;}
     vector<projectile>* get_projectile_vector(){return &projectile_vector;}
+    vector<power_up>* get_power_up_vector(){return &power_up_vector;}
+    vector<explosion>* get_explosion_vector(){return &explosion_vector;}
     int get_window_height(){return window_height;}
     int get_window_width(){return window_width;}
     void play_sound(const string sound_name);

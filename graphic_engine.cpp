@@ -139,54 +139,54 @@ void graphic_engine::draw_all(gamefield& my_gamefield)
         SDL_SetRenderDrawColor(Renderer,0,0,0,255);
         SDL_RenderClear(Renderer);
         draw_object(background,750,400,0);
-        for(auto it = my_gamefield.character_vector.begin(); it != my_gamefield.character_vector.end(); it++)
+        for(auto it = my_gamefield.get_character_vector()->begin(); it != my_gamefield.get_character_vector()->end(); it++)
         {
             draw_object(it->get_body_name(),it->get_xpos(),it->get_ypos(),it->get_direction());
             draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_movement_direction());
         }
-        for(auto it = my_gamefield.projectile_vector.begin(); it != my_gamefield.projectile_vector.end(); it++)
+        for(auto it = my_gamefield.get_projectile_vector()->begin(); it != my_gamefield.get_projectile_vector()->end(); it++)
         {
             draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_direction());
         }
-        for(auto it = my_gamefield.cover_vector.begin(); it != my_gamefield.cover_vector.end(); it++)
+        for(auto it = my_gamefield.get_cover_vector()->begin(); it != my_gamefield.get_cover_vector()->end(); it++)
         {
             draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_direction());
         }
-        for(auto it = my_gamefield.power_up_vector.begin(); it != my_gamefield.power_up_vector.end(); it++)
+        for(auto it = my_gamefield.get_power_up_vector()->begin(); it != my_gamefield.get_power_up_vector()->end(); it++)
         {
             draw_object(it->get_name(),it->get_xpos(),it->get_ypos(),it->get_direction());
         }
-        for(auto it = my_gamefield.explosion_vector.begin(); it != my_gamefield.explosion_vector.end(); it++)
+        for(auto it = my_gamefield.get_explosion_vector()->begin(); it != my_gamefield.get_explosion_vector()->end(); it++)
         {
             draw_scaled_object("explosion",it->get_xpos()-(186*(it->get_scale())*(it->get_timer()))/10,it->get_ypos()-(186*(it->get_scale())*(it->get_timer()))/10,0,(it->get_scale()*it->get_timer())/10,(it->get_scale()*it->get_timer())/10);
         }
 
 
         draw_scaled_object("main_hud",0,Window_height - 200,0, (double) Window_width/800, 1);
-        draw_portrait(my_gamefield.character_vector.at(0).get_portrait_name(), (int) 80*Window_width/800, (int) Window_height-75,0);
-        draw_portrait(my_gamefield.character_vector.at(1).get_portrait_name(),(int) 720*Window_width/800, (int) Window_height-75,0);
-        draw_scaled_object("health_bar",(int)180*Window_width/800, (int) Window_height - 180,0 ,(double)my_gamefield.character_vector.at(0).get_health_percent()*Window_width/800,1);
-        draw_scaled_object("health_bar",(int)460*Window_width/800, (int) Window_height - 180,0 ,(double)my_gamefield.character_vector.at(1).get_health_percent()*Window_width/800,1);
-        if((double)(my_gamefield.character_vector.at(0).get_ammo_percent()==0))
+        draw_portrait(my_gamefield.get_character_vector()->at(0).get_portrait_name(), (int) 80*Window_width/800, (int) Window_height-75,0);
+        draw_portrait(my_gamefield.get_character_vector()->at(1).get_portrait_name(),(int) 720*Window_width/800, (int) Window_height-75,0);
+        draw_scaled_object("health_bar",(int)180*Window_width/800, (int) Window_height - 180,0 ,(double)my_gamefield.get_character_vector()->at(0).get_health_percent()*Window_width/800,1);
+        draw_scaled_object("health_bar",(int)460*Window_width/800, (int) Window_height - 180,0 ,(double)my_gamefield.get_character_vector()->at(1).get_health_percent()*Window_width/800,1);
+        if((double)(my_gamefield.get_character_vector()->at(0).get_ammo_percent()==0))
         {
-              draw_scaled_object("ammo_bar",(int)180*Window_width/800, (int)Window_height-140,0 ,(double)(1 - my_gamefield.character_vector.at(0).get_reload_percent())*Window_width/800,1);
+              draw_scaled_object("ammo_bar",(int)180*Window_width/800, (int)Window_height-140,0 ,(double)(1 - my_gamefield.get_character_vector()->at(0).get_reload_percent())*Window_width/800,1);
         }
         else
         {
-              draw_scaled_object("ammo_bar",(int)180*Window_width/800, (int)Window_height-140,0 ,(double)(my_gamefield.character_vector.at(0).get_ammo_percent())*Window_width/800,1);
+              draw_scaled_object("ammo_bar",(int)180*Window_width/800, (int)Window_height-140,0 ,(double)(my_gamefield.get_character_vector()->at(0).get_ammo_percent())*Window_width/800,1);
         }
-        if((double)(my_gamefield.character_vector.at(1).get_ammo_percent()==0))
+        if((double)(my_gamefield.get_character_vector()->at(1).get_ammo_percent()==0))
         {
-            draw_scaled_object("ammo_bar",(int)460*Window_width/800, (int)Window_height-140,0 ,(double)(1 - my_gamefield.character_vector.at(1).get_reload_percent())*Window_width/800,1);
+            draw_scaled_object("ammo_bar",(int)460*Window_width/800, (int)Window_height-140,0 ,(double)(1 - my_gamefield.get_character_vector()->at(1).get_reload_percent())*Window_width/800,1);
         }
         else
         {
-            draw_scaled_object("ammo_bar",(int)460*Window_width/800, (int)Window_height-140,0 ,(double)(my_gamefield.character_vector.at(1).get_ammo_percent())*Window_width/800,1);
+            draw_scaled_object("ammo_bar",(int)460*Window_width/800, (int)Window_height-140,0 ,(double)(my_gamefield.get_character_vector()->at(1).get_ammo_percent())*Window_width/800,1);
         }
 
-        draw_scaled_object("ultimate_bar",(int)180*Window_width/800, (int)Window_height-100,0 ,(double)(1 - my_gamefield.character_vector.at(0).get_ultimate_percent())*Window_width/800,1);
+        draw_scaled_object("ultimate_bar",(int)180*Window_width/800, (int)Window_height-100,0 ,(double)(1 - my_gamefield.get_character_vector()->at(0).get_ultimate_percent())*Window_width/800,1);
 
-        draw_scaled_object("ultimate_bar",(int)460*Window_width/800, (int)Window_height-100,0 ,(double)(1 - my_gamefield.character_vector.at(1).get_ultimate_percent())*Window_width/800,1);
+        draw_scaled_object("ultimate_bar",(int)460*Window_width/800, (int)Window_height-100,0 ,(double)(1 - my_gamefield.get_character_vector()->at(1).get_ultimate_percent())*Window_width/800,1);
 
 
 

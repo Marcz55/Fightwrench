@@ -21,6 +21,7 @@ public:
     void set_y_movement(double value){y_movement = value;}
     void set_x_position(double value){xpos = value;}
     void set_y_position(double value){ypos = value;}
+    void set_deceleration();
     class character* get_owner_pointer();
     projectile* get_projectile_pointer(){return this;}
 

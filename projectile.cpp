@@ -14,15 +14,8 @@ projectile::projectile(string bullet_name, double x, double y,double init_x_move
     character_owner_pointer = character_pointer;
     //Detta ska abra göras för granater
     if(name == "grenade")
-    {/*
-        x_deceleration = abs(cos(angle*0.0175)*0.1);
-        y_deceleration = abs(sin(angle*0.0175)*0.1);
-*/
-      /*  x_deceleration = abs(x_movement*0.01);
-        y_deceleration = abs(y_movement*0.01);
-*/
-        x_deceleration = 0;
-        y_deceleration = 0;
+    {
+        set_deceleration();
     }
 
     if(name == "rocket")
@@ -35,6 +28,15 @@ projectile::projectile(string bullet_name, double x, double y,double init_x_move
 
 }
 
+
+void projectile::set_deceleration()
+{
+    double x_component = abs(x_movement)/sqrt(pow(x_movement,2) + pow(y_movement,2));
+    double y_component = abs(y_movement)/sqrt(pow(x_movement,2) + pow(y_movement,2));
+    x_deceleration = x_component*0.05;
+    y_deceleration = y_component*0.05;
+}
+
 void projectile::update()
 {
     xpos = xpos + x_movement;
@@ -42,6 +44,7 @@ void projectile::update()
     //Ska bara ske för grenade
     if (name == "grenade")
     {
+        set_deceleration();
         if (abs(x_movement) <= x_deceleration)
         {
             x_movement = 0;

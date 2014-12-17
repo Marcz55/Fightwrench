@@ -33,8 +33,8 @@ void projectile::set_deceleration()
 {
     double x_component = abs(x_movement)/sqrt(pow(x_movement,2) + pow(y_movement,2));
     double y_component = abs(y_movement)/sqrt(pow(x_movement,2) + pow(y_movement,2));
-    x_deceleration = x_component*0.05;
-    y_deceleration = y_component*0.05;
+    x_deceleration = x_component*0.1;
+    y_deceleration = y_component*0.1;
 }
 
 void projectile::update()

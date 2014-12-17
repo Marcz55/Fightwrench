@@ -15,6 +15,10 @@ public:
     virtual double get_ypos()const{return ypos;}
     virtual double get_direction()const{return direction;}
     virtual double get_speed()const{return direction;}
+    virtual double get_forced_x_movement()const{return forced_x_movement;}
+    virtual double get_forced_y_movement()const{return forced_y_movement;}
+    virtual void set_forced_x_movement(double value){forced_x_movement = value;}
+    virtual void set_forced_y_movement(double value){forced_y_movement = value;}
 protected:
     class gamefield* main_gamefield;
     std::string name;
@@ -22,6 +26,8 @@ protected:
     double ypos;
     double direction;
     double speed;
+    double forced_x_movement = 0;
+    double forced_y_movement = 0;
 
 
 

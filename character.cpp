@@ -214,7 +214,7 @@ void character::ultimate()
             {
                 xpos = jump_xpos + ulti_iterator*ultimate_jump_x;
                 ypos = jump_ypos + ulti_iterator*ultimate_jump_y;
-                if(!main_gamefield->allowed_to_move_rectangle(get_corners()))
+                if(!main_gamefield->allowed_to_move_rectangle(get_corners(),this))
                 {
                     xpos = jump_xpos + (ulti_iterator - 1)*ultimate_jump_x;
                     ypos = jump_ypos + (ulti_iterator - 1)*ultimate_jump_y;
@@ -312,7 +312,7 @@ void character::move(double x_length, double y_length,int turn_direction)
         xpos += speed*x_length;
         ypos += speed*y_length;
         //kollar om koordinaten är okej att flytta sig till, om ja så är vi klara om nej så sätter vi tillbaka värdena till de gamla koordinaterna
-        if(main_gamefield -> allowed_to_move_rectangle(get_corners()))
+        if(main_gamefield -> allowed_to_move_rectangle(get_corners(),this))
         {
             return;
         }
@@ -324,18 +324,18 @@ void character::move(double x_length, double y_length,int turn_direction)
 
 
 
-        if(main_gamefield -> allowed_to_move_rectangle(get_corners()))
+        if(main_gamefield -> allowed_to_move_rectangle(get_corners(),this))
         {
             return;
         }
         xpos -= speed*x_length;
-        if(main_gamefield->allowed_to_move_rectangle(get_corners()))
+        if(main_gamefield->allowed_to_move_rectangle(get_corners(),this))
         {
             return;
         }
         xpos += speed*x_length;
         ypos -= speed*y_length;
-        if(main_gamefield -> allowed_to_move_rectangle(get_corners()))
+        if(main_gamefield -> allowed_to_move_rectangle(get_corners(),this))
         {
             return;
         }

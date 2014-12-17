@@ -60,6 +60,8 @@ public:
     virtual void set_health(int new_health){current_health=new_health;}
     virtual double get_width(){return width;}
     virtual double get_height(){return height;}
+    virtual double get_x_movement(){return x_movement;}
+    virtual double get_y_movement(){return y_movement;}
 
     void disable_controlling(){controlling = false;}
 

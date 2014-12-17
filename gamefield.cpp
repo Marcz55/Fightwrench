@@ -116,7 +116,7 @@ void gamefield::update()
         }
         //Om någon kula har kolliderat med något så ska den tas bort, "false" skickas just nu med som en bool och betyder
         //att kulan inte får röra sig igenom skydd, är tänkt att en ultimate ska kunna ändra på detta möjligen
-        if(!collision_handler_pointer->allowed_to_move_bullet(it->get_xpos() - it->get_x_movement(),it->get_ypos() - it->get_y_movement(),it->get_xpos(),it->get_ypos(),false,it->get_speed(),it->get_damage(),it->get_owner_pointer()))
+        if(!collision_handler_pointer->allowed_to_move_bullet(it->get_xpos() - it->get_x_movement(),it->get_ypos() - it->get_y_movement(),it->get_xpos(),it->get_ypos(),false,it->get_speed(),it->get_damage(),it->get_owner_pointer(),it->get_projectile_pointer()))
         {
             if(it->get_name() == "guided rocket" or it->get_name() == "rocket")
             {
@@ -128,6 +128,7 @@ void gamefield::update()
                     send_disable_control();
                 }
             }
+            if(it->get_name() != "grenade")
             projectile_vector.erase(it--);
         }
     }
@@ -135,6 +136,7 @@ void gamefield::update()
     {
         if(it->get_health() <= 0)
             cover_vector.erase(it--);
+        it->update();
     }
 }
 
@@ -154,9 +156,15 @@ void gamefield::check_powerups()
     }
 }
 
-bool gamefield::allowed_to_move_rectangle(vector<double> rectangle_corners)
+bool gamefield::allowed_to_move_rectangle(vector<double> rectangle_corners, character* character_pointer)
 {
-    return collision_handler_pointer->allowed_to_move_rectangle(rectangle_corners);
+    return collision_handler_pointer->allowed_to_move_rectangle(rectangle_corners, character_pointer);
+}
+
+
+bool gamefield::allowed_to_move_rectangle(vector<double> rectangle_corners, cover* cover_pointer)
+{
+    return collision_handler_pointer->allowed_to_move_rectangle(rectangle_corners, cover_pointer);
 }
 
 bool gamefield::allowed_to_move_circle(double circle_x, double circle_y, int circle_radius)

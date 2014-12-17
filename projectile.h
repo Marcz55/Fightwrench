@@ -17,9 +17,16 @@ public:
     int get_damage(){return damage;}
     double get_x_movement(){return x_movement;}
     double get_y_movement(){return y_movement;}
+    void set_x_movement(double value){x_movement = value;}
+    void set_y_movement(double value){y_movement = value;}
+    void set_x_position(double value){xpos = value;}
+    void set_y_position(double value){ypos = value;}
     class character* get_owner_pointer();
+    projectile* get_projectile_pointer(){return this;}
 
     void turn(int turn_direction){direction += turn_direction;}
+
+
 
 protected:
     double x_movement;

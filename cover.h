@@ -13,6 +13,7 @@ public:
     cover& operator=(const cover&) = default;
     ~cover()=default;
     void update() override;
+    cover* get_pointer_to_yourself(){return this;}
 
     vector<double> get_corners();
 

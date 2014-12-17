@@ -1,7 +1,22 @@
 #include "cover.h"
-
+#include <iostream>
+#include "gamefield.h"
 void cover::update()
 {
+    if(forced_x_movement != 0 or forced_y_movement != 0)
+    cout <<forced_x_movement << " " << forced_y_movement << "\n";
+    xpos = xpos + forced_x_movement;
+    ypos = ypos + forced_y_movement;
+    if(main_gamefield->allowed_to_move_rectangle(get_corners(),this))
+    {
+        forced_x_movement = 0;
+        forced_y_movement = 0;
+        return;
+    }
+    xpos = xpos - forced_x_movement;
+    ypos = ypos - forced_y_movement;
+    forced_x_movement = 0;
+    forced_y_movement = 0;
     return;
 }
 

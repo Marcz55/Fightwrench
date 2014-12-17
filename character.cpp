@@ -288,7 +288,7 @@ void character::move(double x_length, double y_length,int turn_direction)
 {
     //Är tvungen att sätta koordinaten vi vill flytta oss till till den aktuella koordinaten
     //för att get_corners ska ta ut hörnen som karaktären kommer att ha vid den nya koordinaten
-    if(x_length != 0 or y_length !=0 or turn_direction != 0)
+    if(x_length != 0 or y_length !=0 or turn_direction != 0 or forced_x_movement != 0 or forced_y_movement != 0)
     {
         if(controlling)
         {
@@ -311,14 +311,16 @@ void character::move(double x_length, double y_length,int turn_direction)
             direction = direction + 360;
         }
 
-        xpos += speed*x_length;
-        ypos += speed*y_length;
+        xpos += speed*x_length + forced_x_movement;
+        ypos += speed*y_length + forced_y_movement;
         //kollar om koordinaten är okej att flytta sig till, om ja så är vi klara om nej så sätter vi tillbaka värdena till de gamla koordinaterna
         if(main_gamefield -> allowed_to_move_rectangle(get_corners(),this))
         {
 
-            allowed_x_movement = speed*x_length;
-            allowed_y_movement = speed*y_length;
+            allowed_x_movement = speed*x_length + forced_x_movement;
+            allowed_y_movement = speed*y_length + forced_y_movement;
+            forced_x_movement = 0;
+            forced_y_movement = 0;
             return;
         }
 
@@ -332,30 +334,38 @@ void character::move(double x_length, double y_length,int turn_direction)
         if(main_gamefield -> allowed_to_move_rectangle(get_corners(),this))
         {
 
-            allowed_x_movement = speed*x_length;
-            allowed_y_movement = speed*y_length;
+            allowed_x_movement = speed*x_length + forced_x_movement;
+            allowed_y_movement = speed*y_length + forced_y_movement;
+            forced_x_movement = 0;
+            forced_y_movement = 0;
             return;
         }
-        xpos -= speed*x_length;
+        xpos -= speed*x_length +  + forced_x_movement;
         if(main_gamefield->allowed_to_move_rectangle(get_corners(),this))
         {
 
             allowed_x_movement = 0;
-            allowed_y_movement = speed*y_length;
+            allowed_y_movement = speed*y_length + forced_y_movement;
+            forced_x_movement = 0;
+            forced_y_movement = 0;
             return;
         }
-        xpos += speed*x_length;
-        ypos -= speed*y_length;
+        xpos += speed*x_length + forced_x_movement;
+        ypos -= speed*y_length + forced_y_movement;
         if(main_gamefield -> allowed_to_move_rectangle(get_corners(),this))
         {
 
-            allowed_x_movement = speed*x_length;
+            allowed_x_movement = speed*x_length + forced_x_movement;
             allowed_y_movement = 0;
+            forced_x_movement = 0;
+            forced_y_movement = 0;
             return;
         }
-        xpos -= speed*x_length;
+        xpos -= speed*x_length + forced_x_movement;
 
      }
+    forced_x_movement = 0;
+    forced_y_movement = 0;
      return;
 }
 void character::pick_up_power_up(const power_up &po_up)

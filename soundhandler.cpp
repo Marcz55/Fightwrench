@@ -2,6 +2,9 @@
 using namespace std;
 soundhandler::soundhandler()
 {
+
+    //Initiera SDL och SDL_Mixer
+
     if (SDL_Init(SDL_INIT_AUDIO) != 0) {
         cerr << "Error initializing SDL" << endl;
         exit(1);
@@ -12,6 +15,8 @@ soundhandler::soundhandler()
         cerr << "Cannot initialize Mix" << endl;
         exit(1);
     }
+
+    //Lägg in musik och ljudeffekter i två maps
 
     create_music("Music1","Testmusik.mp3");
     create_music("Music2","8-Bit-Rebirth.mp3");
@@ -42,6 +47,11 @@ soundhandler::~soundhandler()
     SDL_Quit();
 }
 
+/* void soundhandler::create_*****(const string name, const char* filename)
+ *
+ * Dessa två funktioner sätter in ljud i rätt map.
+ */
+
 void soundhandler::create_music(const string name, const char* filename)
 {
     Music_map.insert(pair<string,Mix_Music*>(name, Mix_LoadMUS(filename)));
@@ -51,6 +61,11 @@ void soundhandler::create_sound(const string name, const char* filename)
 {
     Sound_map.insert(pair<string,Mix_Chunk*>(name, Mix_LoadWAV(filename)));
 }
+
+/* void soundhandler::play_sound(const string name) och void soundhandler::playbgm(const string Soundtrack)
+ *
+ * Spela upp ett ljud eller en bakgrundsmusik som finns lagrad i en map.
+ */
 
 void soundhandler::play_sound(const string name)
 {
@@ -68,6 +83,11 @@ void soundhandler::playbgm(const string Soundtrack)
     }
 }
 
+/* void soundhandler::playbgm
+ *
+ * Spelar upp en slumpmässigt utvald bakgrundsmusik, som inte är Menu_music.
+ */
+
 void soundhandler::playbgm()
 {
     auto it = Music_map.begin();
@@ -75,6 +95,10 @@ void soundhandler::playbgm()
     advance(it,rand()%(Music_map.size() - 1) + 1);
     playbgm(it->first);
 }
+
+/*
+ * Följande funktioner är mycket enkla och använder SDL_Mixers inbyggda funktioner.
+ */
 
 void soundhandler::stopbgm()
 {
@@ -99,6 +123,13 @@ void soundhandler::rewindbgm()
 {
     Mix_RewindMusic();
 }
+
+/*
+ * void soundhandler::setbgmvolume(int level)
+ *
+ * Funktion som sätter volymen på bakgrundsmusiken.
+ * Kan bara ta värden mellan 0 och 128.
+ */
 
 void soundhandler::setbgmvolume(int level)
 {

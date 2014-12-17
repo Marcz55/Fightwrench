@@ -107,7 +107,7 @@ void game::game_loop()
         {
             SDL_Delay(10-elapsed_time);
         }
-
+        /* Koden nedan, fram till markering är skriven av Markus Petersson och hanterar vad som händer då en spelare vinner.*/
         while(main_gamefield.get_character_vector()->at(0).get_health()<=0)
         {
             main_graphic_engine.display_winner(main_gamefield.get_character_vector()->at(1).get_portrait_name());
@@ -115,7 +115,6 @@ void game::game_loop()
             SDL_Delay(2000);
             while (SDL_PollEvent(&event))	{
                 if ( event.type == SDL_KEYDOWN )	{
-                    cout << "Closing window..." << endl;
                     return;
                 }
             }
@@ -129,12 +128,12 @@ void game::game_loop()
             SDL_Delay(2000);
             while (SDL_PollEvent(&event))	{
                 if ( event.type == SDL_KEYDOWN )	{
-                    cout << "Closing window..." << endl;
                     return;
                 }
             }
 
         }
+        /* Markering*/
 
     }
     return;
@@ -149,14 +148,14 @@ void game::spawn_powerup()
     //Denna helar permanent
     if(spawn_randomizer == 1)
     {
-        main_gamefield.add_power_up(permanent_power_up("steroids", xpos_randomizer, ypos_randomizer, 0, 25, &main_gamefield,100));
+        main_gamefield.add_power_up(permanent_power_up("life", xpos_randomizer, ypos_randomizer, 0, 25, &main_gamefield,25));
     }
 
 
     //Denna ger temporär ökning i liv
     if(spawn_randomizer == 2)
     {
-        main_gamefield.add_power_up(temporary_power_up("life", xpos_randomizer, ypos_randomizer, 0, 25, &main_gamefield, 1, 2,1,1,1000));
+        main_gamefield.add_power_up(temporary_power_up("steroids", xpos_randomizer, ypos_randomizer, 0, 25, &main_gamefield, 1, 2,1,1,1000));
         cout << "temp liv" << endl;
     }
 

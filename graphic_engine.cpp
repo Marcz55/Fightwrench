@@ -1,3 +1,8 @@
+/* Inledningsvis skriven av Marcus Wälivaara och Axel Reizenstein
+ * Utökad funktionalitet skriven av Markus Petersson och Axel Reizenstein
+ * Klass som sköter grafiken i spelet. Alla texturer läggs i en map så att de blir lätta att komma åt.
+ */
+
 #include "graphic_engine.h"
 #include <algorithm>    // std::max
 #include <time.h>
@@ -75,15 +80,15 @@ graphic_engine::graphic_engine(int win_height, int win_width, const int Window_w
 
 }
 
-void graphic_engine::create_texture(string texture_name, const char *texture_file)
+void graphic_engine::create_texture(string texture_name, const char *texture_file)  //Skapar en textur och lägger in den i map:en
 {
     SDL_Surface* Create_surface = IMG_Load(texture_file);
     Image_map.insert(pair<string,Texture_struct>(texture_name,Texture_struct{Create_surface->w,Create_surface->h,SDL_CreateTextureFromSurface(Renderer,Create_surface)}));
     SDL_FreeSurface(Create_surface);
 }
 //för att smidigt kunna rita ut healthbars etc /marpe163
-void graphic_engine::draw_scaled_object(string name, double x_coord, double y_coord, double angle, double x_scale, double y_scale)
-{
+void graphic_engine::draw_scaled_object(string name, double x_coord, double y_coord, double angle, double x_scale, double y_scale)//Metoden är implementerad av Markus Petersson
+{                                                                                                                                 //och används för att måla ut skalade objekt, främst bars.
 
     Current_rect.w = Image_map.at(name).Texture_width*x_scale;
     Current_rect.h = Image_map.at(name).Texture_height*y_scale;
@@ -100,7 +105,7 @@ void graphic_engine::draw_object(string name,double x_coord,double y_coord, doub
     SDL_RenderCopyEx(Renderer, Image_map.at(name).Texture, nullptr, &Current_rect,angle,nullptr,SDL_FLIP_NONE);
 }
 
-void graphic_engine::draw_portrait(string name,double x_coord,double y_coord, double angle)
+void graphic_engine::draw_portrait(string name,double x_coord,double y_coord, double angle)//Metoden är implementerad av Markus Petersson och används för att rita ut spelarporträtt
 {
     portrait_size=std::min((int)130, (int) 130*Window_width/800);
     Current_rect.w = portrait_size;
@@ -110,7 +115,7 @@ void graphic_engine::draw_portrait(string name,double x_coord,double y_coord, do
     Current_rect.y = y_coord - Current_rect.h/2;
     SDL_RenderCopyEx(Renderer, Image_map.at(name).Texture, nullptr, &Current_rect,angle,nullptr,SDL_FLIP_NONE);
 }
-void graphic_engine::display_winner(std::string port_name)
+void graphic_engine::display_winner(std::string port_name) //Metoden är implementerad av Markus Petersson och används för att rita ut Vinnare
 {
 
     draw_object("winner",Window_width/2,Window_height/2, 0);
@@ -161,6 +166,8 @@ void graphic_engine::draw_all(gamefield& my_gamefield)
             draw_scaled_object("explosion",it->get_xpos()-(186*(it->get_scale())*(it->get_timer()))/10,it->get_ypos()-(186*(it->get_scale())*(it->get_timer()))/10,0,(it->get_scale()*it->get_timer())/10,(it->get_scale()*it->get_timer())/10);
         }
 
+
+        /*Nedan är koden för HUD:en, denna är skriven av Markus Petersson, med bidrag av Axel Reizenstein. HUD:en är där karaktärernas porträtt och hälsa etc visas på skärmen.*/
 
         draw_scaled_object("main_hud",0,Window_height - 200,0, (double) Window_width/800, 1);
         draw_portrait(my_gamefield.get_character_vector()->at(0).get_portrait_name(), (int) 80*Window_width/800, (int) Window_height-75,0);

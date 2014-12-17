@@ -11,7 +11,8 @@
 #include "rocket.h"
 #include "guided_rocket.h"
 #include "power_up.h"
-
+//Alla projektmedlemmar har varit med och skrivit gamefieldklassen.
+//Gamefieldklassen innehållar alla delar som är del av spelet.
 #include "explosion.h"
 
 using namespace std;
@@ -37,7 +38,7 @@ public:
     int get_window_height(){return window_height;}
     int get_window_width(){return window_width;}
     void play_sound(const string sound_name);
-    void check_powerups();
+    void check_powerups();//Implementerad av Markus petersson och Axel Reizenstein, undersöker om någon powerup kolliderar med en character.
     bool allowed_to_move_rectangle(vector<double> rectangle_corners, character*);
     bool allowed_to_move_rectangle(vector<double> rectangle_corners, cover*);
     bool allowed_to_move_circle(double circle_x, double circle_y, int circle_radius);

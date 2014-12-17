@@ -1,3 +1,5 @@
+//grundläggande funktionalitet implementerad av Markus Petersson
+//Avancerad funktionalitet implementerad av Axel Reizenstein och Joakim Mörhed
 #include "cover.h"
 #include <iostream>
 #include "gamefield.h"

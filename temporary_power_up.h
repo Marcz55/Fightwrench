@@ -1,3 +1,4 @@
+//Klassen är implementerad av Markus Petersson, denna poweruptyp är för powerups som endast temporärt ska verka på en character.
 #ifndef TEMPORARY_POWER_UP_H
 #define TEMPORARY_POWER_UP_H
 #include "power_up.h"

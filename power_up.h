@@ -1,3 +1,5 @@
+//Klassen implementerad av Markus Petersson, med bidrag av axel Reizenstein
+
 #ifndef POWER_UP_H
 #define POWER_UP_H
 #include "gameobject.h"
@@ -14,14 +16,16 @@ public:
     power_up& operator=(const power_up&) = default;
     power_up& operator=(power_up&&) = default;
     virtual void update() override{duration=duration-1;}
-    //power_up(power_up& copy_power_up)=default;
 
-  //  void pick_up(character& up_picker);
+    //Deltafunktionerna returnerar olika effekter som power-upen applicera.
     virtual double get_delta_health()const{return delta_health;}
     virtual double get_delta_damage()const{return delta_damage;}
     virtual double get_delta_fire_speed()const{return delta_fire_speed;}
     virtual double get_delta_move_speed()const{return delta_move_speed;}
+
+    //returnerar poweruptyp
     virtual bool get_type()const{return is_permanent;}
+
     virtual int get_duration()const{return duration;}
     virtual int get_radius()const{return radius;}
 protected:

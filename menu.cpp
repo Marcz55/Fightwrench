@@ -103,6 +103,11 @@ menu::~menu()
     SDL_Quit();
 }
 
+/* void menu::menu_loop(soundhandler& main_soundhandler)
+ *
+ * Detta är huvudloopen som körs igenom i menyn.
+ */
+
 void menu::menu_loop(soundhandler& main_soundhandler)
 {
     double mouse_x = 0;
@@ -138,7 +143,6 @@ void menu::menu_loop(soundhandler& main_soundhandler)
         if(!Running)
             return;
         update(mouse_x,mouse_y);
-        SDL_Delay(10);
 
     }
     }
@@ -231,14 +235,14 @@ void menu::mouse_clicked(const double x, const double y,soundhandler& main_sound
 {
     switch (state)
     {
-    case 0:
-        if(checkcollision(Character_button_rect,x,y))
+    case 0:     //Root
+        if(checkcollision(Character_button_rect,x,y))   //Character-secect-knappen blir klickad på
         {
             main_soundhandler.play_sound("Axel");
             state = 1;
             break;
         }
-        if(checkcollision(Play_button_rect,x,y))
+        if(checkcollision(Play_button_rect,x,y))        //Play-knappen klickas på
         {
             SDL_DestroyWindow(Menu_window);
             SDL_DestroyRenderer(Menu_renderer);
@@ -246,13 +250,13 @@ void menu::mouse_clicked(const double x, const double y,soundhandler& main_sound
             SDL_DestroyTexture(Play_button);
             SDL_DestroyTexture(Character_button);
             main_soundhandler.stopbgm();
-            main_soundhandler.playbgm();
-            game main_game(main_soundhandler, 800, 1500, Player1, Player2,Resolution_width,Resolution_height); // sätt in önskad fönsterstorlek, vilka karaktärer som ska vara med och vilken storlek fönstret ska ha!
+            main_soundhandler.playbgm();                //Slumpmässig musik ska spelas i själva spelet
+            game main_game(main_soundhandler, 800, 1500, Player1, Player2,Resolution_width,Resolution_height); // Sätt in önskad fönsterstorlek, vilka karaktärer som ska vara med och vilken storlek fönstret ska ha!
             main_game.game_loop();
             Running = false;
             return;
         }
-        if(checkcollision(Res_rect,x,y))
+        if(checkcollision(Res_rect,x,y))                //Upplösningsknappen klickas på
         {
             auto it = Resolutions.find(Resolution_width);
             if((++it) == Resolutions.end())
@@ -267,13 +271,13 @@ void menu::mouse_clicked(const double x, const double y,soundhandler& main_sound
         }
 
         break;
-    case 1:
+    case 1:     //Character select
         if(checkcollision(Back_rect,x,y))
         {
             state = 0;
             break;
         }
-        if(checkcollision(Player1_rect,x,y))
+        if(checkcollision(Player1_rect,x,y))        //Spelare 1 blir nästa lediga karaktär i listan
         {
             auto it1 = Characters.find(Player1);
             do
@@ -287,10 +291,9 @@ void menu::mouse_clicked(const double x, const double y,soundhandler& main_sound
             }
             }while(Player1 == Player2);
 
-            cout << Player1;
             break;
         }
-        if(checkcollision(Player2_rect,x,y))
+        if(checkcollision(Player2_rect,x,y))        //Spelare 2 blir nästa lediga karaktär i listan
         {
             auto it2 = Characters.find(Player2);
             do
@@ -304,12 +307,16 @@ void menu::mouse_clicked(const double x, const double y,soundhandler& main_sound
             }
             }while(Player1 == Player2);
 
-            cout << Player2;
         }
         break;
 
     }
 }
+
+/* bool menu::checkcollision(const SDL_Rect& rect,const double x,const double y)
+ *
+ * Kolla om de givna koordinaterna ligger inom den givna Rect:en
+ */
 
 bool menu::checkcollision(const SDL_Rect& rect,const double x,const double y)
 {

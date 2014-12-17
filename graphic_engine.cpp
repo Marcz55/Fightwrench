@@ -110,11 +110,12 @@ void graphic_engine::draw_portrait(string name,double x_coord,double y_coord, do
 }
 void graphic_engine::display_winner(std::string port_name)
 {
-    SDL_RenderClear(Renderer);
+
     draw_object("winner",Window_width/2,Window_height/2, 0);
     draw_object(port_name,Window_width/2,Window_height/2, 0);
     SDL_RenderPresent(Renderer);
-    std::cout<<"OMGWTFBBQ";
+    SDL_Delay(5000);
+
 
 }
 

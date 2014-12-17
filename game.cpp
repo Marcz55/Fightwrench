@@ -90,9 +90,9 @@ void game::game_loop()
             main_graphic_engine.display_winner(main_gamefield.get_character_vector()->at(1).get_portrait_name());
 
 
-            while (SDL_PollEvent(&event))	{
+            if (SDL_PollEvent(&event))	{
                 if ( event.type == SDL_KEYDOWN )	{
-                    cout << "Closing window..." << event.type << endl;
+                    cout << "Closing window..." << endl;
                     return;
                 }
             }
@@ -103,9 +103,9 @@ void game::game_loop()
            main_graphic_engine.display_winner(main_gamefield.get_character_vector()->at(0).get_portrait_name());
 
 
-            while (SDL_PollEvent(&event))	{
+            if (SDL_PollEvent(&event))	{
                 if ( event.type == SDL_KEYDOWN )	{
-                    cout << "Closing window..." << event.type << endl;
+                    cout << "Closing window..." << endl;
                     return;
                 }
             }

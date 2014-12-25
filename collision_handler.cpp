@@ -1,13 +1,22 @@
+//Joakim Mörhed har skrivit Collision_handler.
+//Collision_handler tar hand om kollisioner samt deras effekter.
 #include "collision_handler.h"
 #include <iostream>
+
+
 collision_handler::collision_handler(gamefield* gamefield_object_pointer)
 {
     gamefield_pointer = gamefield_object_pointer;
-    //cover_vector = gamefield_object_pointer->get_cover_vector;
     window_height = gamefield_object_pointer->get_window_height();
     window_width = gamefield_object_pointer->get_window_width();
     return;
 }
+/*Allowed_to_move_rectangle(vector<double>,character*)
+ * Beräknar huruvida en rektangels nya position är okej att flytta till.
+ * Om rektangeln inte fick flytta sig till den nya position så påverkas det objekt som var ivägen på olika sätt,
+ * t.ex. så överförs två krafter, en forced_movement och en explosion_movement som påverkar objektets rörelse på olika sätt
+ *
+ */
 bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_to_check,character* character_pointer)/*(double x1,double y1,double x2,double y2,double x3,double y3,double x4,double y4)*/
 {//corner_vector_to_check innehåller koordinaterna för rektangelns hörn som skall kollas i ordningen, x1,y1,x2,y2,x3,....
     //Kollar först så att rektangeln inte försöker smita utanför banan
@@ -15,6 +24,8 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
             corner_vector_to_check.at(0) > window_width or corner_vector_to_check.at(1) > window_height or corner_vector_to_check.at(2) > window_width or corner_vector_to_check.at(3) > window_height or
             corner_vector_to_check.at(4) > window_width or corner_vector_to_check.at(5) > window_height or corner_vector_to_check.at(6) > window_width or corner_vector_to_check.at(7) > window_height)
         return false;
+
+
     vector<cover>* cover_vector = gamefield_pointer->get_cover_vector();
     //Skapar den nya basen för rektangeln, (x2-x1,y2-y1) och (x3-x2,y3-y2)
     double base_vector_u[2] = {corner_vector_to_check.at(2) - corner_vector_to_check.at(0), corner_vector_to_check.at(3) - corner_vector_to_check.at(1)}; //u uttryckt i basen x,y
@@ -42,6 +53,9 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
     corner_3[0] = base_change_matrix[0][0]*corner_vector_to_check.at(4) + base_change_matrix[0][1]*corner_vector_to_check.at(5);
     corner_3[1] = base_change_matrix[1][0]*corner_vector_to_check.at(4) + base_change_matrix[1][1]*corner_vector_to_check.at(5);
 
+    //Den faktor som explosionsrörelsen för karaktären skalas med varje gång denne kolliderar
+    double explosion_contact_movement_loss = 2;
+    double explosion_transfer_loss = 1.5; //Den faktor som explosionsrörelsen förlorar när den överför till ett nytt objekt
     //Nu har vi initierat klart och behöver alltså kolla igenom om den nya koordinaten är okej att flytta till.
     //Vi börjar med att gå igenom cover listan (som just nu antas bara bestå av rektangelobjekt.
     for(std::vector<cover>::iterator it = cover_vector->begin(); it != cover_vector->end(); ++it)
@@ -89,9 +103,13 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
             if(abs(corner_to_check1[0]-corner_1[0]) + abs(corner_to_check1[0]-corner_3[0]) <= abs(corner_1[0]-corner_3[0]) and
                     abs(corner_to_check1[1]-corner_1[1]) + abs(corner_to_check1[1]-corner_3[1]) <= abs(corner_1[1]-corner_3[1]))
             {
-                //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
+                //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället samt överförs hela explosions hastigheten till nästa objekt
                 it->set_forced_x_movement(it->get_forced_x_movement() + character_pointer->get_x_movement() + character_pointer->get_forced_x_movement());
                 it->set_forced_y_movement(it->get_forced_y_movement() + character_pointer->get_y_movement() + character_pointer->get_forced_y_movement());
+                it->set_explosion_movement_x(it->get_explosion_movement_x() + character_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                it->set_explosion_movement_y(it->get_explosion_movement_y() + character_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                character_pointer->set_explosion_movement_x(character_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                character_pointer->set_explosion_movement_y(character_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                 return false;
             }
             {
@@ -101,6 +119,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                     //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                     it->set_forced_x_movement(it->get_forced_x_movement() + character_pointer->get_x_movement() + character_pointer->get_forced_x_movement());
                     it->set_forced_y_movement(it->get_forced_y_movement() + character_pointer->get_y_movement() + character_pointer->get_forced_y_movement());
+                    it->set_explosion_movement_x(it->get_explosion_movement_x() + character_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                    it->set_explosion_movement_y(it->get_explosion_movement_y() + character_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                    character_pointer->set_explosion_movement_x(character_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                    character_pointer->set_explosion_movement_y(character_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                     return false;
                 }
                 {
@@ -110,6 +132,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                         //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                         it->set_forced_x_movement(it->get_forced_x_movement() + character_pointer->get_x_movement() + character_pointer->get_forced_x_movement());
                         it->set_forced_y_movement(it->get_forced_y_movement() + character_pointer->get_y_movement() + character_pointer->get_forced_y_movement());
+                        it->set_explosion_movement_x(it->get_explosion_movement_x() + character_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                        it->set_explosion_movement_y(it->get_explosion_movement_y() + character_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                        character_pointer->set_explosion_movement_x(character_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                        character_pointer->set_explosion_movement_y(character_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                         return false;
                     }
                     {
@@ -119,6 +145,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                             //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                             it->set_forced_x_movement(it->get_forced_x_movement() + character_pointer->get_x_movement() + character_pointer->get_forced_x_movement());
                             it->set_forced_y_movement(it->get_forced_y_movement() + character_pointer->get_y_movement() + character_pointer->get_forced_y_movement());
+                            it->set_explosion_movement_x(it->get_explosion_movement_x() + character_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                            it->set_explosion_movement_y(it->get_explosion_movement_y() + character_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                            character_pointer->set_explosion_movement_x(character_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                            character_pointer->set_explosion_movement_y(character_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                             return false;
                         }
                     }
@@ -179,6 +209,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                 //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                 it->set_forced_x_movement(it->get_forced_x_movement() + character_pointer->get_x_movement() + character_pointer->get_forced_x_movement());
                 it->set_forced_y_movement(it->get_forced_y_movement() + character_pointer->get_y_movement() + character_pointer->get_forced_y_movement());
+                it->set_explosion_movement_x(it->get_explosion_movement_x() + character_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                it->set_explosion_movement_y(it->get_explosion_movement_y() + character_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                character_pointer->set_explosion_movement_x(character_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                character_pointer->set_explosion_movement_y(character_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                 return false;
             }
             {
@@ -188,6 +222,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                     //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                     it->set_forced_x_movement(it->get_forced_x_movement() + character_pointer->get_x_movement() + character_pointer->get_forced_x_movement());
                     it->set_forced_y_movement(it->get_forced_y_movement() + character_pointer->get_y_movement() + character_pointer->get_forced_y_movement());
+                    it->set_explosion_movement_x(it->get_explosion_movement_x() + character_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                    it->set_explosion_movement_y(it->get_explosion_movement_y() + character_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                    character_pointer->set_explosion_movement_x(character_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                    character_pointer->set_explosion_movement_y(character_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                     return false;
                 }
                 {
@@ -197,6 +235,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                         //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                         it->set_forced_x_movement(it->get_forced_x_movement() + character_pointer->get_x_movement() + character_pointer->get_forced_x_movement());
                         it->set_forced_y_movement(it->get_forced_y_movement() + character_pointer->get_y_movement() + character_pointer->get_forced_y_movement());
+                        it->set_explosion_movement_x(it->get_explosion_movement_x() + character_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                        it->set_explosion_movement_y(it->get_explosion_movement_y() + character_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                        character_pointer->set_explosion_movement_x(character_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                        character_pointer->set_explosion_movement_y(character_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                         return false;
                     }
                     {
@@ -206,6 +248,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                             //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                             it->set_forced_x_movement(it->get_forced_x_movement() + character_pointer->get_x_movement() + character_pointer->get_forced_x_movement());
                             it->set_forced_y_movement(it->get_forced_y_movement() + character_pointer->get_y_movement() + character_pointer->get_forced_y_movement());
+                            it->set_explosion_movement_x(it->get_explosion_movement_x() + character_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                            it->set_explosion_movement_y(it->get_explosion_movement_y() + character_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                            character_pointer->set_explosion_movement_x(character_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                            character_pointer->set_explosion_movement_y(character_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                             return false;
                         }
                     }
@@ -270,6 +316,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                     //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                     it->set_forced_x_movement(it->get_forced_x_movement() + character_pointer->get_x_movement() + character_pointer->get_forced_x_movement());
                     it->set_forced_y_movement(it->get_forced_y_movement() + character_pointer->get_y_movement() + character_pointer->get_forced_y_movement());
+                    it->set_explosion_movement_x(it->get_explosion_movement_x() + character_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                    it->set_explosion_movement_y(it->get_explosion_movement_y() + character_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                    character_pointer->set_explosion_movement_x(character_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                    character_pointer->set_explosion_movement_y(character_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                     return false;
                 }
                 {
@@ -279,6 +329,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                         //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                         it->set_forced_x_movement(it->get_forced_x_movement() + character_pointer->get_x_movement() + character_pointer->get_forced_x_movement());
                         it->set_forced_y_movement(it->get_forced_y_movement() + character_pointer->get_y_movement() + character_pointer->get_forced_y_movement());
+                        it->set_explosion_movement_x(it->get_explosion_movement_x() + character_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                        it->set_explosion_movement_y(it->get_explosion_movement_y() + character_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                        character_pointer->set_explosion_movement_x(character_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                        character_pointer->set_explosion_movement_y(character_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                         return false;
                     }
                     {
@@ -288,6 +342,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                             //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                             it->set_forced_x_movement(it->get_forced_x_movement() + character_pointer->get_x_movement() + character_pointer->get_forced_x_movement());
                             it->set_forced_y_movement(it->get_forced_y_movement() + character_pointer->get_y_movement() + character_pointer->get_forced_y_movement());
+                            it->set_explosion_movement_x(it->get_explosion_movement_x() + character_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                            it->set_explosion_movement_y(it->get_explosion_movement_y() + character_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                            character_pointer->set_explosion_movement_x(character_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                            character_pointer->set_explosion_movement_y(character_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                             return false;
                         }
                         {
@@ -297,6 +355,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                                 //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                                 it->set_forced_x_movement(it->get_forced_x_movement() + character_pointer->get_x_movement() + character_pointer->get_forced_x_movement());
                                 it->set_forced_y_movement(it->get_forced_y_movement() + character_pointer->get_y_movement() + character_pointer->get_forced_y_movement());
+                                it->set_explosion_movement_x(it->get_explosion_movement_x() + character_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                                it->set_explosion_movement_y(it->get_explosion_movement_y() + character_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                                character_pointer->set_explosion_movement_x(character_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                                character_pointer->set_explosion_movement_y(character_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                                 return false;
                             }
                         }
@@ -357,6 +419,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                     //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                     it->set_forced_x_movement(it->get_forced_x_movement() + character_pointer->get_x_movement() + character_pointer->get_forced_x_movement());
                     it->set_forced_y_movement(it->get_forced_y_movement() + character_pointer->get_y_movement() + character_pointer->get_forced_y_movement());
+                    it->set_explosion_movement_x(it->get_explosion_movement_x() + character_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                    it->set_explosion_movement_y(it->get_explosion_movement_y() + character_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                    character_pointer->set_explosion_movement_x(character_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                    character_pointer->set_explosion_movement_y(character_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                     return false;
                 }
                 {
@@ -366,6 +432,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                         //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                         it->set_forced_x_movement(it->get_forced_x_movement() + character_pointer->get_x_movement() + character_pointer->get_forced_x_movement());
                         it->set_forced_y_movement(it->get_forced_y_movement() + character_pointer->get_y_movement() + character_pointer->get_forced_y_movement());
+                        it->set_explosion_movement_x(it->get_explosion_movement_x() + character_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                        it->set_explosion_movement_y(it->get_explosion_movement_y() + character_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                        character_pointer->set_explosion_movement_x(character_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                        character_pointer->set_explosion_movement_y(character_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                         return false;
                     }
                     {
@@ -375,6 +445,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                             //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                             it->set_forced_x_movement(it->get_forced_x_movement() + character_pointer->get_x_movement() + character_pointer->get_forced_x_movement());
                             it->set_forced_y_movement(it->get_forced_y_movement() + character_pointer->get_y_movement() + character_pointer->get_forced_y_movement());
+                            it->set_explosion_movement_x(it->get_explosion_movement_x() + character_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                            it->set_explosion_movement_y(it->get_explosion_movement_y() + character_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                            character_pointer->set_explosion_movement_x(character_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                            character_pointer->set_explosion_movement_y(character_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                             return false;
                         }
                         {
@@ -384,6 +458,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                                 //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                                 it->set_forced_x_movement(it->get_forced_x_movement() + character_pointer->get_x_movement() + character_pointer->get_forced_x_movement());
                                 it->set_forced_y_movement(it->get_forced_y_movement() + character_pointer->get_y_movement() + character_pointer->get_forced_y_movement());
+                                it->set_explosion_movement_x(it->get_explosion_movement_x() + character_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                                it->set_explosion_movement_y(it->get_explosion_movement_y() + character_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                                character_pointer->set_explosion_movement_x(character_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                                character_pointer->set_explosion_movement_y(character_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                                 return false;
                             }
                         }
@@ -402,14 +480,28 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
 
 
 
-
+/*Allowed_to_move_rectangle(vector<double>,cover*)
+ * Beräknar huruvida en rektangels nya position är okej att flytta till.
+ * Om rektangeln inte fick flytta sig till den nya position så påverkas det objekt som var ivägen på olika sätt,
+ * t.ex. så överförs två krafter, en forced_movement och en explosion_movement som påverkar objektets rörelse på olika sätt
+ *
+ */
 bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_to_check,cover* cover_pointer)/*(double x1,double y1,double x2,double y2,double x3,double y3,double x4,double y4)*/
 {//corner_vector_to_check innehåller koordinaterna för rektangelns hörn som skall kollas i ordningen, x1,y1,x2,y2,x3,....
     //Kollar först så att rektangeln inte försöker smita utanför banan
-    if(corner_vector_to_check.at(0) < 0 or corner_vector_to_check.at(1)  < 0 or corner_vector_to_check.at(2) < 0 or corner_vector_to_check.at(3) < 0 or corner_vector_to_check.at(4) < 0 or corner_vector_to_check.at(5) < 0 or corner_vector_to_check.at(6) < 0 or corner_vector_to_check.at(7) < 0 or
-            corner_vector_to_check.at(0) > window_width or corner_vector_to_check.at(1) > window_height or corner_vector_to_check.at(2) > window_width or corner_vector_to_check.at(3) > window_height or
-            corner_vector_to_check.at(4) > window_width or corner_vector_to_check.at(5) > window_height or corner_vector_to_check.at(6) > window_width or corner_vector_to_check.at(7) > window_height)
+
+    if(corner_vector_to_check.at(0) < 0 or corner_vector_to_check.at(2) < 0 or corner_vector_to_check.at(4) < 0 or corner_vector_to_check.at(6) < 0
+            or corner_vector_to_check.at(0) > window_width or corner_vector_to_check.at(2) > window_width or corner_vector_to_check.at(4) > window_width or corner_vector_to_check.at(6) > window_width)
+    {
+        cover_pointer->set_explosion_movement_x(-cover_pointer->get_explosion_movement_x());
         return false;
+    }
+    if(corner_vector_to_check.at(1) < 0 or corner_vector_to_check.at(3) < 0 or corner_vector_to_check.at(5) < 0 or corner_vector_to_check.at(7) < 0
+            or corner_vector_to_check.at(1) > window_height or corner_vector_to_check.at(3) > window_height or corner_vector_to_check.at(5) > window_height or corner_vector_to_check.at(7) > window_height)
+    {
+        cover_pointer->set_explosion_movement_y(-cover_pointer->get_explosion_movement_y());
+        return false;
+    }
     vector<cover>* cover_vector = gamefield_pointer->get_cover_vector();
     //Skapar den nya basen för rektangeln, (x2-x1,y2-y1) och (x3-x2,y3-y2)
     double base_vector_u[2] = {corner_vector_to_check.at(2) - corner_vector_to_check.at(0), corner_vector_to_check.at(3) - corner_vector_to_check.at(1)}; //u uttryckt i basen x,y
@@ -437,6 +529,8 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
     corner_3[0] = base_change_matrix[0][0]*corner_vector_to_check.at(4) + base_change_matrix[0][1]*corner_vector_to_check.at(5);
     corner_3[1] = base_change_matrix[1][0]*corner_vector_to_check.at(4) + base_change_matrix[1][1]*corner_vector_to_check.at(5);
 
+    double explosion_contact_movement_loss = 2; //Det faktor som explosionshastigheten delas med vid varje kollision
+    double explosion_transfer_loss = 1.5; //Den faktor som explosionshastigheten skalas ner med då den överförs till ett nytt objekt
     //Nu har vi initierat klart och behöver alltså kolla igenom om den nya koordinaten är okej att flytta till.
     //Vi börjar med att gå igenom cover listan (som just nu antas bara bestå av rektangelobjekt.
     for(std::vector<cover>::iterator it = cover_vector->begin(); it != cover_vector->end(); ++it)
@@ -489,6 +583,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                     //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                     it->set_forced_x_movement(it->get_forced_x_movement() + cover_pointer->get_forced_x_movement());
                     it->set_forced_y_movement(it->get_forced_y_movement() + cover_pointer->get_forced_y_movement());
+                    it->set_explosion_movement_x(it->get_explosion_movement_x() + cover_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                    it->set_explosion_movement_y(it->get_explosion_movement_y() + cover_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                    cover_pointer->set_explosion_movement_x(cover_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                    cover_pointer->set_explosion_movement_y(cover_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                     return false;
                 }
                 {
@@ -498,6 +596,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                         //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                         it->set_forced_x_movement(it->get_forced_x_movement() + cover_pointer->get_forced_x_movement());
                         it->set_forced_y_movement(it->get_forced_y_movement() + cover_pointer->get_forced_y_movement());
+                        it->set_explosion_movement_x(it->get_explosion_movement_x() + cover_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                        it->set_explosion_movement_y(it->get_explosion_movement_y() + cover_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                        cover_pointer->set_explosion_movement_x(cover_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                        cover_pointer->set_explosion_movement_y(cover_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                         return false;
                     }
                     {
@@ -507,6 +609,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                             //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                             it->set_forced_x_movement(it->get_forced_x_movement() + cover_pointer->get_forced_x_movement());
                             it->set_forced_y_movement(it->get_forced_y_movement() + cover_pointer->get_forced_y_movement());
+                            it->set_explosion_movement_x(it->get_explosion_movement_x() + cover_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                            it->set_explosion_movement_y(it->get_explosion_movement_y() + cover_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                            cover_pointer->set_explosion_movement_x(cover_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                            cover_pointer->set_explosion_movement_y(cover_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                             return false;
                         }
                         {
@@ -516,6 +622,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                                 //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                                 it->set_forced_x_movement(it->get_forced_x_movement() + cover_pointer->get_forced_x_movement());
                                 it->set_forced_y_movement(it->get_forced_y_movement() + cover_pointer->get_forced_y_movement());
+                                it->set_explosion_movement_x(it->get_explosion_movement_x() + cover_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                                it->set_explosion_movement_y(it->get_explosion_movement_y() + cover_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                                cover_pointer->set_explosion_movement_x(cover_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                                cover_pointer->set_explosion_movement_y(cover_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                                 return false;
                             }
                         }
@@ -576,6 +686,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                     //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                     it->set_forced_x_movement(it->get_forced_x_movement() + cover_pointer->get_forced_x_movement());
                     it->set_forced_y_movement(it->get_forced_y_movement() + cover_pointer->get_forced_y_movement());
+                    it->set_explosion_movement_x(it->get_explosion_movement_x() + cover_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                    it->set_explosion_movement_y(it->get_explosion_movement_y() + cover_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                    cover_pointer->set_explosion_movement_x(cover_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                    cover_pointer->set_explosion_movement_y(cover_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                     return false;
                 }
                 {
@@ -585,6 +699,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                         //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                         it->set_forced_x_movement(it->get_forced_x_movement() + cover_pointer->get_forced_x_movement());
                         it->set_forced_y_movement(it->get_forced_y_movement() + cover_pointer->get_forced_y_movement());
+                        it->set_explosion_movement_x(it->get_explosion_movement_x() + cover_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                        it->set_explosion_movement_y(it->get_explosion_movement_y() + cover_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                        cover_pointer->set_explosion_movement_x(cover_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                        cover_pointer->set_explosion_movement_y(cover_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                         return false;
                     }
                     {
@@ -594,6 +712,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                             //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                             it->set_forced_x_movement(it->get_forced_x_movement() + cover_pointer->get_forced_x_movement());
                             it->set_forced_y_movement(it->get_forced_y_movement() + cover_pointer->get_forced_y_movement());
+                            it->set_explosion_movement_x(it->get_explosion_movement_x() + cover_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                            it->set_explosion_movement_y(it->get_explosion_movement_y() + cover_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                            cover_pointer->set_explosion_movement_x(cover_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                            cover_pointer->set_explosion_movement_y(cover_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                             return false;
                         }
                         {
@@ -603,6 +725,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                                 //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                                 it->set_forced_x_movement(it->get_forced_x_movement() + cover_pointer->get_forced_x_movement());
                                 it->set_forced_y_movement(it->get_forced_y_movement() + cover_pointer->get_forced_y_movement());
+                                it->set_explosion_movement_x(it->get_explosion_movement_x() + cover_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                                it->set_explosion_movement_y(it->get_explosion_movement_y() + cover_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                                cover_pointer->set_explosion_movement_x(cover_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                                cover_pointer->set_explosion_movement_y(cover_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                                 return false;
                             }
                         }
@@ -665,6 +791,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                 //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                 it->set_forced_x_movement(it->get_forced_x_movement() + cover_pointer->get_forced_x_movement());
                 it->set_forced_y_movement(it->get_forced_y_movement() + cover_pointer->get_forced_y_movement());
+                it->set_explosion_movement_x(it->get_explosion_movement_x() + cover_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                it->set_explosion_movement_y(it->get_explosion_movement_y() + cover_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                cover_pointer->set_explosion_movement_x(cover_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                cover_pointer->set_explosion_movement_y(cover_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                 return false;
             }
             {
@@ -674,6 +804,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                     //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                     it->set_forced_x_movement(it->get_forced_x_movement() + cover_pointer->get_forced_x_movement());
                     it->set_forced_y_movement(it->get_forced_y_movement() + cover_pointer->get_forced_y_movement());
+                    it->set_explosion_movement_x(it->get_explosion_movement_x() + cover_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                    it->set_explosion_movement_y(it->get_explosion_movement_y() + cover_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                    cover_pointer->set_explosion_movement_x(cover_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                    cover_pointer->set_explosion_movement_y(cover_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                     return false;
                 }
                 {
@@ -683,6 +817,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                         //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                         it->set_forced_x_movement(it->get_forced_x_movement() + cover_pointer->get_forced_x_movement());
                         it->set_forced_y_movement(it->get_forced_y_movement() + cover_pointer->get_forced_y_movement());
+                        it->set_explosion_movement_x(it->get_explosion_movement_x() + cover_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                        it->set_explosion_movement_y(it->get_explosion_movement_y() + cover_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                        cover_pointer->set_explosion_movement_x(cover_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                        cover_pointer->set_explosion_movement_y(cover_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                         return false;
                     }
                     {
@@ -692,6 +830,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                             //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                             it->set_forced_x_movement(it->get_forced_x_movement() + cover_pointer->get_forced_x_movement());
                             it->set_forced_y_movement(it->get_forced_y_movement() + cover_pointer->get_forced_y_movement());
+                            it->set_explosion_movement_x(it->get_explosion_movement_x() + cover_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                            it->set_explosion_movement_y(it->get_explosion_movement_y() + cover_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                            cover_pointer->set_explosion_movement_x(cover_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                            cover_pointer->set_explosion_movement_y(cover_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                             return false;
                         }
                     }
@@ -752,6 +894,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                 //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                 it->set_forced_x_movement(it->get_forced_x_movement() + cover_pointer->get_forced_x_movement());
                 it->set_forced_y_movement(it->get_forced_y_movement() + cover_pointer->get_forced_y_movement());
+                it->set_explosion_movement_x(it->get_explosion_movement_x() + cover_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                it->set_explosion_movement_y(it->get_explosion_movement_y() + cover_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                cover_pointer->set_explosion_movement_x(cover_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                cover_pointer->set_explosion_movement_y(cover_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                 return false;
             }
             {
@@ -761,6 +907,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                     //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                     it->set_forced_x_movement(it->get_forced_x_movement() + cover_pointer->get_forced_x_movement());
                     it->set_forced_y_movement(it->get_forced_y_movement() + cover_pointer->get_forced_y_movement());
+                    it->set_explosion_movement_x(it->get_explosion_movement_x() + cover_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                    it->set_explosion_movement_y(it->get_explosion_movement_y() + cover_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                    cover_pointer->set_explosion_movement_x(cover_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                    cover_pointer->set_explosion_movement_y(cover_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                     return false;
                 }
                 {
@@ -770,6 +920,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                         //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                         it->set_forced_x_movement(it->get_forced_x_movement() + cover_pointer->get_forced_x_movement());
                         it->set_forced_y_movement(it->get_forced_y_movement() + cover_pointer->get_forced_y_movement());
+                        it->set_explosion_movement_x(it->get_explosion_movement_x() + cover_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                        it->set_explosion_movement_y(it->get_explosion_movement_y() + cover_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                        cover_pointer->set_explosion_movement_x(cover_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                        cover_pointer->set_explosion_movement_y(cover_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                         return false;
                     }
                     {
@@ -779,6 +933,10 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
                             //Om det inte var tillåtet att röra sig så ska objektet som stöttes i få rörelsen istället
                             it->set_forced_x_movement(it->get_forced_x_movement() + cover_pointer->get_forced_x_movement());
                             it->set_forced_y_movement(it->get_forced_y_movement() + cover_pointer->get_forced_y_movement());
+                            it->set_explosion_movement_x(it->get_explosion_movement_x() + cover_pointer->get_explosion_movement_x() / explosion_transfer_loss);
+                            it->set_explosion_movement_y(it->get_explosion_movement_y() + cover_pointer->get_explosion_movement_y() / explosion_transfer_loss);
+                            cover_pointer->set_explosion_movement_x(cover_pointer->get_explosion_movement_x() / explosion_contact_movement_loss);
+                            cover_pointer->set_explosion_movement_y(cover_pointer->get_explosion_movement_y() / explosion_contact_movement_loss);
                             return false;
                         }
                     }
@@ -793,7 +951,12 @@ bool collision_handler::allowed_to_move_rectangle(vector<double> corner_vector_t
 }
 
 
-
+/*Allowed_to_move_circle(double,double,int)
+ * Beräknar huruvida en cirkels nya position är okej att flytta till.
+ * Om cirkeln inte fick flytta sig till den nya position så påverkas det objekt som var ivägen på olika sätt,
+ * t.ex. så överförs två krafter, en forced_movement och en explosion_movement som påverkar objektets rörelse på olika sätt
+ *
+ */
 bool collision_handler::allowed_to_move_circle(double x_pos, double y_pos, int radius)
 {
     //Kollar först så att cirkeln inte försöker smita ut från banan
@@ -908,6 +1071,13 @@ bool collision_handler::allowed_to_move_circle(double x_pos, double y_pos, int r
     return true;
 }
 
+/*Allowed_to_move_bullet(vector<double>,character*)
+ * Var tänkt att bara användas av kulor men användes sedan av alla projektiler för enkelhets skull,
+ * behandlar projektilen som en punkt och testar om linjen ifrån dess föregående position till dess nya skär
+ * någon linje som ej är tillåten att skära.
+ * För missilen och kulan medför en kollision att objektet den kolliderar med tar skada
+ * Granatar ska istället för att göra skada på föremålet den träffar studsa mot det.
+ */
 bool collision_handler::allowed_to_move_bullet(double x_before, double y_before, double x_after, double y_after, bool move_trought_covers, double bullet_speed, double bullet_damage, class character* owner_pointer, class projectile* projectile_pointer)
 {   //Kollar först så att inte kulan försöker åka utanför banan, om ja returnera false den!
 
@@ -931,16 +1101,6 @@ bool collision_handler::allowed_to_move_bullet(double x_before, double y_before,
         projectile_pointer->set_y_movement(-projectile_pointer->get_y_movement());
         return false;
     }
-    /*
-    if(x_after < 0 or y_after < 0 or x_after > window_width or y_after > window_height)
-    {
-        //Som lägget är nu så ska vissa projektiler studsa mot objekt de inte kan röra sig igenom och deras nuvarande position är den som kontrollerades om de kunde flytta till
-        //Så vi behöver till en början ändra tillbaka deras position till den senaste godkända positionen
-        projectile_pointer->set_x_position(projectile_pointer->get_xpos() - projectile_pointer->get_x_movement());
-        projectile_pointer->set_y_position(projectile_pointer->get_ypos() - projectile_pointer->get_y_movement());
-        return false;
-    }*/
-    //Tänker att det kan finnas en ultimate som gör att ens kulor går rakt igenom skydd:
     if(!move_trought_covers)
     {
         //Används i kollisionshanteringen senare, t och s är parametrar för riktningsvektorer
@@ -999,7 +1159,7 @@ bool collision_handler::allowed_to_move_bullet(double x_before, double y_before,
                                 / (bullet_vector[1]*corner4_corner1[0] - bullet_vector[0]*corner4_corner1[1]);
                         if(t >= 0 and t <= 1 and s >= 0 and s <= 1) //Om bägge parametrar är mellan 0-1 så skedde en kollision
                         {
-                            if(projectile_pointer->get_name() == "bullet")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
+                            if(projectile_pointer->get_name() != "grenade")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
                                 it->set_health(it->get_health() - bullet_damage); //Kulan gör skada på skyddet
 
                             if(projectile_pointer->get_name() == "grenade") //Om projektilen är en granat så ska den studsa på skyddet
@@ -1032,7 +1192,7 @@ bool collision_handler::allowed_to_move_bullet(double x_before, double y_before,
                                 / (bullet_vector[1]*corner1_corner2[0] - bullet_vector[0]*corner1_corner2[1]);
                         if(t >= 0 and t <= 1 and s >= 0 and s <= 1) //Om bägge parametrar är mellan 0-1 så skedde en kollision
                         {
-                            if(projectile_pointer->get_name() == "bullet")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
+                            if(projectile_pointer->get_name() != "grenade")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
                                 it->set_health(it->get_health() - bullet_damage); //Kulan gör skada på skyddet
 
                             if(projectile_pointer->get_name() == "grenade") //Om projektilen är en granat så ska den studsa på skyddet
@@ -1079,7 +1239,7 @@ bool collision_handler::allowed_to_move_bullet(double x_before, double y_before,
                                 / (bullet_vector[1]*corner2_corner3[0] - bullet_vector[0]*corner2_corner3[1]);
                         if(t >= 0 and t <= 1 and s >= 0 and s <= 1) //Om bägge parametrar är mellan 0-1 så skedde en kollision
                         {
-                            if(projectile_pointer->get_name() == "bullet")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
+                            if(projectile_pointer->get_name() != "grenade")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
                                 it->set_health(it->get_health() - bullet_damage); //Kulan gör skada på skyddet
 
                             if(projectile_pointer->get_name() == "grenade") //Om projektilen är en granat så ska den studsa på skyddet
@@ -1112,7 +1272,7 @@ bool collision_handler::allowed_to_move_bullet(double x_before, double y_before,
                                 / (bullet_vector[1]*corner1_corner2[0] - bullet_vector[0]*corner1_corner2[1]);
                         if(t >= 0 and t <= 1 and s >= 0 and s <= 1) //Om bägge parametrar är mellan 0-1 så skedde en kollision
                         {
-                            if(projectile_pointer->get_name() == "bullet")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
+                            if(projectile_pointer->get_name() != "grenade")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
                                 it->set_health(it->get_health() - bullet_damage); //Kulan gör skada på skyddet
 
                             if(projectile_pointer->get_name() == "grenade") //Om projektilen är en granat så ska den studsa på skyddet
@@ -1152,7 +1312,7 @@ bool collision_handler::allowed_to_move_bullet(double x_before, double y_before,
                                 / (bullet_vector[1]*corner3_corner4[0] - bullet_vector[0]*corner3_corner4[1]);
                         if(t >= 0 and t <= 1 and s >= 0 and s <= 1) //Om bägge parametrar är mellan 0-1 så skedde en kollision
                         {
-                            if(projectile_pointer->get_name() == "bullet")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
+                            if(projectile_pointer->get_name() != "grenade")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
                                 it->set_health(it->get_health() - bullet_damage); //Kulan gör skada på skyddet
 
                             if(projectile_pointer->get_name() == "grenade") //Om projektilen är en granat så ska den studsa på skyddet
@@ -1184,7 +1344,7 @@ bool collision_handler::allowed_to_move_bullet(double x_before, double y_before,
                                 / (bullet_vector[1]*corner2_corner3[0] - bullet_vector[0]*corner2_corner3[1]);
                         if(t >= 0 and t <= 1 and s >= 0 and s <= 1) //Om bägge parametrar är mellan 0-1 så skedde en kollision
                         {
-                            if(projectile_pointer->get_name() == "bullet")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
+                            if(projectile_pointer->get_name() != "grenade")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
                                 it->set_health(it->get_health() - bullet_damage); //Kulan gör skada på skyddet
 
                             if(projectile_pointer->get_name() == "grenade") //Om projektilen är en granat så ska den studsa på skyddet
@@ -1219,7 +1379,7 @@ bool collision_handler::allowed_to_move_bullet(double x_before, double y_before,
                                 / (bullet_vector[1]*corner4_corner1[0] - bullet_vector[0]*corner4_corner1[1]);
                         if(t >= 0 and t <= 1 and s >= 0 and s <= 1) //Om bägge parametrar är mellan 0-1 så skedde en kollision
                         {
-                            if(projectile_pointer->get_name() == "bullet")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
+                            if(projectile_pointer->get_name() != "grenade")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
                                 it->set_health(it->get_health() - bullet_damage); //Kulan gör skada på skyddet
 
                             if(projectile_pointer->get_name() == "grenade") //Om projektilen är en granat så ska den studsa på skyddet
@@ -1252,7 +1412,7 @@ bool collision_handler::allowed_to_move_bullet(double x_before, double y_before,
                                 / (bullet_vector[1]*corner3_corner4[0] - bullet_vector[0]*corner3_corner4[1]);
                         if(t >= 0 and t <= 1 and s >= 0 and s <= 1) //Om bägge parametrar är mellan 0-1 så skedde en kollision
                         {
-                            if(projectile_pointer->get_name() == "bullet")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
+                            if(projectile_pointer->get_name() != "grenade")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
                                 it->set_health(it->get_health() - bullet_damage); //Kulan gör skada på skyddet
 
                             if(projectile_pointer->get_name() == "grenade") //Om projektilen är en granat så ska den studsa på skyddet
@@ -1306,7 +1466,7 @@ bool collision_handler::allowed_to_move_bullet(double x_before, double y_before,
                 {
                     if(it->get_pointer_to_yourself()!=owner_pointer)//Kollar så att kollisionen inte var mot spelaren som avfyrade skottet
                     {
-                        if(projectile_pointer->get_name() == "bullet")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
+                        if(projectile_pointer->get_name() != "grenade")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
                             it->set_health(it->get_health() - bullet_damage); //Kulan gör skada på skyddet
 
                         if(projectile_pointer->get_name() == "grenade") //Om projektilen är en granat så ska den studsa på skyddet
@@ -1343,7 +1503,7 @@ bool collision_handler::allowed_to_move_bullet(double x_before, double y_before,
                 {
                     if(it->get_pointer_to_yourself()!=owner_pointer)//Kollar så att kollisionen inte var mot spelaren som avfyrade skottet
                     {
-                        if(projectile_pointer->get_name() == "bullet")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
+                        if(projectile_pointer->get_name() != "grenade")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
                             it->set_health(it->get_health() - bullet_damage); //Kulan gör skada på skyddet
 
                         if(projectile_pointer->get_name() == "grenade") //Om projektilen är en granat så ska den studsa på skyddet
@@ -1389,7 +1549,7 @@ bool collision_handler::allowed_to_move_bullet(double x_before, double y_before,
                 {
                     if(it->get_pointer_to_yourself()!=owner_pointer)//Kollar så att kollisionen inte var mot spelaren som avfyrade skottet
                     {
-                        if(projectile_pointer->get_name() == "bullet")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
+                        if(projectile_pointer->get_name() != "grenade")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
                             it->set_health(it->get_health() - bullet_damage); //Kulan gör skada på skyddet
 
                         if(projectile_pointer->get_name() == "grenade") //Om projektilen är en granat så ska den studsa på skyddet
@@ -1428,7 +1588,7 @@ bool collision_handler::allowed_to_move_bullet(double x_before, double y_before,
                 {
                     if(it->get_pointer_to_yourself()!=owner_pointer)//Kollar så att kollisionen inte var mot spelaren som avfyrade skottet
                     {
-                        if(projectile_pointer->get_name() == "bullet")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
+                        if(projectile_pointer->get_name() != "grenade")//Om projektilen är en kula så ska kulan göra skada, för de andra projektilerna är det explosionen som gör skada
                             it->set_health(it->get_health() - bullet_damage); //Kulan gör skada på skyddet
 
                         if(projectile_pointer->get_name() == "grenade") //Om projektilen är en granat så ska den studsa på skyddet
@@ -1456,8 +1616,14 @@ bool collision_handler::allowed_to_move_bullet(double x_before, double y_before,
     }
     return true;
 }
+
+/*Apply_explosion_damage(double,double,int,int)
+ * Applicerar skada på alla objekt som är inom en viss radie från föremålet.
+ * Ger dessutom ut en tryckvåg så att objekt som är innanför explosionsradien får en rörelse ifrån explosionen
+ */
 void collision_handler::apply_explosion_damage(double x_pos, double y_pos, int radius, int damage)
 {
+    double explosion_power = 2;
     vector<cover>* cover_vector = gamefield_pointer->get_cover_vector();
     for(std::vector<cover>::iterator it = cover_vector->begin(); it != cover_vector->end(); ++it)
     {
@@ -1469,11 +1635,27 @@ void collision_handler::apply_explosion_damage(double x_pos, double y_pos, int r
         {
             if(sqrt(pow((x_pos - *it2),2) + pow(y_pos - *(it2+1),2)) < radius)
             {
-                cout << "BOOM";
                 it->set_health(it->get_health() - damage);
                 it2 = corner_vector.end();//Fullösning för att få for loopen att avsluta så fort den har skadat ett hörn
                 //vill ju inte att ett något ska ta dubbel skada bara för den hade två hörn nära explosionen
                 done_damage=true;
+
+                //Explosionen ska ge en tryckvåg som gör att objekt som är nära explosionen ska flyga iväg
+
+                //vektorn från explosionens mitt till rektangelns mitt
+                double explosion_center_cover_center[2] = {it->get_xpos() - x_pos, it->get_ypos() - y_pos};
+                //Tar längden av vektorn
+                double normalizer = sqrt(pow(explosion_center_cover_center[0],2) + pow(explosion_center_cover_center[1],2));
+                //Nyttjar längden av vektorn för att skala ner vektorn från explosionens mitt till rektangelns mitt, dvs ju längre ifrån mitten är desto mindre blir vektorn
+                explosion_center_cover_center[0] = explosion_center_cover_center[0] / pow(normalizer,2);
+                explosion_center_cover_center[1]= explosion_center_cover_center[1] / pow(normalizer,2);
+                //Skalar vektorn med damage
+                explosion_center_cover_center[0] = explosion_center_cover_center[0] * pow(damage,explosion_power);
+                explosion_center_cover_center[1] = explosion_center_cover_center[1] * pow(damage,explosion_power);
+                //Nu är det dags att lägga till denna nya explosionshastigheten till det berörda objektet
+                it->set_explosion_movement_x(it->get_explosion_movement_x() + explosion_center_cover_center[0]);
+                it->set_explosion_movement_y(it->get_explosion_movement_y() + explosion_center_cover_center[1]);
+
             }
         }
         if(!done_damage)
@@ -1506,17 +1688,29 @@ void collision_handler::apply_explosion_damage(double x_pos, double y_pos, int r
             explosion_position_new[0] = base_change_matrix[0][0]*explosion_position[0] + base_change_matrix[0][1]*explosion_position[1];
             explosion_position_new[1] = base_change_matrix[1][0]*explosion_position[0] + base_change_matrix[1][1]*explosion_position[1];
             //circle_position innehåller nu cirkelns koordinater i den nya koordinaten
-            cout << radius << " ";
-            cout << rectangle_position_new[0] - explosion_position_new[0] << " ";
-            cout << rectangle_position_new[1] - explosion_position_new[1] << "\n";
             //För att explosionen inte ska nå rektangeln så måste rektangeln vara halva höjden + radien ifrån explosionen mitt
             //och halva bredden + radien ifrån explosionens mitt i de riktningar som höjden och bredden avser, förutom
             //vid hörnen men det har redan tagits hand om ovan
             //Notera att bredden på rektangeln är utmed u vektorn och höjden utmed v vektorn
             if(abs(rectangle_position_new[0] - explosion_position_new[0]) < (it->get_width() / 2) + radius and abs(rectangle_position_new[1] - explosion_position_new[1]) < (it->get_height() / 2) + radius)
             {
-                cout << "FEL";
                 it->set_health(it->get_health() - damage);
+                //Explosionen ska ge en tryckvåg som gör att objekt som är nära explosionen ska flyga iväg
+
+                //vektorn från explosionens mitt till rektangelns mitt
+                double explosion_center_cover_center[2] = {it->get_xpos() - x_pos, it->get_ypos() - y_pos};
+                //Tar längden av vektorn
+                double normalizer = sqrt(pow(explosion_center_cover_center[0],2) + pow(explosion_center_cover_center[1],2));
+                //Nyttjar längden av vektorn för att skala ner vektorn från explosionens mitt till rektangelns mitt, dvs ju längre ifrån mitten är desto mindre blir vektorn
+                explosion_center_cover_center[0] = explosion_center_cover_center[0] / pow(normalizer,2);
+                explosion_center_cover_center[1]= explosion_center_cover_center[1] / pow(normalizer,2);
+                //Skalar vektorn med damage
+                explosion_center_cover_center[0] = explosion_center_cover_center[0] * pow(damage,explosion_power);
+                explosion_center_cover_center[1] = explosion_center_cover_center[1] * pow(damage,explosion_power);
+                //Nu är det dags att lägga till denna nya explosionshastigheten till det berörda objektet
+                it->set_explosion_movement_x(it->get_explosion_movement_x() + explosion_center_cover_center[0]);
+                it->set_explosion_movement_y(it->get_explosion_movement_y() + explosion_center_cover_center[1]);
+
             }
         }
     }
@@ -1532,11 +1726,26 @@ void collision_handler::apply_explosion_damage(double x_pos, double y_pos, int r
         {
             if(sqrt(pow((x_pos - *it2),2) + pow(y_pos - *(it2+1),2)) < radius)
             {
-                cout << "BOOM";
                 it->set_health(it->get_health() - damage);
                 it2 = corner_vector.end();//Fullösning för att få for loopen att avsluta så fort den har skadat ett hörn
                 //vill ju inte att ett något ska ta dubbel skada bara för den hade två hörn nära explosionen
                 done_damage=true;
+                //Explosionen ska ge en tryckvåg som gör att objekt som är nära explosionen ska flyga iväg
+
+                //vektorn från explosionens mitt till rektangelns mitt
+                double explosion_center_cover_center[2] = {it->get_xpos() - x_pos, it->get_ypos() - y_pos};
+                //Tar längden av vektorn
+                double normalizer = sqrt(pow(explosion_center_cover_center[0],2) + pow(explosion_center_cover_center[1],2));
+                //Nyttjar längden av vektorn för att skala ner vektorn från explosionens mitt till rektangelns mitt, dvs ju längre ifrån mitten är desto mindre blir vektorn
+                explosion_center_cover_center[0] = explosion_center_cover_center[0] / pow(normalizer,2);
+                explosion_center_cover_center[1]= explosion_center_cover_center[1] / pow(normalizer,2);
+                //Skalar vektorn med damage
+                explosion_center_cover_center[0] = explosion_center_cover_center[0] * pow(damage,explosion_power);
+                explosion_center_cover_center[1] = explosion_center_cover_center[1] * pow(damage,explosion_power);
+                //Nu är det dags att lägga till denna nya explosionshastigheten till det berörda objektet
+                it->set_explosion_movement_x(it->get_explosion_movement_x() + explosion_center_cover_center[0]);
+                it->set_explosion_movement_y(it->get_explosion_movement_y() + explosion_center_cover_center[1]);
+                cout << " 1 ";
             }
         }
         if(!done_damage)
@@ -1569,17 +1778,31 @@ void collision_handler::apply_explosion_damage(double x_pos, double y_pos, int r
             explosion_position_new[0] = base_change_matrix[0][0]*explosion_position[0] + base_change_matrix[0][1]*explosion_position[1];
             explosion_position_new[1] = base_change_matrix[1][0]*explosion_position[0] + base_change_matrix[1][1]*explosion_position[1];
             //circle_position innehåller nu cirkelns koordinater i den nya koordinaten
-            cout << radius << " ";
-            cout << rectangle_position_new[0] - explosion_position_new[0] << " ";
-            cout << rectangle_position_new[1] - explosion_position_new[1] << "\n";
+
             //För att explosionen inte ska nå rektangeln så måste rektangeln vara halva höjden + radien ifrån explosionen mitt
             //och halva bredden + radien ifrån explosionens mitt i de riktningar som höjden och bredden avser, förutom
             //vid hörnen men det har redan tagits hand om ovan
             //Notera att bredden på rektangeln är utmed u vektorn och höjden utmed v vektorn
             if(abs(rectangle_position_new[0] - explosion_position_new[0]) < (it->get_width() / 2) + radius and abs(rectangle_position_new[1] - explosion_position_new[1]) < (it->get_height() / 2) + radius)
             {
-                cout << "FEL";
+
                 it->set_health(it->get_health() - damage);
+                //Explosionen ska ge en tryckvåg som gör att objekt som är nära explosionen ska flyga iväg
+
+                //vektorn från explosionens mitt till rektangel mitt
+                double explosion_center_cover_center[2] = {it->get_xpos() - x_pos, it->get_ypos() - y_pos};
+                //Tar längden av vektorn
+                double normalizer = sqrt(pow(explosion_center_cover_center[0],2) + pow(explosion_center_cover_center[1],2));
+                //Nyttjar längden av vektorn för att skala ner vektorn från explosionens mitt till rektangelns mitt, dvs ju längre ifrån mitten är desto mindre blir vektorn
+                explosion_center_cover_center[0] = explosion_center_cover_center[0] / pow(normalizer,2);
+                explosion_center_cover_center[1]= explosion_center_cover_center[1] / pow(normalizer,2);
+                //Skalar vektorn med damage
+                explosion_center_cover_center[0] = explosion_center_cover_center[0] * pow(damage,explosion_power);
+                explosion_center_cover_center[1] = explosion_center_cover_center[1] * pow(damage,explosion_power);
+                //Nu är det dags att lägga till denna nya explosionshastigheten till det berörda objektet
+                it->set_explosion_movement_x(it->get_explosion_movement_x() + explosion_center_cover_center[0]);
+                it->set_explosion_movement_y(it->get_explosion_movement_y() + explosion_center_cover_center[1]);
+                cout << " 2 ";
             }
         }
     }

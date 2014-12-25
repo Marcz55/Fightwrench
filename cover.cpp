@@ -5,18 +5,31 @@
 #include "gamefield.h"
 void cover::update()
 {
-    if(forced_x_movement != 0 or forced_y_movement != 0)
-    cout <<forced_x_movement << " " << forced_y_movement << "\n";
-    xpos = xpos + forced_x_movement;
-    ypos = ypos + forced_y_movement;
+
+    //Explosionshastigheten ska sänkas utefter tiden
+    explosion_movement_x = explosion_movement_x * 0.95;
+    explosion_movement_y = explosion_movement_y * 0.95;
+
+    //Behöver ha dessa för att sätta tillbaka position då nästkommande position är otillåten, dessa parametrar ändras nämligen i kollisionshanteringen
+    double help_explosion_movement_x = explosion_movement_x;
+    double help_explosion_movement_y = explosion_movement_y;
+    double help_forced_x_movement = forced_x_movement;
+    double help_forced_y_movement = forced_y_movement;
+
+    if(abs(explosion_movement_x) < 0.1)
+        explosion_movement_x = 0;
+    if(abs(explosion_movement_y) < 0.1)
+        explosion_movement_y = 0;
+    xpos = xpos + forced_x_movement + explosion_movement_x;
+    ypos = ypos + forced_y_movement + explosion_movement_y;
     if(main_gamefield->allowed_to_move_rectangle(get_corners(),this))
     {
         forced_x_movement = 0;
         forced_y_movement = 0;
         return;
     }
-    xpos = xpos - forced_x_movement;
-    ypos = ypos - forced_y_movement;
+    xpos = xpos - help_forced_x_movement - help_explosion_movement_x;
+    ypos = ypos - help_forced_y_movement - help_explosion_movement_y;
     forced_x_movement = 0;
     forced_y_movement = 0;
     return;

@@ -272,7 +272,7 @@ vector<double> character::get_corners()
     vector_corner4[1] = ypos + vector_corner4[1];
 
 
-   vector<double> ret;
+   vector<double> ret; //Lägger de framtagna hörnpunkterna i vektorn som sedan kan skickas vidare till andra funktioner som behöver dem
    ret.push_back(vector_corner1[0]);
    ret.push_back(vector_corner1[1]);
    ret.push_back(vector_corner2[0]);
@@ -281,14 +281,28 @@ vector<double> character::get_corners()
    ret.push_back(vector_corner3[1]);
    ret.push_back(vector_corner4[0]);
    ret.push_back(vector_corner4[1]);
-   return ret;//vector<double>{vector_corner1[0],vector_corner1[1],vector_corner2[0],vector_corner2[1],vector_corner3[0],vector_corner3[1],vector_corner4[0],vector_corner4[1]};
+   return ret;
 }
 
 void character::move(double x_length, double y_length,int turn_direction)
 {
-    //Är tvungen att sätta koordinaten vi vill flytta oss till till den aktuella koordinaten
-    //för att get_corners ska ta ut hörnen som karaktären kommer att ha vid den nya koordinaten
-    if(x_length != 0 or y_length !=0 or turn_direction != 0 or forced_x_movement != 0 or forced_y_movement != 0)
+    //Börjar med att skala ner explosionshastigheterna
+    explosion_movement_x = explosion_movement_x * 0.95;
+    explosion_movement_y = explosion_movement_y * 0.95;
+
+    //När explosionshastigheten är tillräckligt låg så tas den bort helt och hållet
+    if(abs(explosion_movement_x) < 0.1)
+        explosion_movement_x = 0;
+    if(abs(explosion_movement_y) < 0.1)
+        explosion_movement_y = 0;
+
+    //konstanter som behövs för att sätta tillbaka positionen då en rörelse inte var tillåten
+    double help_explosion_movement_x = explosion_movement_x;
+    double help_explosion_movement_y = explosion_movement_y;
+    double help_forced_x_movement = forced_x_movement;
+    double help_forced_y_movement = forced_y_movement;
+
+    if(x_length != 0 or y_length !=0 or turn_direction != 0 or forced_x_movement != 0 or forced_y_movement != 0 or explosion_movement_x != 0 or explosion_movement_y != 0)
     {
         if(controlling)
         {
@@ -311,14 +325,14 @@ void character::move(double x_length, double y_length,int turn_direction)
             direction = direction + 360;
         }
 
-        xpos += speed*x_length + forced_x_movement;
-        ypos += speed*y_length + forced_y_movement;
+        xpos += speed*x_length + forced_x_movement + explosion_movement_x;
+        ypos += speed*y_length + forced_y_movement + explosion_movement_y;
         //kollar om koordinaten är okej att flytta sig till, om ja så är vi klara om nej så sätter vi tillbaka värdena till de gamla koordinaterna
         if(main_gamefield -> allowed_to_move_rectangle(get_corners(),this))
         {
 
-            allowed_x_movement = speed*x_length + forced_x_movement;
-            allowed_y_movement = speed*y_length + forced_y_movement;
+            allowed_x_movement = speed*x_length + help_forced_x_movement + help_explosion_movement_x;
+            allowed_y_movement = speed*y_length + help_forced_y_movement + help_explosion_movement_y;
             forced_x_movement = 0;
             forced_y_movement = 0;
             return;
@@ -334,34 +348,34 @@ void character::move(double x_length, double y_length,int turn_direction)
         if(main_gamefield -> allowed_to_move_rectangle(get_corners(),this))
         {
 
-            allowed_x_movement = speed*x_length + forced_x_movement;
-            allowed_y_movement = speed*y_length + forced_y_movement;
+            allowed_x_movement = speed*x_length + help_forced_x_movement + help_explosion_movement_x;
+            allowed_y_movement = speed*y_length + help_forced_y_movement + help_explosion_movement_y;
             forced_x_movement = 0;
             forced_y_movement = 0;
             return;
         }
-        xpos -= speed*x_length +  + forced_x_movement;
+        xpos -= speed*x_length + help_forced_x_movement + help_explosion_movement_x;
         if(main_gamefield->allowed_to_move_rectangle(get_corners(),this))
         {
 
             allowed_x_movement = 0;
-            allowed_y_movement = speed*y_length + forced_y_movement;
+            allowed_y_movement = speed*y_length + help_forced_y_movement  + help_explosion_movement_y;
             forced_x_movement = 0;
             forced_y_movement = 0;
             return;
         }
-        xpos += speed*x_length + forced_x_movement;
-        ypos -= speed*y_length + forced_y_movement;
+        xpos += speed*x_length + help_forced_x_movement + help_explosion_movement_x;
+        ypos -= speed*y_length + help_forced_y_movement + help_explosion_movement_y;
         if(main_gamefield -> allowed_to_move_rectangle(get_corners(),this))
         {
 
-            allowed_x_movement = speed*x_length + forced_x_movement;
+            allowed_x_movement = speed*x_length + help_forced_x_movement + explosion_movement_x;
             allowed_y_movement = 0;
             forced_x_movement = 0;
             forced_y_movement = 0;
             return;
         }
-        xpos -= speed*x_length + forced_x_movement;
+        xpos -= speed*x_length + help_forced_x_movement + help_explosion_movement_x;
 
      }
     forced_x_movement = 0;

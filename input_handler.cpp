@@ -1,5 +1,11 @@
-#include "input_handler.h"
+//Joakim Mörhed har skrivit Input_handler.
+//Input_handler tar hand om key-events och diregerar konsekvenserna av dessa
 
+#include "input_handler.h"
+/*Update(gamefield%)
+ * Tar hand om alla key-events som har tryckts ner sedan denna funktionen kördes förra gången.
+ * Beroende på vilken typ av key-event så utförs olika kommando.
+ */
 void input_handler::update(gamefield& field)
 {
     while(SDL_PollEvent(&event))

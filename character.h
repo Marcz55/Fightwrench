@@ -71,9 +71,14 @@ public:
 
     void disable_controlling(){controlling = false;}
 
-
+    virtual void set_explosion_movement_x(double value){explosion_movement_x = value;}
+    virtual void set_explosion_movement_y(double value){explosion_movement_y = value;}
+    virtual double get_explosion_movement_x(){return explosion_movement_x;}
+    virtual double get_explosion_movement_y(){return explosion_movement_y;}
 
 protected:
+    double explosion_movement_x = 0;
+    double explosion_movement_y = 0;
     double x_movement = 0;
     double y_movement = 0;
     int up_key = 0;

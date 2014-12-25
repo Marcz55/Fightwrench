@@ -1,3 +1,5 @@
+//Joakim Mörhed har skrivit Input_handler.
+//Input_handler tar hand om key-events och diregerar konsekvenserna av dessa
 #ifndef INPUT_HANDLER_H
 #define INPUT_HANDLER_H
 #include <SDL2/SDL.h>

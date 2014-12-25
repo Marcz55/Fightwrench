@@ -21,11 +21,15 @@ public:
     int get_health(){return health;}
     double get_height(){return height;}
     double get_width(){return width;}
+    double get_explosion_movement_x(){return explosion_movement_x;}
+    double get_explosion_movement_y(){return explosion_movement_y;}
 
     //setters
     void set_health(int new_health);
     void set_height(int new_height);
     void set_width(int new_width);
+    void set_explosion_movement_x(double value){explosion_movement_x = value;}
+    void set_explosion_movement_y(double value){explosion_movement_y = value;}
 
 
 
@@ -34,6 +38,8 @@ protected:
     int health = 0;
     double height = 0;
     double width = 0;
+    double explosion_movement_x = 0;
+    double explosion_movement_y = 0;
 };
 
 #endif // COVER_H

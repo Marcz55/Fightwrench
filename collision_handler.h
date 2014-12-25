@@ -1,3 +1,7 @@
+//Joakim Mörhed har skrivit Collision_handler.
+//Collision_handler tar hand om kollisioner samt deras effekter.
+
+
 #ifndef COLLISION_HANDLER_H
 #define COLLISION_HANDLER_H
 #include <vector>
@@ -17,6 +21,11 @@ class collision_handler
 public:
     collision_handler(class gamefield*);
     ~collision_handler() = default;
+    collision_handler(const collision_handler&) = delete;
+    collision_handler& operator=(const collision_handler&) = delete;
+
+
+
     bool allowed_to_move_rectangle(vector<double>,character*);
     bool allowed_to_move_rectangle(vector<double>,cover*);
     bool allowed_to_move_circle(double,double,int);
@@ -25,7 +34,6 @@ public:
 
 private:
     class gamefield* gamefield_pointer;
-    //vector<cover>* cover_vector_pointer;
     int window_height;
     int window_width;
 
